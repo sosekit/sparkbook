@@ -330,9 +330,9 @@ export function CreateSparkScreen({ route, navigation }: Props) {
               </View>
             </View>
           )}
-          {editingSparkId ? (
+          {selectedMedia.length ? (
             <Pressable onPress={() => setStep('media')} style={({ pressed }) => [styles.changePhotoButton, pressed ? styles.changePhotoButtonPressed : null]}>
-              <Text style={styles.changePhotoText}>Add or change photo</Text>
+              <Text style={styles.changePhotoText}>Change photos</Text>
             </Pressable>
           ) : null}
           {prefillLocation ? (
@@ -434,13 +434,18 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <CTAButton
-          label={saving ? 'Saving' : editingSparkId && step === 'location' ? 'Save changes' : step === 'media' ? 'Next' : step === 'content' ? 'Next' : 'Save spark'}
+          label={saving ? 'Saving' : editingSparkId && step === 'location' ? 'Save changes' : step === 'media' ? mediaNextLabel(selectedMedia.length) : step === 'content' ? 'Next' : 'Save spark'}
           onPress={goNext}
           disabled={saving}
         />
       </View>
     </KeyboardAvoidingView>
   );
+}
+
+function mediaNextLabel(count: number) {
+  if (!count) return 'Next';
+  return `Next (${count})`;
 }
 
 function SelectedMediaPreview({ item, categoryId, style }: { item: SelectedMedia; categoryId: string; style: object }) {

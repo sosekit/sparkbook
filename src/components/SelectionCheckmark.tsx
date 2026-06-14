@@ -1,11 +1,13 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { colors } from '../theme/colors';
+import { fontFamilies } from '../theme/typography';
 
-export function SelectionCheckmark({ selected }: { selected?: boolean }) {
+export function SelectionCheckmark({ selected, order }: { selected?: boolean; order?: number }) {
   return (
     <View style={[styles.indicator, selected ? styles.selected : null]}>
-      {selected ? <SparkbookIcon name="check" color={colors.white} size={13} /> : null}
+      {selected && order ? <Text style={styles.orderText}>{order}</Text> : null}
+      {selected && !order ? <SparkbookIcon name="check" color={colors.white} size={13} /> : null}
     </View>
   );
 }
@@ -24,5 +26,11 @@ const styles = StyleSheet.create({
   selected: {
     backgroundColor: colors.main,
     borderColor: colors.main
+  },
+  orderText: {
+    color: colors.white,
+    fontFamily: fontFamilies.secondaryBold,
+    fontSize: 11,
+    lineHeight: 14
   }
 });

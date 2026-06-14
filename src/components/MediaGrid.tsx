@@ -19,9 +19,13 @@ export function MediaGrid({ assets, selectedIds, error, onToggle }: MediaGridPro
 
   return (
     <ScrollView contentContainerStyle={styles.grid}>
-      {assets.map((asset) => (
-        <MediaGridItem key={asset.id} asset={asset} selected={selectedIds.includes(asset.id)} size={tileSize} onPress={() => onToggle(asset)} />
-      ))}
+      {assets.map((asset) => {
+        const selectedIndex = selectedIds.indexOf(asset.id);
+        const selected = selectedIndex >= 0;
+        return (
+          <MediaGridItem key={asset.id} asset={asset} selected={selected} selectedOrder={selected ? selectedIndex + 1 : undefined} size={tileSize} onPress={() => onToggle(asset)} />
+        );
+      })}
       {!assets.length ? (
         <View style={styles.state}>
           <Text style={styles.title}>No demo media found</Text>

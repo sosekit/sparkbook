@@ -5,10 +5,11 @@ import { radius } from '../theme/radius';
 import { DemoMediaArtwork } from './DemoMediaArtwork';
 import { SelectionCheckmark } from './SelectionCheckmark';
 
-export function MediaGridItem({ asset, selected, onPress, size }: { asset: DemoMediaAsset; selected?: boolean; onPress: () => void; size: number }) {
+export function MediaGridItem({ asset, selected, selectedOrder, onPress, size }: { asset: DemoMediaAsset; selected?: boolean; selectedOrder?: number; onPress: () => void; size: number }) {
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={`${selected ? 'Remove' : 'Select'} ${asset.title}`}
       accessibilityState={{ selected }}
       hitSlop={4}
       onPress={onPress}
@@ -20,7 +21,7 @@ export function MediaGridItem({ asset, selected, onPress, size }: { asset: DemoM
         <Image source={{ uri: asset.uri }} style={styles.image} resizeMode="cover" />
       )}
       <View style={styles.indicator}>
-        <SelectionCheckmark selected={selected} />
+        <SelectionCheckmark selected={selected} order={selectedOrder} />
       </View>
     </Pressable>
   );
