@@ -19,6 +19,12 @@ export function useLists() {
     }
   }, []);
 
+  const addSparkToList = useCallback(async (listId: string, sparkId: string) => {
+    const updatedList = await listService.addSparkToList(listId, sparkId);
+    setLists((current) => current.map((list) => (list.id === updatedList.id ? updatedList : list)));
+    return updatedList;
+  }, []);
+
   useEffect(() => {
     refresh();
   }, [refresh]);
@@ -29,7 +35,7 @@ export function useLists() {
     error,
     refresh,
     createList: listService.createList,
-    addSparkToList: listService.addSparkToList,
+    addSparkToList,
     removeSparkFromList: listService.removeSparkFromList,
     reorderListSparks: listService.reorderListSparks,
     softDeleteList: listService.softDeleteList

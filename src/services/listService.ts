@@ -1,17 +1,30 @@
 import { sampleLists } from '../data/sampleLists';
-import { SparkList } from '../types/list';
+import { sampleSparks } from '../data/sampleSparks';
+import { SparkList, SparkListItem } from '../types/list';
 import { Spark } from '../types/spark';
 import { localStore } from '../utils/storage';
 import { dataClient } from './dataClient';
 
+export type ListServiceErrorCode = 'missing-spark' | 'list-not-found' | 'spark-not-found' | 'already-in-list' | 'save-failed';
+
+export class ListServiceError extends Error {
+  code: ListServiceErrorCode;
+
+  constructor(code: ListServiceErrorCode, message: string) {
+    super(message);
+    this.name = 'ListServiceError';
+    this.code = code;
+  }
+}
+
 export const listService = {
   async fetchLists() {
     if (dataClient.supabase) {
-      const { data, error } = await dataClient.supabase.from('spark_lists').select('*').order('created_at', { ascending: false });
-      if (!error && data) return data.map(fromSupabaseList);
+      const { data, error } = await dataClient.supabase.from('spark_lists').select('*, spark_list_items(*)').order('created_at', { ascending: false });
+      if (!error && data) return data.map(fromSupabaseList).map(normalizeList);
     }
     const local = await localStore.loadLists(sampleLists);
-    return mergeGeneratedLists(local, await localStore.loadSparks([]));
+    return mergeGeneratedLists(local.map(normalizeList), await localStore.loadSparks([]));
   },
   async fetchList(id: string) {
     const lists = await this.fetchLists();
@@ -39,24 +52,51 @@ export const listService = {
     return list;
   },
   async addSparkToList(listId: string, sparkId: string) {
-    const lists = await localStore.loadLists(sampleLists);
-    const sparks = await localStore.loadSparks([]);
+    if (!sparkId) throw new ListServiceError('missing-spark', 'Spark ID missing.');
+    const lists = (await localStore.loadLists(sampleLists)).map(normalizeList);
+    const listIndex = lists.findIndex((list) => list.id === listId && list.status === 'active');
+    if (listIndex < 0) throw new ListServiceError('list-not-found', 'Selected list not found.');
+    const sparks = await localStore.loadSparks(sampleSparks);
     const addedSpark = sparks.find((spark) => spark.id === sparkId);
+    if (!addedSpark) throw new ListServiceError('spark-not-found', 'Spark not found.');
+    const selectedList = lists[listIndex];
+    const currentItems = normalizeListItems(selectedList);
+    if (currentItems.some((item) => item.sparkId === sparkId)) {
+      throw new ListServiceError('already-in-list', 'This spark is already in that list.');
+    }
     const thumbnailUri = addedSpark?.media?.find((media) => media.mediaType === 'photo')?.url;
     const now = new Date().toISOString();
-    const next = lists.map((list) => {
-      if (list.id !== listId) return list;
-      const sparkIds = [...new Set([...list.sparkIds, sparkId])];
-      const currentItems = list.items || list.sparkIds.map((id, index) => ({ id: `${list.id}-${id}`, listId: list.id, sparkId: id, sortOrder: index }));
-      const items = currentItems.some((item) => item.sparkId === sparkId)
-        ? currentItems
-        : [...currentItems, { id: `${list.id}-${sparkId}`, listId, sparkId, sortOrder: currentItems.length }];
-      return { ...list, sparkIds, items, thumbnailUri: list.thumbnailUri || thumbnailUri, coverSparkId: list.coverSparkId || sparkId, updatedAt: now };
-    });
-    await localStore.saveLists(next);
-    if (dataClient.supabase) {
-      await dataClient.supabase.from('spark_list_items').upsert({ list_id: listId, spark_id: sparkId, sort_order: next.find((list) => list.id === listId)?.sparkIds.indexOf(sparkId) || 0 });
+    const nextSortOrder = currentItems.reduce((max, item) => Math.max(max, item.sortOrder), -1) + 1;
+    const items: SparkListItem[] = [
+      ...currentItems,
+      { id: `${listId}-${sparkId}`, listId, sparkId, sortOrder: nextSortOrder, createdAt: now }
+    ];
+    const updatedList: SparkList = {
+      ...selectedList,
+      sparkIds: items.map((item) => item.sparkId),
+      items,
+      thumbnailUri: selectedList.thumbnailUri || thumbnailUri,
+      coverSparkId: selectedList.coverSparkId || sparkId,
+      updatedAt: now
+    };
+    const next = lists.map((list, index) => (index === listIndex ? updatedList : list));
+    try {
+      await localStore.saveLists(next);
+    } catch (error) {
+      throw new ListServiceError('save-failed', error instanceof Error ? error.message : 'Couldn’t save list changes.');
     }
+    if (dataClient.supabase) {
+      await dataClient.supabase.from('spark_list_items').upsert(
+        { id: `${listId}-${sparkId}`, list_id: listId, spark_id: sparkId, sort_order: nextSortOrder, created_at: now },
+        { onConflict: 'list_id,spark_id' }
+      );
+      await dataClient.supabase.from('spark_lists').update({
+        cover_spark_id: updatedList.coverSparkId,
+        thumbnail_uri: updatedList.thumbnailUri,
+        updated_at: now
+      }).eq('id', listId);
+    }
+    return updatedList;
   },
   async removeSparkFromList(listId: string, sparkId: string) {
     const lists = await localStore.loadLists(sampleLists);
@@ -82,10 +122,11 @@ export const listService = {
     const now = new Date().toISOString();
     const next = lists.map((list) => {
       if (list.id !== listId) return list;
+      const items = sparkIds.map((sparkId, index) => ({ id: `${listId}-${sparkId}`, listId, sparkId, sortOrder: index, createdAt: now }));
       return {
         ...list,
         sparkIds,
-        items: sparkIds.map((sparkId, index) => ({ id: `${listId}-${sparkId}`, listId, sparkId, sortOrder: index })),
+        items,
         updatedAt: now
       };
     });
@@ -137,13 +178,23 @@ function generatedList(id: string, title: string, description: string, sparkIds:
     coverSparkId: sparkIds[0],
     thumbnailIconKey: 'custom',
     sparkIds,
-    items: sparkIds.map((sparkId, index) => ({ id: `${id}-${sparkId}`, listId: id, sparkId, sortOrder: index })),
+    items: sparkIds.map((sparkId, index) => ({ id: `${id}-${sparkId}`, listId: id, sparkId, sortOrder: index, createdAt: now })),
     createdAt: now,
     updatedAt: now
   };
 }
 
 function fromSupabaseList(row: any): SparkList {
+  const relationItems = Array.isArray(row.spark_list_items) ? row.spark_list_items : [];
+  const items = relationItems
+    .map((item: any, index: number) => ({
+      id: item.id || `${row.id}-${item.spark_id}`,
+      listId: item.list_id || row.id,
+      sparkId: item.spark_id,
+      sortOrder: Number.isFinite(item.sort_order) ? item.sort_order : index,
+      createdAt: item.created_at || row.created_at
+    }))
+    .filter((item: SparkListItem) => Boolean(item.sparkId));
   return {
     id: row.id,
     createdBy: row.created_by,
@@ -156,10 +207,44 @@ function fromSupabaseList(row: any): SparkList {
     coverSparkId: row.cover_spark_id || undefined,
     thumbnailUri: row.thumbnail_uri || undefined,
     thumbnailIconKey: row.thumbnail_icon_key || undefined,
-    sparkIds: row.spark_ids || [],
-    items: row.items || undefined,
+    sparkIds: items.length ? items.sort((a: SparkListItem, b: SparkListItem) => a.sortOrder - b.sortOrder).map((item: SparkListItem) => item.sparkId) : row.spark_ids || [],
+    items: items.length ? items : row.items || undefined,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     deletedAt: row.deleted_at || undefined
   };
+}
+
+function normalizeList(list: SparkList): SparkList {
+  const items = normalizeListItems(list);
+  return {
+    ...list,
+    sparkIds: items.length ? items.map((item) => item.sparkId) : dedupe(list.sparkIds),
+    items
+  };
+}
+
+function normalizeListItems(list: SparkList): SparkListItem[] {
+  const fallbackCreatedAt = list.updatedAt || list.createdAt || new Date().toISOString();
+  const sourceItems: SparkListItem[] = list.items?.length
+    ? [...list.items].sort((a, b) => a.sortOrder - b.sortOrder)
+    : list.sparkIds.map((sparkId, index) => ({ id: `${list.id}-${sparkId}`, listId: list.id, sparkId, sortOrder: index, createdAt: fallbackCreatedAt }));
+  const seen = new Set<string>();
+  return sourceItems.reduce<SparkListItem[]>((items, item, index) => {
+    if (!item.sparkId || seen.has(item.sparkId)) return items;
+    seen.add(item.sparkId);
+    items.push({
+      id: item.id || `${list.id}-${item.sparkId}`,
+      listId: item.listId || list.id,
+      sparkId: item.sparkId,
+      sortOrder: Number.isFinite(item.sortOrder) ? item.sortOrder : index,
+      createdAt: item.createdAt || list.updatedAt || list.createdAt || new Date().toISOString(),
+      status: item.status
+    });
+    return items;
+  }, []);
+}
+
+function dedupe(ids: string[]) {
+  return [...new Set(ids.filter(Boolean))];
 }

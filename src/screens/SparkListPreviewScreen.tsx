@@ -33,17 +33,18 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
     () => orderedIds.map((id) => sparks.find((spark) => spark.id === id && spark.status === 'active')).filter(Boolean) as Spark[],
     [orderedIds, sparks]
   );
-  const [selectedId, setSelectedId] = useState<string | undefined>(route.params.selectedSparkId || listSparks[0]?.id);
+  const routeSelectedSparkId = route.params.selectedSparkId || route.params.addedSparkId;
+  const [selectedId, setSelectedId] = useState<string | undefined>(routeSelectedSparkId || listSparks[0]?.id);
   const selectedSpark = listSparks.find((spark) => spark.id === selectedId) || listSparks[0];
 
   useEffect(() => {
-    if (!selectedId && route.params.selectedSparkId && listSparks.some((spark) => spark.id === route.params.selectedSparkId)) {
-      setSelectedId(route.params.selectedSparkId);
+    if (routeSelectedSparkId && selectedId !== routeSelectedSparkId && listSparks.some((spark) => spark.id === routeSelectedSparkId)) {
+      setSelectedId(routeSelectedSparkId);
       return;
     }
     if (!selectedId && listSparks[0]?.id) setSelectedId(listSparks[0].id);
     if (selectedId && !listSparks.some((spark) => spark.id === selectedId)) setSelectedId(listSparks[0]?.id);
-  }, [listSparks, route.params.selectedSparkId, selectedId]);
+  }, [listSparks, routeSelectedSparkId, selectedId]);
 
   useEffect(() => {
     if (!list || list.status === 'deleted') navigation.replace('SavedListError', { listId: route.params.listId });

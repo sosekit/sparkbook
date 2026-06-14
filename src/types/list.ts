@@ -26,6 +26,7 @@ export type SparkListItem = {
   listId: string;
   sparkId: string;
   sortOrder: number;
+  createdAt: string;
   status?: GuideStopStatus;
 };
 

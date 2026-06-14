@@ -8,6 +8,7 @@ function items(listId: string, sparkIds: string[]) {
     listId,
     sparkId,
     sortOrder: index,
+    createdAt: stamp,
     status: index === 0 ? 'current' as const : 'upcoming' as const
   }));
 }
