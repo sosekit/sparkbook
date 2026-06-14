@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.main,
+    alignItems: 'center',
+    justifyContent: 'center',
     overflow: 'hidden'
   },
   bookmarkIcon: {

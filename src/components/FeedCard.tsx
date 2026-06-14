@@ -141,12 +141,12 @@ const styles = StyleSheet.create({
   },
   creator: {
     position: 'absolute',
-    left: 5,
-    top: 5,
-    minWidth: 44,
-    minHeight: 44,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start'
+    left: 4,
+    top: 4,
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   bookmarkOverlay: {
     position: 'absolute',
