@@ -38,8 +38,8 @@ export function ProfileScreen({ navigation }: Props) {
     <View style={styles.root}>
       <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <View style={styles.profileCard}>
-          <Avatar name={profile?.displayName} size={52} />
-          <View style={{ flex: 1 }}>
+          <Avatar name={profile?.displayName} size={72} />
+          <View style={styles.profileCopy}>
             <Text style={styles.title}>{profile?.displayName || 'Create profile'}</Text>
             <Text style={styles.subtitle}>@{profile?.username || 'sparkbook'}</Text>
             <Text style={styles.body}>{profile?.bio || 'Add a bio to tell people what you spark.'}</Text>
@@ -79,10 +79,24 @@ export function ProfileScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background, paddingBottom: 58 },
   content: { padding: 14, gap: spacing.sm },
-  profileCard: { flexDirection: 'row', gap: spacing.sm, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: spacing.sm },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 22, lineHeight: 28 },
-  subtitle: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800' },
-  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17, marginTop: 2 },
+  profileCard: {
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg
+  },
+  profileCopy: {
+    width: '100%',
+    alignItems: 'center',
+    gap: 2
+  },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 22, lineHeight: 28, textAlign: 'center' },
+  subtitle: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800', textAlign: 'center' },
+  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17, marginTop: 2, textAlign: 'center' },
   section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18 },
   stats: { flexDirection: 'row', gap: spacing.xs },
   stat: { flex: 1, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.neutral, borderRadius: radius.md, padding: spacing.sm },

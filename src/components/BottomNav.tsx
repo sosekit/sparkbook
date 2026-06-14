@@ -33,7 +33,7 @@ export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onPr
   ] as const;
 
   return (
-    <View style={[styles.bar, { height: 60 + insets.bottom, paddingBottom: Math.max(insets.bottom - 20, 4) }]}>
+    <View style={[styles.bar, { height: 64 + insets.bottom, paddingBottom: insets.bottom }]}>
       {items.map(([key, label, onPress]) => (
         <Pressable
           key={key}
@@ -44,7 +44,7 @@ export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onPr
         >
           {key === 'create' ? (
             <View style={styles.createButton}>
-              <SparkbookIcon name="add" color={colors.white} size={34} />
+              <SparkbookIcon name="add" color={colors.white} size={24} />
             </View>
           ) : (
             <>
@@ -72,13 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 16,
     paddingHorizontal: 16,
-    paddingTop: 8,
     borderTopWidth: 1,
-    borderColor: colors.dividerMuted
+    borderColor: colors.text
   },
   item: {
     width: 60,
-    minHeight: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4

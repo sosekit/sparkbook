@@ -1,7 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Avatar } from '../components/Avatar';
 import { BackButton } from '../components/BackButton';
 import { Button } from '../components/Button';
 import { TextField } from '../components/TextField';
@@ -38,6 +39,15 @@ export function EditProfileScreen({ navigation }: Props) {
       <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 24 }]}>
         <BackButton label="Cancel" onPress={() => navigation.goBack()} />
         <Text style={styles.title}>Edit profile</Text>
+        <View style={styles.profilePreview}>
+          <Avatar name={displayName || 'Sparkbook'} size={76} />
+          <Text style={styles.previewName} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.82}>
+            {displayName || 'Display name'}
+          </Text>
+          <Text style={styles.previewUsername} numberOfLines={1}>
+            @{username || 'username'}
+          </Text>
+        </View>
         <TextField label="Display name" value={displayName} onChangeText={setDisplayName} />
         <TextField label="Username" value={username} onChangeText={setUsername} />
         <TextField label="Bio" value={bio} onChangeText={setBio} multiline />
@@ -54,5 +64,27 @@ function initials(name: string) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: { padding: 14, gap: spacing.sm },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 }
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 },
+  profilePreview: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 3,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md
+  },
+  previewName: {
+    maxWidth: '92%',
+    color: colors.text,
+    fontFamily: fontFamilies.primaryBold,
+    fontSize: 22,
+    lineHeight: 28,
+    textAlign: 'center'
+  },
+  previewUsername: {
+    color: colors.main,
+    fontFamily: fontFamilies.secondaryBold,
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: 'center'
+  }
 });
