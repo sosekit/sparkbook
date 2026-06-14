@@ -14,15 +14,16 @@ type CommentsSectionProps = {
   inputPlaceholder?: string;
   maxVisible?: number;
   compact?: boolean;
+  plain?: boolean;
 };
 
-export function CommentsSection({ targetType, targetId, inputPlaceholder, maxVisible = 2, compact = false }: CommentsSectionProps) {
+export function CommentsSection({ targetType, targetId, inputPlaceholder, maxVisible = 2, compact = false, plain = false }: CommentsSectionProps) {
   const { comments, loading, addComment } = useComments(targetType, targetId);
   const visibleComments = comments.slice(0, maxVisible);
   const hiddenCount = Math.max(comments.length - visibleComments.length, 0);
 
   return (
-    <View style={[styles.panel, compact ? styles.compactPanel : null]}>
+    <View style={[styles.panel, compact ? styles.compactPanel : null, plain ? styles.plainPanel : null]}>
       <Text style={styles.title}>Comments{comments.length ? ` (${comments.length})` : ''}</Text>
       {loading ? (
         <View style={styles.loading}>
@@ -31,7 +32,7 @@ export function CommentsSection({ targetType, targetId, inputPlaceholder, maxVis
         </View>
       ) : comments.length ? (
         <View style={styles.list}>
-          {visibleComments.map((comment) => <CommentItem key={comment.id} comment={comment} compact={compact} />)}
+          {visibleComments.map((comment) => <CommentItem key={comment.id} comment={comment} compact={compact} plain={plain} />)}
           {hiddenCount ? <Text style={styles.hiddenText}>{hiddenCount} more comment{hiddenCount === 1 ? '' : 's'}</Text> : null}
         </View>
       ) : (
@@ -60,6 +61,13 @@ const styles = StyleSheet.create({
   compactPanel: {
     padding: spacing.xs,
     gap: spacing.xs
+  },
+  plainPanel: {
+    borderWidth: 0,
+    borderRadius: 0,
+    backgroundColor: colors.background,
+    paddingHorizontal: 0,
+    paddingVertical: spacing.xs
   },
   title: {
     color: colors.text,

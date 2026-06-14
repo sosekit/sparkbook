@@ -73,7 +73,7 @@ export function CreatorProfileScreen({ route, navigation }: Props) {
       )) : <EmptyState title="No public sparks yet" message="Shared places from this creator will appear here." />}
       <Text style={styles.section}>Lists</Text>
       {creatorLists.length ? creatorLists.map((list) => (
-        <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
+        <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} />
       )) : <EmptyState title="No public lists yet" message="Curated routes from this creator will appear here." />}
     </ScrollView>
   );

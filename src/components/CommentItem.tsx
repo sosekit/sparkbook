@@ -7,11 +7,11 @@ import { fontFamilies } from '../theme/typography';
 import { formatSavedDate } from '../utils/date';
 import { Avatar } from './Avatar';
 
-export function CommentItem({ comment, compact = false }: { comment: Comment; compact?: boolean }) {
+export function CommentItem({ comment, compact = false, plain = false }: { comment: Comment; compact?: boolean; plain?: boolean }) {
   return (
     <View style={[styles.row, compact ? styles.compactRow : null]}>
       <Avatar name={comment.userName} size={compact ? 22 : 28} />
-      <View style={[styles.bubble, compact ? styles.compactBubble : null]}>
+      <View style={[styles.bubble, compact ? styles.compactBubble : null, plain ? styles.plainBubble : null]}>
         <View style={styles.header}>
           <Text style={styles.name}>{comment.userName}</Text>
           <Text style={styles.date}>{formatSavedDate(comment.createdAt)}</Text>
@@ -44,6 +44,12 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: spacing.xs,
     borderRadius: radius.sm
+  },
+  plainBubble: {
+    borderWidth: 0,
+    borderRadius: 0,
+    paddingHorizontal: 0,
+    backgroundColor: colors.background
   },
   header: {
     flexDirection: 'row',

@@ -31,6 +31,8 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
   );
   const selected = safeLocations.find((item) => item.id === selectedId) || safeLocations[0];
   const center = liveLocation || selected || { latitude: 43.6532, longitude: -79.3832 };
+  const initialZoom = safeLocations.length <= 1 ? 16 : 13;
+  const fitBoundsMaxZoom = safeLocations.length <= 2 ? 16 : 15;
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const markers = safeLocations
     .map((item) => {
@@ -183,7 +185,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
               boxZoom: false,
               keyboard: false,
               tap: true
-            }).setView([${center.latitude}, ${center.longitude}], 13);
+            }).setView([${center.latitude}, ${center.longitude}], ${initialZoom});
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               maxZoom: 19,
               subdomains: 'abc',
@@ -194,7 +196,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
             ${liveMarker}
             const bounds = ${JSON.stringify(safeLocations.map((item) => [item.latitude, item.longitude]))};
             if (bounds.length > 1) {
-              map.fitBounds(bounds, { padding: [34, 34], maxZoom: 14 });
+              map.fitBounds(bounds, { padding: [28, 28], maxZoom: ${fitBoundsMaxZoom} });
             }
             setTimeout(function () {
               map.invalidateSize();
@@ -206,7 +208,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
         </script>
       </body>
     </html>
-  `, [center.latitude, center.longitude, liveMarker, markers, routeLine, safeLocations, showMarkers]);
+  `, [center.latitude, center.longitude, fitBoundsMaxZoom, initialZoom, liveMarker, markers, routeLine, safeLocations, showMarkers]);
 
   useEffect(() => {
     loadedRef.current = loaded;

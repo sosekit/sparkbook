@@ -99,10 +99,10 @@ export function SparkDetailScreen({ route, navigation }: Props) {
       <Text style={styles.tags}>{tags.map((tag) => `#${tag}`).join(' ') || '#custom'}</Text>
       <View style={styles.locationPanel}>
         <Text style={styles.section}>Location</Text>
-        <MapPreview locations={[spark]} selectedId={spark.id} height={156} />
+        <MapPreview locations={[spark]} selectedId={spark.id} height={188} />
       </View>
-      <CommentsSection targetType="spark" targetId={spark.id} maxVisible={2} compact />
       <CTAButton label="Add to list" onPress={() => navigation.navigate('AddSparkToList', { sparkId: spark.id })} />
+      <CommentsSection targetType="spark" targetId={spark.id} maxVisible={1} compact plain />
       {isOwnSpark && !DEMO_MODE ? (
         <View style={styles.secondaryActions}>
           <Button label="Delete spark" onPress={removeSpark} variant="ghost" />
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   source: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 },
   tags: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800', fontSize: 12 },
-  locationPanel: { gap: spacing.sm },
+  locationPanel: { gap: spacing.xs, marginBottom: spacing.xs },
   secondaryActions: { gap: spacing.sm }
 });
 
