@@ -27,17 +27,17 @@ export function ListErrorState({ query, onQuery, suggestion, sparks, onSuggestio
 
 const styles = StyleSheet.create({
   root: {
-    gap: spacing.md
+    gap: spacing.sm
   },
   message: {
-    paddingTop: 16,
-    gap: 8
+    paddingTop: 10,
+    gap: 6
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primaryRegular,
-    fontSize: 24,
-    lineHeight: 32
+    fontSize: 20,
+    lineHeight: 26
   },
   body: {
     color: colors.altText,
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     lineHeight: 16
   },
   suggestions: {
-    paddingTop: 8,
-    gap: spacing.sm
+    paddingTop: 6,
+    gap: spacing.xs
   },
   suggestionTitle: {
     color: colors.text,

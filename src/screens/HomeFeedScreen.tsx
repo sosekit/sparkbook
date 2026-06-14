@@ -32,9 +32,9 @@ export function HomeFeedScreen({ navigation }: Props) {
   const [query, setQuery] = useState('');
   const [focusedSparkId, setFocusedSparkId] = useState<string | undefined>();
   const screenHeight = Dimensions.get('window').height;
-  const expandedTop = insets.top + 82;
-  const midTop = Math.max(insets.top + 250, Math.round(screenHeight * 0.5));
-  const collapsedTop = Math.max(insets.top + 330, screenHeight - 260);
+  const expandedTop = insets.top + 70;
+  const midTop = Math.max(insets.top + 280, Math.round(screenHeight * 0.54));
+  const collapsedTop = Math.max(insets.top + 360, screenHeight - 230);
   const active = useMemo(
     () => sparks.filter(Boolean).filter((spark) => spark.id && spark.status === 'active'),
     [sparks]
@@ -89,7 +89,7 @@ export function HomeFeedScreen({ navigation }: Props) {
           <SearchResultsList results={results} query={query} searching={searching} onSelect={selectSearchResult} />
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tags}>
             {[
-              { id: 'all' as const, label: 'Recs Nearby' },
+              { id: 'all' as const, label: 'Nearby' },
               { id: 'hidden' as const, label: 'Trending' },
               { id: 'friends' as const, label: 'Friends' }
             ].map((item) => (
@@ -104,7 +104,7 @@ export function HomeFeedScreen({ navigation }: Props) {
             ))}
           </ScrollView>
 
-          <Text style={styles.sectionTitle}>Spark Lists to explore around you</Text>
+          <Text style={styles.sectionTitle}>Lists around you</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.listRow}>
             {visibleLists.map((list) => (
               <View key={list.id} style={styles.listPreview}>
@@ -113,7 +113,7 @@ export function HomeFeedScreen({ navigation }: Props) {
             ))}
           </ScrollView>
 
-          <Text style={styles.sectionTitle}>From your following list</Text>
+          <Text style={styles.sectionTitle}>Following</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewRow}>
             {following.slice(0, 4).map((spark) => (
               <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
@@ -135,11 +135,11 @@ export function HomeFeedScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
-  tags: { paddingVertical: 14, gap: 10 },
-  feed: { paddingHorizontal: 16, paddingTop: 0, paddingBottom: 118, gap: 12 },
-  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 32, marginTop: 2 },
-  previewRow: { gap: 8, paddingRight: 16 },
-  listRow: { gap: 8, paddingRight: 16 },
-  listPreview: { width: 242 },
-  verticalList: { gap: 8 }
+  tags: { paddingVertical: 8, gap: 8 },
+  feed: { paddingHorizontal: 12, paddingTop: 0, paddingBottom: 96, gap: 8 },
+  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23, marginTop: 0 },
+  previewRow: { gap: 6, paddingRight: 12 },
+  listRow: { gap: 6, paddingRight: 12 },
+  listPreview: { width: 212 },
+  verticalList: { gap: 6 }
 });

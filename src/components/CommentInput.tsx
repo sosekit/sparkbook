@@ -32,7 +32,7 @@ export function CommentInput({ placeholder = 'Share a thought about this spark',
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.row}>
-        <Avatar name="Raymond Zhang" size={32} />
+        <Avatar name="Raymond Zhang" size={28} />
         <View style={styles.inputWrap}>
           <TextField
             label=""
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs
   },
   input: {
-    minHeight: 72,
+    minHeight: 56,
     backgroundColor: colors.surface
   },
   action: {

@@ -61,7 +61,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }]}>
+    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 24 }]}>
       <View style={styles.topBar}>
         <BackButton onPress={() => navigation.goBack()} />
         {isOwnSpark ? <Button label="Edit Spark" onPress={() => navigation.navigate('CreateSpark', { sparkId: spark.id })} variant="secondary" /> : null}
@@ -85,7 +85,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
       {!isOwnSpark ? (
         <View style={styles.creatorPanel}>
           <Pressable accessibilityRole="button" onPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} style={styles.creatorInfo}>
-          <Avatar name={creatorName} size={42} />
+          <Avatar name={creatorName} size={36} />
           <View style={{ flex: 1 }}>
             <Text style={styles.creatorLabel}>Saved by</Text>
             <Text style={styles.creatorName}>{creatorName}</Text>
@@ -121,7 +121,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
       <Text style={styles.tags}>{tags.map((tag) => `#${tag}`).join(' ') || '#custom'}</Text>
       <View style={styles.locationPanel}>
         <Text style={styles.section}>Location</Text>
-        <MapPreview locations={[spark]} selectedId={spark.id} height={210} />
+        <MapPreview locations={[spark]} selectedId={spark.id} height={176} />
       </View>
       <CommentsSection targetType="spark" targetId={spark.id} />
       <CTAButton label="Add to list" onPress={() => navigation.navigate('AddSparkToList', { sparkId: spark.id })} />
@@ -136,31 +136,31 @@ export function SparkDetailScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 20, paddingBottom: 44, gap: spacing.md },
-  center: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: colors.background },
+  content: { padding: 14, paddingBottom: 32, gap: spacing.sm },
+  center: { flex: 1, justifyContent: 'center', padding: 16, backgroundColor: colors.background },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   header: { flexDirection: 'row', gap: spacing.sm, alignItems: 'flex-start' },
-  titleWrap: { flex: 1, gap: 8 },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 32 },
-  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13 },
-  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
-  metaRow: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' },
-  creatorPanel: { minHeight: 64, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, padding: spacing.sm, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  titleWrap: { flex: 1, gap: 5 },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 22, lineHeight: 28 },
+  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
+  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 11, lineHeight: 14 },
+  metaRow: { flexDirection: 'row', gap: spacing.xs, flexWrap: 'wrap' },
+  creatorPanel: { minHeight: 56, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, padding: spacing.sm, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   creatorInfo: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   creatorLabel: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11 },
-  creatorName: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 17 },
-  panel: { backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, padding: spacing.md, gap: spacing.xs },
-  section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18 },
-  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 },
-  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18 },
+  creatorName: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15 },
+  panel: { backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: spacing.sm, gap: spacing.xs },
+  section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 16 },
+  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20 },
+  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 },
   source: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 6 },
-  tags: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800' },
-  actionsRow: { minHeight: 44, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, paddingHorizontal: spacing.sm, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
-  revisitMeta: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
-  revisitMetaText: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  revisitButton: { height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.main, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.md },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 },
+  tags: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800', fontSize: 12 },
+  actionsRow: { minHeight: 40, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, paddingHorizontal: spacing.sm, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
+  revisitMeta: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
+  revisitMetaText: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 11 },
+  revisitButton: { height: 30, borderRadius: 15, borderWidth: 1, borderColor: colors.main, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.sm },
   revisitText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   locationPanel: { gap: spacing.sm },
   secondaryActions: { gap: spacing.sm }

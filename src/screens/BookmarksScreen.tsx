@@ -37,7 +37,7 @@ export function BookmarksScreen({ navigation }: Props) {
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <Text style={styles.title}>Saved sparks</Text>
         <Text style={styles.subtitle}>Bookmarked places you want to come back to.</Text>
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search sparks, notes, tags" />
@@ -60,10 +60,10 @@ export function BookmarksScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background, paddingBottom: 64 },
-  content: { padding: 20, gap: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 32 },
-  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 },
-  section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 22 },
-  filters: { gap: spacing.sm, paddingVertical: 2 }
+  root: { flex: 1, backgroundColor: colors.background, paddingBottom: 58 },
+  content: { padding: 14, gap: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 },
+  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18 },
+  section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 16, lineHeight: 20 },
+  filters: { gap: spacing.xs, paddingVertical: 0 }
 });

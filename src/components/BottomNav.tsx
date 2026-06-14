@@ -33,7 +33,7 @@ export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onPr
   ] as const;
 
   return (
-    <View style={[styles.bar, { height: 64 + insets.bottom, paddingBottom: insets.bottom }]}>
+    <View style={[styles.bar, { height: 58 + insets.bottom, paddingBottom: insets.bottom }]}>
       {items.map(([key, label, onPress]) => (
         <Pressable
           key={key}
@@ -76,22 +76,22 @@ const styles = StyleSheet.create({
     borderColor: colors.text
   },
   item: {
-    width: 76,
+    width: 70,
     minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 3
+    gap: 2
   },
   createItem: {
-    width: 62,
-    height: 64,
+    width: 58,
+    height: 58,
     alignItems: 'center',
     justifyContent: 'center'
   },
   createButton: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.text
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
   label: {
     color: colors.text,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 12,
-    lineHeight: 14
+    fontSize: 10,
+    lineHeight: 12
   },
   activeLabel: {
     color: colors.main

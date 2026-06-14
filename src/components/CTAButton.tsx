@@ -29,14 +29,14 @@ export function CTAButton({ label, onPress, disabled = false }: CTAButtonProps) 
 
 const styles = StyleSheet.create({
   button: {
-    height: 36,
-    borderRadius: 18,
+    height: 34,
+    borderRadius: 17,
     backgroundColor: colors.main,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: 16
+    gap: 5,
+    paddingHorizontal: 14
   },
   disabled: {
     backgroundColor: colors.neutral,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   label: {
     color: colors.white,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 13,
-    lineHeight: 16
+    fontSize: 12,
+    lineHeight: 15
   }
 });

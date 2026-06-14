@@ -19,7 +19,7 @@ export function PostSparkOptionsScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.root}>
-      <View style={[styles.header, { paddingTop: insets.top + 8, minHeight: insets.top + 64 }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
         <Text style={styles.headerText}>Your spark is saved.</Text>
         <ProgressBar progress={1} />
       </View>
@@ -46,14 +46,14 @@ export function PostSparkOptionsScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
-  header: { justifyContent: 'center', gap: 8 },
-  headerText: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 25, textAlign: 'center' },
-  content: { paddingTop: 8, paddingBottom: 40, gap: spacing.md },
-  carousel: { paddingHorizontal: 16, gap: 6 },
-  details: { paddingHorizontal: 16, gap: 8 },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 32 },
-  caption: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20 },
-  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
-  cta: { paddingHorizontal: 16, paddingTop: 8, gap: spacing.md },
+  header: { justifyContent: 'center', gap: 6 },
+  headerText: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 18, lineHeight: 23, textAlign: 'center' },
+  content: { paddingTop: 6, paddingBottom: 32, gap: spacing.sm },
+  carousel: { paddingHorizontal: 14, gap: 5 },
+  details: { paddingHorizontal: 14, gap: 5 },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
+  caption: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 },
+  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
+  cta: { paddingHorizontal: 14, paddingTop: 4, gap: spacing.sm },
   leave: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13, lineHeight: 16, textAlign: 'center' }
 });

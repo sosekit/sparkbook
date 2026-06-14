@@ -29,7 +29,7 @@ export function ListsScreen({ navigation }: Props) {
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <Text style={styles.title}>Your lists</Text>
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search lists" />
         <Pressable onPress={() => navigation.navigate('CreateSparkList')} style={styles.createList}>
@@ -43,7 +43,7 @@ export function ListsScreen({ navigation }: Props) {
             </Pressable>
           ))}
         </View>
-        <Text style={styles.sectionTitle}>{filter === 'all' ? 'Recently created and suggested lists' : `${filter[0].toUpperCase()}${filter.slice(1)} lists`}</Text>
+        <Text style={styles.sectionTitle}>{filter === 'all' ? 'Recent lists' : `${filter[0].toUpperCase()}${filter.slice(1)} lists`}</Text>
         {active.length ? active.map((list) => (
           <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
         )) : <EmptyState title="No lists yet" message="Create or save lists to guide future exploration." />}
@@ -54,15 +54,15 @@ export function ListsScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background, paddingBottom: 64 },
-  content: { padding: 20, gap: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24 },
+  root: { flex: 1, backgroundColor: colors.background, paddingBottom: 58 },
+  content: { padding: 14, gap: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 20, lineHeight: 25 },
   subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 },
-  createList: { height: 42, borderRadius: 10, borderWidth: 1, borderColor: colors.main, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.md },
-  createText: { color: colors.main, fontFamily: fontFamilies.secondary, fontSize: 14 },
-  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
+  createList: { height: 38, borderRadius: 9, borderWidth: 1, borderColor: colors.main, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  createText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
+  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23 },
   filters: { flexDirection: 'row', gap: spacing.xs },
-  filter: { height: 30, borderRadius: 15, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.surface, paddingHorizontal: 12, alignItems: 'center', justifyContent: 'center' },
+  filter: { height: 26, borderRadius: 13, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.surface, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' },
   activeFilter: { backgroundColor: colors.main, borderColor: colors.main },
   filterText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   activeFilterText: { color: colors.white }

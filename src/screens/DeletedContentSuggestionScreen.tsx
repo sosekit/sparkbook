@@ -23,7 +23,7 @@ export function DeletedContentSuggestionScreen({ route, navigation }: Props) {
   }, []);
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 }]}>
+    <View style={[styles.root, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}>
       <Text style={styles.title}>{route.params.contentType === 'spark' ? 'This spark is no longer available' : 'This list is no longer available'}</Text>
       <Text style={styles.body}>{suggestion ? 'Deleted content stays private. Here is a nearby place you might like instead.' : 'Deleted content stays private. Explore nearby sparks to keep going.'}</Text>
       {suggestion ? <SparkCard spark={suggestion} onPress={() => navigation.replace('SparkDetail', { sparkId: suggestion.id })} /> : null}
@@ -34,7 +34,7 @@ export function DeletedContentSuggestionScreen({ route, navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background, padding: 20, justifyContent: 'center', gap: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 30 },
-  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 }
+  root: { flex: 1, backgroundColor: colors.background, padding: 16, justifyContent: 'center', gap: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 },
+  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18 }
 });

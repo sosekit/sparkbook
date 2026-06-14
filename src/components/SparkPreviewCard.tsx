@@ -15,7 +15,7 @@ export function SparkPreviewCard({ spark }: { spark?: Spark | null }) {
   return (
     <View style={styles.card}>
       <View style={styles.media}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" /> : <CategoryIcon categoryId={spark.categoryId} selected size={52} />}
+        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" /> : <CategoryIcon categoryId={spark.categoryId} selected size={42} />}
       </View>
       <View style={styles.copy}>
         <Text style={styles.title} numberOfLines={2}>{spark.title}</Text>
@@ -31,8 +31,8 @@ export function SparkPreviewCard({ spark }: { spark?: Spark | null }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: 198,
-    height: 348,
+    width: 166,
+    height: 282,
     borderRadius: radius.sm,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderColor: cardStyles.borderColor
   },
   media: {
-    height: 236,
+    height: 178,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: cardStyles.previewBackground,
@@ -54,29 +54,29 @@ const styles = StyleSheet.create({
   },
   copy: {
     padding: spacing.sm,
-    gap: 5
+    gap: 3
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 18,
-    lineHeight: 22
+    fontSize: 15,
+    lineHeight: 19
   },
   caption: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
-    fontSize: 12,
-    lineHeight: 16
+    fontSize: 11,
+    lineHeight: 14
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6
+    gap: 4
   },
   location: {
     flex: 1,
     color: colors.text,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 12
+    fontSize: 11
   }
 });

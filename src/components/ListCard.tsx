@@ -25,11 +25,11 @@ export function ListCard({ list, sparks = [], onPress }: ListCardProps) {
         ) : (
           <>
             {sparks.slice(0, 3).map((spark, index) => (
-              <View key={spark.id} style={[styles.previewIcon, { left: 12 + index * 26 }]}>
-                <CategoryIcon categoryId={spark.categoryId} size={34} selected={index === 0} />
+              <View key={spark.id} style={[styles.previewIcon, { left: 10 + index * 22 }]}>
+                <CategoryIcon categoryId={spark.categoryId} size={30} selected={index === 0} />
               </View>
             ))}
-            {!sparks.length ? <View style={styles.emptyPreview}><CategoryIcon categoryId={list.thumbnailIconKey || 'custom'} size={40} selected /></View> : null}
+            {!sparks.length ? <View style={styles.emptyPreview}><CategoryIcon categoryId={list.thumbnailIconKey || 'custom'} size={34} selected /></View> : null}
           </>
         )}
         <View style={styles.locationPill}>
@@ -47,7 +47,7 @@ export function ListCard({ list, sparks = [], onPress }: ListCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    height: 236,
+    height: 190,
     backgroundColor: colors.surface,
     borderRadius: 4,
     overflow: 'hidden',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     borderColor: cardStyles.borderColor
   },
   preview: {
-    height: 152,
+    height: 116,
     backgroundColor: cardStyles.previewBackground,
     overflow: 'hidden',
     borderBottomWidth: 1,
@@ -73,44 +73,44 @@ const styles = StyleSheet.create({
   },
   previewIcon: {
     position: 'absolute',
-    top: 10
+    top: 8
   },
   locationPill: {
     position: 'absolute',
     left: 8,
-    bottom: 8,
-    height: 28,
+    bottom: 7,
+    height: 24,
     borderRadius: 6,
     backgroundColor: colors.main,
     flexDirection: 'row',
     gap: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8
+    paddingHorizontal: 7
   },
   locationText: {
     color: colors.white,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 12
+    fontSize: 11
   },
   copy: {
-    gap: 4,
+    gap: 2,
     padding: spacing.sm,
-    paddingBottom: spacing.md,
+    paddingBottom: spacing.sm,
     backgroundColor: colors.neutral,
-    minHeight: 84
+    minHeight: 72
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 16,
-    lineHeight: 24
+    fontSize: 15,
+    lineHeight: 19
   },
   body: {
     color: colors.text,
     fontFamily: fontFamilies.secondary,
-    fontSize: 12,
-    lineHeight: 16,
-    paddingBottom: 2
+    fontSize: 11,
+    lineHeight: 15,
+    paddingBottom: 0
   },
 });

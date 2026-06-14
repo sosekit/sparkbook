@@ -48,10 +48,10 @@ export function CreatorProfileScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }]}>
+    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 24 }]}>
       <BackButton onPress={() => navigation.goBack()} />
       <View style={styles.profileCard}>
-        <Avatar name={profile.displayName} size={64} />
+        <Avatar name={profile.displayName} size={52} />
         <View style={{ flex: 1 }}>
           <Text style={styles.title}>{profile.displayName}</Text>
           <Text style={styles.username}>@{profile.username}</Text>
@@ -81,16 +81,16 @@ export function CreatorProfileScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 20, gap: spacing.md },
+  content: { padding: 14, gap: spacing.sm },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
   loading: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 14 },
-  profileCard: { flexDirection: 'row', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, padding: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 28 },
-  username: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
-  bio: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20, marginTop: 4 },
-  stats: { flexDirection: 'row', gap: spacing.sm },
+  profileCard: { flexDirection: 'row', gap: spacing.sm, backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 22, lineHeight: 28 },
+  username: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
+  bio: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17, marginTop: 2 },
+  stats: { flexDirection: 'row', gap: spacing.xs },
   stat: { flex: 1, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.neutral, borderRadius: radius.md, padding: spacing.sm },
-  statNumber: { color: colors.main, fontFamily: fontFamilies.primaryBold, fontSize: 24 },
-  statLabel: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 11 },
-  section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 20 }
+  statNumber: { color: colors.main, fontFamily: fontFamilies.primaryBold, fontSize: 20 },
+  statLabel: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 10 },
+  section: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18 }
 });

@@ -40,7 +40,7 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.root}>
-      <View style={[styles.header, { paddingTop: insets.top + 8, minHeight: insets.top + 64 }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.close}>
           <SparkbookIcon name="close" color={colors.text} size={24} />
         </Pressable>
@@ -66,7 +66,7 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
           );
         }) : <EmptyState title="No matching lists" message="Try another list name or create a new list." />}
       </ScrollView>
-      <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom + 10 }]}>
         <CTAButton label={saving ? 'Adding...' : 'Add to selected list'} onPress={addToSelected} disabled={!selectedListId || saving} />
       </View>
     </View>
@@ -75,17 +75,17 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, gap: 16 },
+  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, gap: 12 },
   close: { width: 24, height: 44, justifyContent: 'center' },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 32 },
-  searchWrap: { paddingHorizontal: 16, paddingBottom: 8 },
-  content: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 110, gap: spacing.md },
-  sectionHeader: { gap: 10 },
-  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 31 },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
+  searchWrap: { paddingHorizontal: 14, paddingBottom: 6 },
+  content: { paddingHorizontal: 14, paddingTop: 8, paddingBottom: 96, gap: spacing.sm },
+  sectionHeader: { gap: 6 },
+  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23 },
   createListButton: { alignSelf: 'flex-start', height: 34, borderRadius: 17, paddingHorizontal: 12, flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.main },
   createListButtonPressed: { backgroundColor: colors.highlight },
   createListText: { color: colors.white, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   listOption: { borderRadius: 6, padding: 2 },
   selected: { borderWidth: 2, borderColor: colors.main },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 12, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.neutral }
+  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 14, paddingTop: 8, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.neutral }
 });

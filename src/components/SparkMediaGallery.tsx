@@ -50,12 +50,12 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
 
 const styles = StyleSheet.create({
   row: {
-    gap: 6,
+    gap: 5,
     paddingHorizontal: 16
   },
   card: {
-    width: 198,
-    height: 348,
+    width: 172,
+    height: 292,
     borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(78, 101, 133, 0.18)'
   },
   compactCard: {
-    width: 178,
-    height: 286,
+    width: 154,
+    height: 232,
     borderRadius: radius.sm,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
   emptyCard: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8
+    gap: 6
   },
   emptyCardSize: {
-    height: 168
+    height: 138
   },
   compactEmptyCard: {
-    height: 148
+    height: 124
   },
   emptyText: {
     color: colors.altText,

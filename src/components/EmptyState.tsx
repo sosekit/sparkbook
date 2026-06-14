@@ -27,19 +27,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    padding: spacing.lg,
-    gap: spacing.sm
+    padding: spacing.md,
+    gap: spacing.xs
   },
   title: {
     color: colors.ink,
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: fontFamilies.primarySemiBold,
     fontWeight: '800'
   },
   message: {
     color: colors.muted,
-    fontSize: 15,
+    fontSize: 13,
     fontFamily: fontFamilies.secondary,
-    lineHeight: 22
+    lineHeight: 18
   }
 });

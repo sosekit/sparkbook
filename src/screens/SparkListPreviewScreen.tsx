@@ -86,16 +86,16 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
-  header: { position: 'absolute', left: 16, right: 16, height: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  headerGroup: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  header: { position: 'absolute', left: 14, right: 14, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  headerGroup: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   back: { width: 24, height: 44, justifyContent: 'center' },
-  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 32 },
-  sheet: { position: 'absolute', left: 0, right: 0, top: 272, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, padding: 16 },
-  handle: { alignSelf: 'center', marginTop: 16, width: 107, height: 6, borderRadius: 999, backgroundColor: colors.main },
-  carousel: { paddingTop: 8, gap: 6 },
+  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
+  sheet: { position: 'absolute', left: 0, right: 0, top: 260, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, padding: 12 },
+  handle: { alignSelf: 'center', marginTop: 8, width: 86, height: 5, borderRadius: 999, backgroundColor: colors.main },
+  carousel: { paddingTop: 6, gap: 5 },
   detailsScroll: { flex: 1 },
-  details: { paddingTop: 8, gap: spacing.sm },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 32 },
-  caption: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18 },
-  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 }
+  details: { paddingTop: 6, gap: spacing.xs },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
+  caption: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
+  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12 }
 });

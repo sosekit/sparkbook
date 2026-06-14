@@ -22,7 +22,7 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark }: SparkCardP
   return (
     <Pressable onPress={onPress} style={styles.card}>
       <View style={styles.preview}>
-        <CategoryIcon categoryId={category.id} size={32} />
+        <CategoryIcon categoryId={category.id} size={28} />
       </View>
       <View style={styles.copy}>
         <Text style={styles.title} numberOfLines={1}>{spark.title}</Text>
@@ -31,7 +31,7 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark }: SparkCardP
           <View style={styles.tag}>
             <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
           </View>
-          {showBookmark ? <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={26} /> : null}
+          {showBookmark ? <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={24} /> : null}
         </View>
       </View>
     </Pressable>
@@ -45,33 +45,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: cardStyles.borderColor,
     borderRadius: cardStyles.radius,
-    minHeight: 64,
+    minHeight: 56,
     alignItems: 'stretch',
     overflow: 'hidden'
   },
   preview: {
-    width: 58,
+    width: 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: cardStyles.previewBackground,
     borderRightWidth: 1,
     borderRightColor: cardStyles.dividerColor
   },
-  copy: { flex: 1, gap: 4, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
-  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 14, lineHeight: 18 },
-  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 15 },
-  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 24 },
+  copy: { flex: 1, gap: 2, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xxs },
+  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 13, lineHeight: 16 },
+  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 10, lineHeight: 13 },
+  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 22 },
   tag: {
     alignSelf: 'flex-start',
-    minHeight: 22,
-    borderRadius: 11,
+    minHeight: 20,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgba(46, 91, 173, 0.22)',
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     justifyContent: 'center',
     backgroundColor: colors.surface
   },
-  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 10, lineHeight: 12 }
+  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 9, lineHeight: 11 }
 });
 
 function formatCardLocation(address: string) {

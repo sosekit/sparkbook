@@ -41,40 +41,40 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   input: {
-    minHeight: 48,
+    minHeight: 42,
     borderRadius: radii.md,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     color: colors.ink,
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: fontFamilies.secondary
   },
   creationTitle: {
-    minHeight: 48,
+    minHeight: 42,
     borderWidth: 0,
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral,
     borderRadius: 0,
     paddingHorizontal: 0,
     fontFamily: fontFamilies.primaryRegular,
-    fontSize: 24,
-    lineHeight: 32
+    fontSize: 20,
+    lineHeight: 27
   },
   creationCaption: {
-    minHeight: 112,
+    minHeight: 82,
     borderWidth: 0,
     borderRadius: 0,
     paddingHorizontal: 0,
-    paddingTop: 8,
+    paddingTop: 6,
     fontFamily: fontFamilies.secondary,
     fontSize: 14,
     lineHeight: 20
   },
   multiline: {
-    minHeight: 104,
-    paddingTop: spacing.md,
+    minHeight: 76,
+    paddingTop: spacing.sm,
     textAlignVertical: 'top'
   },
   errorBorder: {

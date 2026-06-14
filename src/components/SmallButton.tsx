@@ -18,10 +18,10 @@ export function SmallButton({ label, selected = false, onPress }: SmallButtonPro
 
 const styles = StyleSheet.create({
   button: {
-    height: 24,
-    minWidth: 63,
-    borderRadius: 12,
-    paddingHorizontal: 10,
+    height: 22,
+    minWidth: 52,
+    borderRadius: 11,
+    paddingHorizontal: 8,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.neutral
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
   label: {
     color: colors.main,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 11,
-    lineHeight: 13
+    fontSize: 10,
+    lineHeight: 12
   },
   selectedLabel: {
     color: colors.white

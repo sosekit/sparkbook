@@ -35,7 +35,7 @@ export function EditProfileScreen({ navigation }: Props) {
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 32 }]}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 24 }]}>
         <BackButton label="Cancel" onPress={() => navigation.goBack()} />
         <Text style={styles.title}>Edit profile</Text>
         <TextField label="Display name" value={displayName} onChangeText={setDisplayName} />
@@ -53,6 +53,6 @@ function initials(name: string) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 20, gap: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 32 }
+  content: { padding: 14, gap: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 }
 });

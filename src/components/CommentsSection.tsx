@@ -46,22 +46,22 @@ export function CommentsSection({ targetType, targetId, inputPlaceholder }: Comm
 const styles = StyleSheet.create({
   panel: {
     backgroundColor: colors.surface,
-    borderRadius: radius.lg,
+    borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.md,
-    gap: spacing.sm
+    padding: spacing.sm,
+    gap: spacing.xs
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 18
+    fontSize: 16
   },
   list: {
-    gap: spacing.sm
+    gap: spacing.xs
   },
   loading: {
-    minHeight: 80,
+    minHeight: 56,
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.xs

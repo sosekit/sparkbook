@@ -14,7 +14,7 @@ export function EmptyLocationSuggestionScreen({ route, navigation }: Props) {
   const insets = useSafeAreaInsets();
   const suggestion = route.params.suggestedSpark;
   return (
-    <View style={[styles.root, { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 }]}>
+    <View style={[styles.root, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}>
       <Text style={styles.title}>No spark here yet</Text>
       <Text style={styles.body}>Start one for this place or explore a nearby suggestion.</Text>
       {suggestion ? <SparkCard spark={suggestion} onPress={() => navigation.navigate('SparkDetail', { sparkId: suggestion.id })} /> : null}
@@ -25,7 +25,7 @@ export function EmptyLocationSuggestionScreen({ route, navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background, padding: 20, justifyContent: 'center', gap: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 30 },
-  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 }
+  root: { flex: 1, backgroundColor: colors.background, padding: 16, justifyContent: 'center', gap: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 },
+  body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18 }
 });

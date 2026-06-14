@@ -35,7 +35,7 @@ export function ListDetailScreen({ route, navigation }: Props) {
 
   if (!list || list.status === 'deleted') {
     return (
-      <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
+      <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <BackButton label="Go back" onPress={() => navigation.goBack()} />
         <Text style={styles.title}>This list is no longer available.</Text>
         <Text style={styles.subtitle}>Deleted lists stay private. Browse your available Sparkbook lists to keep going.</Text>
@@ -49,7 +49,7 @@ export function ListDetailScreen({ route, navigation }: Props) {
     .filter((spark): spark is NonNullable<typeof spark> => Boolean(spark));
 
   return (
-    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}>
+    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
       <BackButton onPress={() => navigation.goBack()} />
       <Text style={styles.title}>{list.title}</Text>
       <Text style={styles.subtitle}>{list.description}</Text>
@@ -72,10 +72,10 @@ export function ListDetailScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 20, gap: spacing.md },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 32 },
-  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 },
-  reorderHint: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 12 }
+  content: { padding: 14, gap: spacing.sm },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 },
+  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 19 },
+  reorderHint: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 11 }
 });
 
 function sameIds(a: string[], b: string[]) {

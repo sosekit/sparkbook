@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 12
+    paddingHorizontal: 16,
+    paddingTop: 8
   },
   scroll: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 32
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 24
   }
 });

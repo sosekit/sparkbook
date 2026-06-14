@@ -41,13 +41,13 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 44,
+    minHeight: 40,
     borderRadius: radii.sm,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: spacing.xs
+    gap: spacing.xxs
   },
   primary: {
     backgroundColor: colors.accent

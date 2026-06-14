@@ -37,7 +37,7 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
           }}
           style={styles.creator}
         >
-          <Avatar name={creatorName} size={28} />
+          <Avatar name={creatorName} size={24} />
         </Pressable>
       ) : null}
       <View style={styles.copy}>
@@ -47,7 +47,7 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
           <View style={styles.tag}>
             <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
           </View>
-          <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={26} />
+          <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={24} />
         </View>
       </View>
     </Pressable>
@@ -56,8 +56,8 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
 
 const styles = StyleSheet.create({
   card: {
-    width: 124,
-    height: 228,
+    width: 116,
+    height: 194,
     borderRadius: 4,
     backgroundColor: colors.neutral,
     overflow: 'hidden',
@@ -66,11 +66,11 @@ const styles = StyleSheet.create({
     borderColor: cardStyles.borderColor
   },
   image: {
-    height: 142,
+    height: 112,
     backgroundColor: cardStyles.previewBackground,
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    padding: 6,
+    padding: 5,
     borderBottomWidth: 1,
     borderBottomColor: cardStyles.dividerColor
   },
@@ -79,38 +79,38 @@ const styles = StyleSheet.create({
   },
   copy: {
     flex: 1,
-    paddingHorizontal: 8,
-    paddingTop: 8,
-    paddingBottom: 8,
-    gap: 4
+    paddingHorizontal: 7,
+    paddingTop: 6,
+    paddingBottom: 6,
+    gap: 3
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 11,
-    lineHeight: 14,
-    minHeight: 30
+    fontSize: 10,
+    lineHeight: 13,
+    minHeight: 26
   },
   meta: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
     fontSize: 9,
-    lineHeight: 12
+    lineHeight: 11
   },
   bottomRow: {
     marginTop: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 6
+    gap: 5
   },
   tag: {
-    maxWidth: 74,
-    minHeight: 20,
-    borderRadius: 10,
+    maxWidth: 68,
+    minHeight: 18,
+    borderRadius: 9,
     borderWidth: 1,
     borderColor: 'rgba(46, 91, 173, 0.22)',
-    paddingHorizontal: 6,
+    paddingHorizontal: 5,
     justifyContent: 'center',
     backgroundColor: colors.surface
   },
@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
     color: colors.main,
     fontFamily: fontFamilies.secondaryBold,
     fontSize: 8,
-    lineHeight: 10
+    lineHeight: 9
   },
   creator: {
     position: 'absolute',
-    left: 6,
-    top: 6
+    left: 5,
+    top: 5
   }
 });
 

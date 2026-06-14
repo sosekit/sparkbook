@@ -272,7 +272,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={[styles.header, { paddingTop: insets.top + 8, minHeight: insets.top + 64 }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
         <Pressable accessibilityRole="button" onPress={back} style={styles.headerIcon}>
           <SparkbookIcon name={step === 'media' ? 'close' : 'chevronLeft'} color={colors.text} size={24} />
         </Pressable>
@@ -413,42 +413,42 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, gap: 12, backgroundColor: colors.surface },
+  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, gap: 10, backgroundColor: colors.surface },
   headerIcon: { width: 28, height: 44, alignItems: 'flex-start', justifyContent: 'center' },
-  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
+  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
   mediaStep: { flex: 1, paddingHorizontal: 0 },
   mediaImage: { width: '100%', height: '100%' },
-  content: { paddingHorizontal: 16, paddingBottom: 112, gap: 12 },
-  previewStrip: { gap: 8, paddingTop: 8 },
-  largePreview: { width: 196, height: 336, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.neutral },
+  content: { paddingHorizontal: 14, paddingBottom: 96, gap: 8 },
+  previewStrip: { gap: 6, paddingTop: 6 },
+  largePreview: { width: 168, height: 260, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.neutral },
   largePlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.neutral },
   changePhotoButton: { height: 34, borderRadius: 17, backgroundColor: colors.main, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', paddingHorizontal: 14 },
   changePhotoButtonPressed: { backgroundColor: colors.highlight },
   changePhotoText: { color: colors.white, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   prefillNotice: { borderRadius: radius.sm, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.neutral, padding: spacing.sm, gap: 2 },
-  prefillTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 16 },
-  prefillText: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13 },
-  locationRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: 1, borderBottomColor: colors.neutral },
-  locationText: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
+  prefillTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15 },
+  prefillText: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
+  locationRow: { minHeight: 42, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 1, borderBottomColor: colors.neutral },
+  locationText: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
   label: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12 },
-  contextGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  contextChip: { height: 28, borderRadius: 14, paddingHorizontal: 10, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
+  contextGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  contextChip: { height: 24, borderRadius: 12, paddingHorizontal: 8, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
   contextChipSelected: { backgroundColor: colors.main },
   contextText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 11 },
   contextTextSelected: { color: colors.white },
   helper: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
   unable: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
-  hiddenGemCard: { marginTop: 96, marginHorizontal: 30, minHeight: 298, borderWidth: 3, borderColor: colors.main, borderRadius: 14, alignItems: 'center', justifyContent: 'center', padding: spacing.md },
-  hiddenTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, textAlign: 'center' },
-  hiddenLink: { color: colors.main, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18, textAlign: 'center', textDecorationLine: 'underline' },
-  locationResult: { gap: 6 },
-  resultTitle: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
-  resultAddress: { color: '#B8BDC6', fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
-  tagGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  tag: { minHeight: 36, borderRadius: 18, borderWidth: 1, borderColor: colors.highlight, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, backgroundColor: colors.surface },
+  hiddenGemCard: { marginTop: 48, marginHorizontal: 20, minHeight: 220, borderWidth: 2, borderColor: colors.main, borderRadius: 12, alignItems: 'center', justifyContent: 'center', padding: spacing.sm },
+  hiddenTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, textAlign: 'center' },
+  hiddenLink: { color: colors.main, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16, textAlign: 'center', textDecorationLine: 'underline' },
+  locationResult: { gap: 3, paddingVertical: 4 },
+  resultTitle: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
+  resultAddress: { color: '#B8BDC6', fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
+  tagGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  tag: { minHeight: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.highlight, flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 8, backgroundColor: colors.surface },
   tagSelected: { backgroundColor: colors.main, borderColor: colors.main },
   tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   tagTextSelected: { color: colors.white },
   warning: { color: colors.danger, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 12, borderTopWidth: 1, borderTopColor: colors.neutral, backgroundColor: colors.surface }
+  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 14, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.neutral, backgroundColor: colors.surface }
 });

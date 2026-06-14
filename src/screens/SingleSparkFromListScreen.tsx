@@ -44,7 +44,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.root}>
-      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
+      <View style={[styles.header, { paddingTop: insets.top + 6 }]}>
         <View style={styles.headerTitleWrap}>
           <Pressable onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} style={styles.back}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
@@ -53,7 +53,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
         </View>
         <BookmarkToggle saved={bookmarks.includes(spark.id)} onPress={() => toggleBookmark(spark.id)} size={30} />
       </View>
-      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 96 }]}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 84 }]}>
         <SparkMediaGallery spark={spark} />
         <View style={styles.details}>
           <Text style={styles.title}>{spark.title}</Text>
@@ -89,18 +89,18 @@ function Metric({ icon, label }: { icon: 'chat' | 'bookmark' | 'arrowForward'; l
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
-  header: { minHeight: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: '#CACACA' },
-  headerTitleWrap: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  header: { minHeight: 66, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 14, borderBottomWidth: 1, borderBottomColor: '#CACACA' },
+  headerTitleWrap: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   back: { width: 24, height: 44, justifyContent: 'center' },
-  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
-  content: { gap: 8 },
-  details: { paddingHorizontal: 16, paddingTop: 8, gap: 12 },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
-  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 16, lineHeight: 24, borderTopWidth: 1, borderTopColor: '#EDEDED', paddingTop: 8 },
-  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 4 },
-  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
-  stats: { flexDirection: 'row', gap: 10, paddingHorizontal: 16, paddingVertical: 8 },
+  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
+  content: { gap: 6 },
+  details: { paddingHorizontal: 14, paddingTop: 6, gap: 8 },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 27 },
+  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20, borderTopWidth: 1, borderTopColor: '#EDEDED', paddingTop: 6 },
+  locationRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 2 },
+  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 11, lineHeight: 14 },
+  stats: { flexDirection: 'row', gap: 8, paddingHorizontal: 14, paddingVertical: 4 },
   metric: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   metricText: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  switcher: { paddingHorizontal: 16, gap: 8, paddingTop: 8 }
+  switcher: { paddingHorizontal: 14, gap: 6, paddingTop: 4 }
 });

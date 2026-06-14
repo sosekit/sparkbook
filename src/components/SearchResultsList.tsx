@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(46, 91, 173, 0.18)',
-    borderRadius: 12,
+    borderRadius: 10,
     overflow: 'hidden'
   },
   row: {
-    minHeight: 54,
+    minHeight: 46,
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.neutral
   },
   icon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     borderWidth: 1,
     borderColor: 'rgba(46, 91, 173, 0.22)',
     alignItems: 'center',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface
   },
   copy: { flex: 1, gap: 2 },
-  title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13, lineHeight: 18 },
-  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
+  title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
+  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
   empty: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16, padding: spacing.sm }
 });

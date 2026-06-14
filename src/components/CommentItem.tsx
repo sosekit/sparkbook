@@ -10,7 +10,7 @@ import { Avatar } from './Avatar';
 export function CommentItem({ comment }: { comment: Comment }) {
   return (
     <View style={styles.row}>
-      <Avatar name={comment.userName} size={32} />
+      <Avatar name={comment.userName} size={28} />
       <View style={styles.bubble}>
         <View style={styles.header}>
           <Text style={styles.name}>{comment.userName}</Text>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral,
     backgroundColor: colors.surface,
     padding: spacing.sm,
-    gap: 4
+    gap: 2
   },
   header: {
     flexDirection: 'row',
@@ -45,17 +45,17 @@ const styles = StyleSheet.create({
   name: {
     color: colors.text,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 12
+    fontSize: 11
   },
   date: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
-    fontSize: 11
+    fontSize: 10
   },
   body: {
     color: colors.text,
     fontFamily: fontFamilies.secondary,
-    fontSize: 13,
-    lineHeight: 18
+    fontSize: 12,
+    lineHeight: 16
   }
 });
