@@ -26,7 +26,7 @@ export function SparkListItemCard({ spark, order, dragging = false, onPress, onL
       onPress={onPress}
       onLongPress={onLongPress}
       delayLongPress={260}
-      style={[styles.card, dragging ? styles.dragging : null]}
+      style={({ pressed }) => [styles.card, dragging ? styles.dragging : null, pressed ? styles.pressed : null]}
     >
       <View style={styles.preview}>
         {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" /> : <CategoryIcon categoryId={category.id} selected size={38} />}
@@ -47,7 +47,7 @@ export function SparkListItemCard({ spark, order, dragging = false, onPress, onL
 
 const styles = StyleSheet.create({
   card: {
-    minHeight: 78,
+    minHeight: 88,
     flexDirection: 'row',
     alignItems: 'stretch',
     backgroundColor: colors.neutral,
@@ -60,8 +60,11 @@ const styles = StyleSheet.create({
     opacity: 0.92,
     transform: [{ scale: 1.015 }]
   },
+  pressed: {
+    opacity: 0.78
+  },
   preview: {
-    width: 74,
+    width: 88,
     backgroundColor: cardStyles.previewBackground,
     alignItems: 'center',
     justifyContent: 'center',
@@ -91,14 +94,14 @@ const styles = StyleSheet.create({
   copy: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     gap: 4
   },
   title: {
     color: colors.text,
-    fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 15,
-    lineHeight: 20
+    fontFamily: fontFamilies.secondaryBold,
+    fontSize: 16,
+    lineHeight: 24
   },
   meta: {
     color: colors.altText,

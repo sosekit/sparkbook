@@ -4,7 +4,6 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { BookmarkToggle } from '../components/BookmarkToggle';
-import { CommentsSection } from '../components/CommentsSection';
 import { CTAButton } from '../components/CTAButton';
 import { ListMapPreview } from '../components/ListMapPreview';
 import { SparkPreviewCard } from '../components/SparkPreviewCard';
@@ -51,11 +50,20 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
   }, [list, navigation, route.params.listId]);
 
   if (!list || list.status === 'deleted') return null;
+  const activeList = list;
+
+  function handlePreviewPress(spark: Spark) {
+    if (spark.id === selectedSpark?.id) {
+      navigation.navigate('SingleSparkFromList', { listId: activeList.id, sparkId: spark.id });
+      return;
+    }
+    setSelectedId(spark.id);
+  }
 
   return (
     <View style={styles.root}>
       <ListMapPreview sparks={listSparks} selectedId={selectedSpark?.id} onSelect={setSelectedId} />
-      <View style={[styles.header, { top: insets.top + 8 }]}>
+      <View style={[styles.header, { top: insets.top }]}>
         <View style={styles.headerGroup}>
           <Pressable onPress={() => navigation.goBack()} style={styles.back}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
@@ -68,15 +76,27 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
         <View style={styles.handle} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
           {listSparks.map((spark) => (
-            <SparkPreviewCard key={spark.id} spark={spark} onPress={() => navigation.navigate('SingleSparkFromList', { listId: list.id, sparkId: spark.id })} />
+            <SparkPreviewCard
+              key={spark.id}
+              spark={spark}
+              variant="media"
+              selected={spark.id === selectedSpark?.id}
+              onPress={() => handlePreviewPress(spark)}
+            />
           ))}
         </ScrollView>
         <ScrollView style={styles.detailsScroll} contentContainerStyle={styles.details}>
-          <Text style={styles.title}>{selectedSpark?.title || list.title}</Text>
-          <Text style={styles.caption}>{selectedSpark?.description || list.description || 'A saved Sparkbook list.'}</Text>
-          <Text style={styles.location}>{selectedSpark?.addressLabel || `${listSparks.length} saved sparks`}</Text>
+          <View style={styles.titleField}>
+            <Text style={styles.title} numberOfLines={2}>{selectedSpark?.title || list.title}</Text>
+          </View>
+          <View style={styles.captionField}>
+            <Text style={styles.caption}>{selectedSpark?.description || list.description || 'A saved Sparkbook list.'}</Text>
+          </View>
+          <View style={styles.locationField}>
+            <SparkbookIcon name="location" color={colors.text} size={16} />
+            <Text style={styles.location} numberOfLines={1}>{selectedSpark?.addressLabel || `${listSparks.length} saved sparks`}</Text>
+          </View>
           <CTAButton label="Start Exploring" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} disabled={!listSparks.length} />
-          <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Share a thought about this list" />
         </ScrollView>
       </View>
     </View>
@@ -85,16 +105,19 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
-  header: { position: 'absolute', left: 14, right: 14, height: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  headerGroup: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  header: { position: 'absolute', left: 16, right: 16, height: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  headerGroup: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   back: { width: 24, height: 44, justifyContent: 'center' },
-  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
-  sheet: { position: 'absolute', left: 0, right: 0, top: 260, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, padding: 12 },
-  handle: { alignSelf: 'center', marginTop: 8, width: 86, height: 5, borderRadius: 999, backgroundColor: colors.main },
-  carousel: { paddingTop: 6, gap: 5 },
+  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
+  sheet: { position: 'absolute', left: 0, right: 0, top: 272, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, paddingHorizontal: 16, paddingTop: 16 },
+  handle: { alignSelf: 'center', width: 107, height: 6, borderRadius: 5, backgroundColor: colors.main },
+  carousel: { paddingTop: 8, gap: 6 },
   detailsScroll: { flex: 1 },
-  details: { paddingTop: 6, gap: spacing.xs },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
-  caption: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
-  location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12 }
+  details: { paddingTop: 8, paddingBottom: 24, gap: spacing.sm },
+  titleField: { padding: 8 },
+  captionField: { padding: 8, borderTopWidth: 1, borderTopColor: '#EDEDED', borderRadius: 4 },
+  locationField: { minHeight: 24, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 4 },
+  title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 16, lineHeight: 24 },
+  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
+  location: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 }
 });

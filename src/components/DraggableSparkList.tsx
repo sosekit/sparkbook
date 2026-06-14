@@ -3,7 +3,7 @@ import { Animated, PanResponder, StyleSheet, View } from 'react-native';
 import { Spark } from '../types/spark';
 import { SparkListItemCard } from './SparkListItemCard';
 
-const ROW_HEIGHT = 90;
+const ROW_HEIGHT = 98;
 
 type DraggableSparkListProps = {
   sparks: Spark[];
@@ -103,7 +103,7 @@ function moveToIndex(ids: string[], id: string, target: number) {
 
 const styles = StyleSheet.create({
   list: {
-    gap: 10
+    gap: 8
   },
   row: {
     minHeight: ROW_HEIGHT

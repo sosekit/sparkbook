@@ -1,11 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BackButton } from '../components/BackButton';
 import { Button } from '../components/Button';
 import { CommentsSection } from '../components/CommentsSection';
 import { DraggableSparkList } from '../components/DraggableSparkList';
+import { EmptyState } from '../components/EmptyState';
 import { useLists } from '../hooks/useLists';
 import { useSparks } from '../hooks/useSparks';
 import { colors } from '../theme/colors';
@@ -49,22 +50,27 @@ export function ListDetailScreen({ route, navigation }: Props) {
     .filter((spark): spark is NonNullable<typeof spark> => Boolean(spark));
 
   return (
-    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
+    <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 96 }]}>
       <BackButton onPress={() => navigation.goBack()} />
-      <Text style={styles.title}>{list.title}</Text>
-      <Text style={styles.subtitle}>{list.description}</Text>
-      <Text style={styles.reorderHint}>Hold and order</Text>
+      <View style={styles.hero}>
+        <Text style={styles.title}>{list.title}</Text>
+        {list.description ? <Text style={styles.subtitle}>{list.description}</Text> : null}
+        <Text style={styles.meta}>{listSparks.length} {listSparks.length === 1 ? 'spark' : 'sparks'} · {list.visibility}</Text>
+      </View>
       <Button label="Start guide" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} />
-      <DraggableSparkList
-        sparks={listSparks}
-        orderedIds={orderedIds}
-        onOrderPreview={setOrderedIds}
-        onOrderCommit={async (next) => {
-          await reorderListSparks(list.id, next);
-          await refresh();
-        }}
-        onOpenSpark={(sparkId) => navigation.navigate('SparkDetail', { sparkId })}
-      />
+      <Text style={styles.reorderHint}>Hold and order</Text>
+      {listSparks.length ? (
+        <DraggableSparkList
+          sparks={listSparks}
+          orderedIds={orderedIds}
+          onOrderPreview={setOrderedIds}
+          onOrderCommit={async (next) => {
+            await reorderListSparks(list.id, next);
+            await refresh();
+          }}
+          onOpenSpark={(sparkId) => navigation.navigate('SingleSparkFromList', { listId: list.id, sparkId })}
+        />
+      ) : <EmptyState title="This list is empty" message="Add sparks to build a route you can revisit." />}
       <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Share a thought about this list" />
     </ScrollView>
   );
@@ -72,10 +78,12 @@ export function ListDetailScreen({ route, navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 14, gap: spacing.sm },
-  title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 24, lineHeight: 30 },
-  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 19 },
-  reorderHint: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 11 }
+  content: { paddingHorizontal: 16, gap: spacing.md },
+  hero: { gap: spacing.xs },
+  title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
+  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20 },
+  meta: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16, textTransform: 'capitalize' },
+  reorderHint: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 }
 });
 
 function sameIds(a: string[], b: string[]) {

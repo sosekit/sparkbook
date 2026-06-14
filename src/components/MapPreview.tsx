@@ -35,7 +35,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
     .map((item) => {
       const isSelected = item.id === selected?.id;
       const isCompleted = completedSet.has(item.id);
-      const size = isSelected ? 40 : 34;
+      const size = 40;
       const state = isCompleted ? 'completed' : isSelected ? 'selected' : 'upcoming';
       return `
         L.marker([${item.latitude}, ${item.longitude}], {
@@ -113,16 +113,16 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
             place-items: center;
             border-radius: 999px;
             color: #FFFFFF;
-            background: #2E5BAD;
+            background: #7BA3E0;
             border: 2px solid rgba(255, 255, 255, 0.96);
             box-shadow: 0 2px 8px rgba(15, 26, 46, 0.12);
           }
           .spark-dot.selected {
-            background: #7BA3E0;
+            background: #2E5BAD;
             outline: 5px solid rgba(123, 163, 224, 0.22);
           }
           .spark-dot.upcoming {
-            background: #2E5BAD;
+            background: #7BA3E0;
           }
           .spark-dot.completed {
             background: #4E6585;

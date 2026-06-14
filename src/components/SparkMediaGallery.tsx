@@ -1,7 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { colors } from '../theme/colors';
-import { radius } from '../theme/radius';
 import { fontFamilies } from '../theme/typography';
 import { Spark, SparkMedia } from '../types/spark';
 import { getCategoryForSpark } from '../utils/category';
@@ -50,12 +49,12 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
 
 const styles = StyleSheet.create({
   row: {
-    gap: 5,
+    gap: 6,
     paddingHorizontal: 16
   },
   card: {
-    width: 172,
-    height: 292,
+    width: 198,
+    height: 348,
     borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
@@ -63,9 +62,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(78, 101, 133, 0.18)'
   },
   compactCard: {
-    width: 154,
-    height: 232,
-    borderRadius: radius.sm,
+    width: 156,
+    height: 200,
+    borderRadius: 4,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
     borderWidth: 1,
@@ -81,10 +80,10 @@ const styles = StyleSheet.create({
     gap: 6
   },
   emptyCardSize: {
-    height: 138
+    height: 348
   },
   compactEmptyCard: {
-    height: 124
+    height: 200
   },
   emptyText: {
     color: colors.altText,

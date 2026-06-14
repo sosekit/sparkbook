@@ -172,6 +172,6 @@ const styles = StyleSheet.create({
   sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23, marginTop: 0 },
   previewRow: { gap: 6, paddingRight: 12 },
   listRow: { gap: 6, paddingRight: 12 },
-  listPreview: { width: 212 },
+  listPreview: { width: 242 },
   verticalList: { gap: 6 }
 });

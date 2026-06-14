@@ -1,17 +1,17 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
 import { EmptyState } from '../components/EmptyState';
 import { ListCard } from '../components/ListCard';
-import { SearchBar } from '../components/SearchBar';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { useLists } from '../hooks/useLists';
 import { useSparks } from '../hooks/useSparks';
 import { colors } from '../theme/colors';
+import { radius } from '../theme/radius';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
+import { SparkList } from '../types/list';
 import { RootStackParamList } from '../types/navigation';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Lists'>;
@@ -20,50 +20,93 @@ export function ListsScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
   const { lists } = useLists();
   const { sparks } = useSparks();
-  const [filter, setFilter] = useState<'all' | 'collected' | 'suggested'>('all');
-  const [query, setQuery] = useState('');
-  const active = lists
-    .filter((list) => list.status === 'active')
-    .filter((list) => filter === 'all' || list.listType === filter)
-    .filter((list) => `${list.title} ${list.description || ''}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const active = lists.filter((list) => list.status === 'active');
+  const recentlyCreated = active.filter((list) => list.createdBy === 'profile-ray' && list.listType === 'collected');
+  const recentIds = new Set(recentlyCreated.map((list) => list.id));
+  const publicLists = active.filter((list) => !recentIds.has(list.id) && (list.visibility === 'public' || list.listType !== 'collected'));
 
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
-        <Text style={styles.title}>Your lists</Text>
-        <SearchBar value={query} onChangeText={setQuery} placeholder="Search lists" />
-        <Pressable onPress={() => navigation.navigate('CreateSparkList')} style={styles.createList}>
+      <View style={[styles.header, { paddingTop: insets.top, height: insets.top + 56 }]}>
+        <Text style={styles.title}>Your Lists</Text>
+      </View>
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 88 }]}>
+        <Pressable onPress={() => navigation.navigate('CreateSparkList')} style={({ pressed }) => [styles.createList, pressed ? styles.createListPressed : null]}>
           <Text style={styles.createText}>Create new list</Text>
-          <SparkbookIcon name="add" color={colors.main} size={22} />
+          <SparkbookIcon name="add" color={colors.main} size={14} />
         </Pressable>
-        <View style={styles.filters}>
-          {(['all', 'collected', 'suggested'] as const).map((item) => (
-            <Pressable key={item} onPress={() => setFilter(item)} style={[styles.filter, filter === item ? styles.activeFilter : null]}>
-              <Text style={[styles.filterText, filter === item ? styles.activeFilterText : null]}>{item === 'all' ? 'All' : item[0].toUpperCase() + item.slice(1)}</Text>
-            </Pressable>
-          ))}
-        </View>
-        <Text style={styles.sectionTitle}>{filter === 'all' ? 'Recent lists' : `${filter[0].toUpperCase()}${filter.slice(1)} lists`}</Text>
-        {active.length ? active.map((list) => (
-          <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
-        )) : <EmptyState title="No lists yet" message="Create or save lists to guide future exploration." />}
+        <ListSection title="Recently Created Lists" lists={recentlyCreated} sparks={sparks} onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        <ListSection title="Public Lists" lists={publicLists} sparks={sparks} onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        {!active.length ? <EmptyState title="No lists yet" message="Create or save lists to guide future exploration." /> : null}
       </ScrollView>
       <BottomNav active="lists" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => navigation.navigate('Bookmarks')} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => undefined} onProfile={() => navigation.navigate('Profile')} />
     </View>
   );
 }
 
+function ListSection({ title, lists, sparks, onOpen }: { title: string; lists: SparkList[]; sparks: ReturnType<typeof useSparks>['sparks']; onOpen: (listId: string) => void }) {
+  if (!lists.length) return null;
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <View style={styles.cardStack}>
+        {lists.map((list) => (
+          <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => onOpen(list.id)} />
+        ))}
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background, paddingBottom: 58 },
-  content: { padding: 14, gap: spacing.sm },
-  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 20, lineHeight: 25 },
-  subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 15, lineHeight: 22 },
-  createList: { height: 38, borderRadius: 9, borderWidth: 1, borderColor: colors.main, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
-  createText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
-  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23 },
-  filters: { flexDirection: 'row', gap: spacing.xs },
-  filter: { height: 26, borderRadius: 13, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.surface, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' },
-  activeFilter: { backgroundColor: colors.main, borderColor: colors.main },
-  filterText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  activeFilterText: { color: colors.white }
+  root: { flex: 1, backgroundColor: colors.background },
+  header: {
+    backgroundColor: colors.surface,
+    paddingHorizontal: 16,
+    justifyContent: 'center'
+  },
+  content: {
+    paddingHorizontal: 16,
+    paddingTop: 0,
+    gap: 16
+  },
+  title: {
+    color: colors.text,
+    fontFamily: fontFamilies.primaryRegular,
+    fontSize: 22,
+    lineHeight: 32
+  },
+  createList: {
+    width: '100%',
+    height: 42,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.main,
+    backgroundColor: colors.surface,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs
+  },
+  createListPressed: {
+    backgroundColor: colors.neutral
+  },
+  createText: {
+    color: colors.main,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 14,
+    lineHeight: 24
+  },
+  section: {
+    gap: 8
+  },
+  sectionTitle: {
+    color: colors.text,
+    fontFamily: fontFamilies.primaryRegular,
+    fontSize: 22,
+    lineHeight: 32
+  },
+  cardStack: {
+    gap: 16
+  }
 });
