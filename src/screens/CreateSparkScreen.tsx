@@ -297,6 +297,8 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     if (step === 'location') setStep('content');
   }
 
+  const showLocationSummary = Boolean(editingSparkId || selectedLocation);
+
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
@@ -347,11 +349,13 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           <TextField label="" placeholder="Add a note" value={description} onChangeText={setDescription} multiline variant="creationCaption" />
           <InlineError message={errors.caption} />
           <TextField label="" placeholder="Add details for later" value={reflectionNote} onChangeText={setReflectionNote} multiline variant="creationCaption" />
-          <Pressable onPress={() => setStep('location')} style={styles.locationRow}>
-            <SparkbookIcon name="location" color={colors.text} size={18} />
-            <Text style={styles.locationText}>{selectedLocation ? selectedLocation.displayName : 'Add a Location'}</Text>
-            <SparkbookIcon name="chevronRight" color={colors.text} size={20} />
-          </Pressable>
+          {showLocationSummary ? (
+            <Pressable onPress={() => setStep('location')} style={styles.locationRow}>
+              <SparkbookIcon name="location" color={colors.text} size={18} />
+              <Text style={styles.locationText}>{selectedLocation ? selectedLocation.displayName : 'Change location'}</Text>
+              <SparkbookIcon name="chevronRight" color={colors.text} size={20} />
+            </Pressable>
+          ) : null}
           <InlineError message={errors.action} />
           <Text style={styles.label}>Add hashtag</Text>
           <View style={styles.contextGrid}>

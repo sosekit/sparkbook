@@ -15,13 +15,14 @@ type MapPreviewProps = {
   height?: number;
   fullBleed?: boolean;
   showMarkers?: boolean;
+  preloadToronto?: boolean;
   completedIds?: string[];
   liveLocation?: { latitude: number; longitude: number } | null;
   routeSegments?: GuideRouteSegment[];
   onMarkerPress?: (sparkId: string) => void;
 };
 
-export function MapPreview({ locations, selectedId, height = 260, fullBleed = false, showMarkers = true, completedIds = [], liveLocation, routeSegments = [], onMarkerPress }: MapPreviewProps) {
+export function MapPreview({ locations, selectedId, height = 260, fullBleed = false, showMarkers = true, preloadToronto = false, completedIds = [], liveLocation, routeSegments = [], onMarkerPress }: MapPreviewProps) {
   const [loaded, setLoaded] = useState(false);
   const [mapFailed, setMapFailed] = useState(false);
   const loadedRef = useRef(false);
@@ -31,6 +32,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
   );
   const selected = safeLocations.find((item) => item.id === selectedId) || safeLocations[0];
   const center = liveLocation || selected || { latitude: 43.6532, longitude: -79.3832 };
+  const usePreloadedTorontoMap = preloadToronto || (DEMO_MODE && fullBleed);
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const markers = safeLocations
     .map((item) => {
@@ -212,6 +214,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
   }, [loaded]);
 
   useEffect(() => {
+    if (usePreloadedTorontoMap) return;
     loadedRef.current = false;
     setLoaded(false);
     setMapFailed(false);
@@ -222,12 +225,34 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
       }
     }, DEMO_MODE ? 2500 : 7000);
     return () => clearTimeout(timer);
-  }, [html]);
+  }, [html, usePreloadedTorontoMap]);
+
+  if (usePreloadedTorontoMap) {
+    return (
+      <View style={[styles.wrap, fullBleed ? styles.fullBleed : null, { height }]}>
+        <MapFallback
+          locations={safeLocations}
+          selectedId={selected?.id}
+          completedIds={completedIds}
+          liveLocation={liveLocation}
+          routeSegments={routeSegments}
+          onMarkerPress={onMarkerPress}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.wrap, fullBleed ? styles.fullBleed : null, { height }]}>
       {mapFailed ? (
-        <MapFallback locations={safeLocations} selectedId={selected?.id} liveLocation={liveLocation} onMarkerPress={onMarkerPress} />
+        <MapFallback
+          locations={safeLocations}
+          selectedId={selected?.id}
+          completedIds={completedIds}
+          liveLocation={liveLocation}
+          routeSegments={routeSegments}
+          onMarkerPress={onMarkerPress}
+        />
       ) : (
         <WebView
           originWhitelist={['*']}
@@ -261,7 +286,16 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
               // Ignore malformed map bridge messages.
             }
           }}
-          renderError={() => <MapFallback locations={safeLocations} selectedId={selected?.id} liveLocation={liveLocation} onMarkerPress={onMarkerPress} />}
+          renderError={() => (
+            <MapFallback
+              locations={safeLocations}
+              selectedId={selected?.id}
+              completedIds={completedIds}
+              liveLocation={liveLocation}
+              routeSegments={routeSegments}
+              onMarkerPress={onMarkerPress}
+            />
+          )}
         />
       )}
       {!loaded ? (

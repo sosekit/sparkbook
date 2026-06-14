@@ -30,6 +30,14 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
     );
   }
 
+  if (media.length === 1) {
+    return (
+      <View style={[styles.singleRow, { paddingHorizontal: horizontalPadding }]}>
+        <GalleryItem item={media[0]} style={cardStyle} categoryId={category.id} />
+      </View>
+    );
+  }
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.row, { paddingHorizontal: horizontalPadding }]}>
       {media.map((item) => (
@@ -70,6 +78,10 @@ const styles = StyleSheet.create({
   row: {
     gap: 6,
     paddingHorizontal: 16
+  },
+  singleRow: {
+    width: '100%',
+    alignItems: 'center'
   },
   card: {
     width: 198,
