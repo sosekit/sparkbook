@@ -10,15 +10,20 @@ type SearchResultsListProps = {
   query: string;
   searching?: boolean;
   onSelect: (result: SearchResult) => void;
+  onCreateFromQuery?: (query: string) => void;
 };
 
-export function SearchResultsList({ results, query, searching = false, onSelect }: SearchResultsListProps) {
+export function SearchResultsList({ results, query, searching = false, onSelect, onCreateFromQuery }: SearchResultsListProps) {
   if (query.trim().length < 2) return null;
 
   return (
     <View style={styles.wrap}>
       {searching ? <Text style={styles.empty}>Searching Toronto places...</Text> : null}
-      {!searching && !results.length ? <Text style={styles.empty}>No spark here yet. Start one for this place.</Text> : null}
+      {!searching && !results.length ? (
+        <Pressable onPress={() => onCreateFromQuery?.(query.trim())} disabled={!onCreateFromQuery} style={({ pressed }) => [styles.emptyAction, pressed ? styles.emptyPressed : null]}>
+          <Text style={styles.empty}>No spark here yet. Tap to start one.</Text>
+        </Pressable>
+      ) : null}
       {results.map((result) => (
         <Pressable key={result.id} onPress={() => onSelect(result)} style={styles.row}>
           <View style={styles.icon}>
@@ -66,4 +71,7 @@ const styles = StyleSheet.create({
   title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
   empty: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16, padding: spacing.sm }
+  ,
+  emptyAction: { backgroundColor: colors.surface },
+  emptyPressed: { backgroundColor: colors.neutral }
 });

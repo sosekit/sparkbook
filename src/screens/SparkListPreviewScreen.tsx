@@ -34,13 +34,17 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
     () => orderedIds.map((id) => sparks.find((spark) => spark.id === id && spark.status === 'active')).filter(Boolean) as Spark[],
     [orderedIds, sparks]
   );
-  const [selectedId, setSelectedId] = useState<string | undefined>(listSparks[0]?.id);
+  const [selectedId, setSelectedId] = useState<string | undefined>(route.params.selectedSparkId || listSparks[0]?.id);
   const selectedSpark = listSparks.find((spark) => spark.id === selectedId) || listSparks[0];
 
   useEffect(() => {
+    if (!selectedId && route.params.selectedSparkId && listSparks.some((spark) => spark.id === route.params.selectedSparkId)) {
+      setSelectedId(route.params.selectedSparkId);
+      return;
+    }
     if (!selectedId && listSparks[0]?.id) setSelectedId(listSparks[0].id);
     if (selectedId && !listSparks.some((spark) => spark.id === selectedId)) setSelectedId(listSparks[0]?.id);
-  }, [listSparks, selectedId]);
+  }, [listSparks, route.params.selectedSparkId, selectedId]);
 
   useEffect(() => {
     if (!list || list.status === 'deleted') navigation.replace('SavedListError', { listId: route.params.listId });
@@ -64,12 +68,7 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
         <View style={styles.handle} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
           {listSparks.map((spark) => (
-            <Pressable
-              key={spark.id}
-              onPress={() => navigation.navigate('SingleSparkFromList', { listId: list.id, sparkId: spark.id })}
-            >
-              <SparkPreviewCard spark={spark} />
-            </Pressable>
+            <SparkPreviewCard key={spark.id} spark={spark} onPress={() => navigation.navigate('SingleSparkFromList', { listId: list.id, sparkId: spark.id })} />
           ))}
         </ScrollView>
         <ScrollView style={styles.detailsScroll} contentContainerStyle={styles.details}>

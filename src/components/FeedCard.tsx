@@ -14,16 +14,17 @@ type FeedCardProps = {
   onPress: () => void;
   onBookmark: () => void;
   onCreatorPress?: () => void;
+  onCategoryPress?: () => void;
 };
 
-export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPress }: FeedCardProps) {
+export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPress, onCategoryPress }: FeedCardProps) {
   if (!spark?.id) return null;
   const category = getCategoryForSpark(spark);
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
   const isOwnSpark = spark.createdBy === 'profile-ray';
   const creatorName = getCreatorName(spark.createdBy, spark.recommendedBy);
   return (
-    <Pressable onPress={onPress} style={styles.card}>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.image}>
         {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" /> : <CategoryIcon categoryId={category.id} selected size={30} />}
       </View>
@@ -44,9 +45,21 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
         <Text style={styles.title} numberOfLines={2}>{spark.title}</Text>
         <Text style={styles.meta} numberOfLines={1}>{formatCardLocation(spark.addressLabel)}</Text>
         <View style={styles.bottomRow}>
-          <View style={styles.tag}>
-            <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
-          </View>
+          {onCategoryPress ? (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation?.();
+                onCategoryPress();
+              }}
+              style={({ pressed }) => [styles.tag, pressed ? styles.tagPressed : null]}
+            >
+              <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
+            </Pressable>
+          ) : (
+            <View style={styles.tag}>
+              <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
+            </View>
+          )}
           <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={24} />
         </View>
       </View>
@@ -65,6 +78,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: cardStyles.borderColor
   },
+  pressed: { opacity: 0.78 },
   image: {
     height: 112,
     backgroundColor: cardStyles.previewBackground,
@@ -114,6 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.surface
   },
+  tagPressed: { backgroundColor: colors.neutral },
   tagText: {
     color: colors.main,
     fontFamily: fontFamilies.secondaryBold,

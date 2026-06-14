@@ -74,6 +74,10 @@ export function GuideRouteScreen({ route, navigation }: Props) {
         completedIds={completedIds}
         liveLocation={permissionDenied ? null : location}
         routeSegments={guideRoute?.segments || []}
+        onMarkerPress={(sparkId) => {
+          const index = ordered.findIndex((spark) => spark.id === sparkId);
+          if (index >= 0) guide.selectStop(index);
+        }}
         fullBleed
         height={820}
       />

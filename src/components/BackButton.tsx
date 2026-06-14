@@ -11,7 +11,7 @@ type BackButtonProps = {
 
 export function BackButton({ label = 'Back', onPress }: BackButtonProps) {
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={styles.button}>
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={({ pressed }) => [styles.button, pressed ? styles.pressed : null]}>
       <SparkbookIcon name="chevronLeft" color={colors.text} size={22} />
       <Text style={styles.label}>{label}</Text>
     </Pressable>
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.xxs
   },
+  pressed: { opacity: 0.62 },
   label: {
     color: colors.text,
     fontFamily: fontFamilies.secondaryBold,

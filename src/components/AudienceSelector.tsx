@@ -25,7 +25,7 @@ export function AudienceSelector({ value, onChange, options = ['public', 'friend
           const selected = value === option;
           const isAvatar = option === 'friends';
           return (
-            <Pressable key={option} onPress={() => onChange(option)} style={[styles.pill, selected ? styles.selected : null, isAvatar ? styles.avatarPill : null]}>
+            <Pressable key={option} onPress={() => onChange(option)} style={({ pressed }) => [styles.pill, selected ? styles.selected : null, isAvatar ? styles.avatarPill : null, pressed ? styles.pressed : null]}>
               <SparkbookIcon name={option === 'private' ? 'visibility' : 'friends'} color={selected ? colors.white : colors.main} size={16} />
               <Text style={[styles.pillText, selected ? styles.selectedText : null]}>{labels[option]}</Text>
             </Pressable>
@@ -69,6 +69,9 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: colors.main
+  },
+  pressed: {
+    backgroundColor: colors.highlight
   },
   pillText: {
     color: colors.main,

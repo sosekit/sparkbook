@@ -22,7 +22,7 @@ export type RootStackParamList = {
   Lists: undefined;
   CreateSparkList: { initialSparkId?: string } | undefined;
   ListDetail: { listId: string };
-  SparkListPreview: { listId: string };
+  SparkListPreview: { listId: string; selectedSparkId?: string };
   SavedListError: { listId?: string };
   GuideRoute: { listId: string };
   EndOfListExploration: { listId: string };

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 
@@ -9,9 +9,19 @@ type SmallButtonProps = {
 };
 
 export function SmallButton({ label, selected = false, onPress }: SmallButtonProps) {
+  const content = <Text style={[styles.label, selected ? styles.selectedLabel : null]}>{label}</Text>;
+
+  if (!onPress) {
+    return (
+      <View style={[styles.button, selected ? styles.selected : null]}>
+        {content}
+      </View>
+    );
+  }
+
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.button, selected ? styles.selected : null, pressed && onPress ? styles.pressed : null]}>
-      <Text style={[styles.label, selected ? styles.selectedLabel : null]}>{label}</Text>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.button, selected ? styles.selected : null, pressed ? styles.pressed : null]}>
+      {content}
     </Pressable>
   );
 }

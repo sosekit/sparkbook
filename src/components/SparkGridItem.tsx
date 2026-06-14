@@ -29,7 +29,7 @@ export function SparkGridItem({ spark, selected = false, order, dragging = false
       onPress={onPress}
       onLongPress={onLongPress}
       delayLongPress={220}
-      style={[styles.card, selected ? styles.selected : null, dragging ? styles.dragging : null]}
+      style={({ pressed }) => [styles.card, selected ? styles.selected : null, dragging ? styles.dragging : null, pressed ? styles.pressed : null]}
       {...panHandlers}
     >
       <View style={styles.preview}>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     opacity: 0.78,
     transform: [{ scale: 1.02 }]
   },
+  pressed: { opacity: 0.78 },
   preview: {
     height: 146,
     alignItems: 'center',

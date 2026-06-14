@@ -60,9 +60,9 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
         {filtered.length ? filtered.map((list) => {
           const selected = selectedListId === list.id;
           return (
-            <Pressable key={list.id} onPress={() => setSelectedListId(list.id)} style={[styles.listOption, selected ? styles.selected : null]}>
+            <View key={list.id} style={[styles.listOption, selected ? styles.selected : null]}>
               <ListCard list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => setSelectedListId(list.id)} />
-            </Pressable>
+            </View>
           );
         }) : <EmptyState title="No matching lists" message="Try another list name or create a new list." />}
       </ScrollView>

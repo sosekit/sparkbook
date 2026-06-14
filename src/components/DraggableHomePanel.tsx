@@ -9,9 +9,10 @@ type DraggableHomePanelProps = PropsWithChildren<{
   midTop: number;
   collapsedTop: number;
   bottomInset: number;
+  scrollOffset?: number;
 }>;
 
-export function DraggableHomePanel({ children, expandedTop, midTop, collapsedTop, bottomInset }: DraggableHomePanelProps) {
+export function DraggableHomePanel({ children, expandedTop, midTop, collapsedTop, bottomInset, scrollOffset = 0 }: DraggableHomePanelProps) {
   const snapPoints = useMemo(() => [expandedTop, midTop, collapsedTop], [collapsedTop, expandedTop, midTop]);
   const [currentTop, setCurrentTop] = useState(midTop);
   const translateY = useRef(new Animated.Value(midTop)).current;
@@ -27,12 +28,22 @@ export function DraggableHomePanel({ children, expandedTop, midTop, collapsedTop
   }
 
   const panResponder = useMemo(() => PanResponder.create({
-    onMoveShouldSetPanResponder: (_, gesture) => Math.abs(gesture.dy) > 8 && Math.abs(gesture.dx) < 28,
+    onMoveShouldSetPanResponderCapture: (_, gesture) => {
+      if (Math.abs(gesture.dx) > 28 || Math.abs(gesture.dy) < 14) return false;
+      if (gesture.dy > 0) return scrollOffset <= 2;
+      return currentTop > expandedTop;
+    },
+    onMoveShouldSetPanResponder: (_, gesture) => {
+      if (Math.abs(gesture.dx) > 28 || Math.abs(gesture.dy) < 14) return false;
+      if (gesture.dy > 0) return scrollOffset <= 2;
+      return currentTop > expandedTop;
+    },
     onPanResponderGrant: () => {
       translateY.stopAnimation();
     },
     onPanResponderMove: (_, gesture) => {
-      const next = Math.max(expandedTop, Math.min(collapsedTop, currentTop + gesture.dy));
+      const resistedDy = gesture.dy * 0.82;
+      const next = Math.max(expandedTop, Math.min(collapsedTop, currentTop + resistedDy));
       translateY.setValue(next);
     },
     onPanResponderRelease: (_, gesture) => {
@@ -42,7 +53,7 @@ export function DraggableHomePanel({ children, expandedTop, midTop, collapsedTop
       ), snapPoints[0]);
       snapTo(nearest);
     }
-  }), [collapsedTop, currentTop, expandedTop, snapPoints, translateY]);
+  }), [collapsedTop, currentTop, expandedTop, scrollOffset, snapPoints, translateY]);
 
   function cyclePanel() {
     const index = snapPoints.indexOf(currentTop);

@@ -26,6 +26,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
   const [description, setDescription] = useState('');
   const [query, setQuery] = useState('');
   const [titleError, setTitleError] = useState<string | undefined>();
+  const [saving, setSaving] = useState(false);
   const [audience, setAudience] = useState<'public' | 'friends'>('public');
   const [selectedSparkIds, setSelectedSparkIds] = useState<string[]>(route.params?.initialSparkId ? [route.params.initialSparkId] : []);
   const [draggingId, setDraggingId] = useState<string | null>(null);
@@ -39,19 +40,25 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
   }, [activeSparks, query]);
 
   async function save() {
+    if (saving) return;
     if (!title.trim()) {
       setTitleError('Add a list title before posting.');
       return;
     }
-    const list = await createList({
-      title: title.trim(),
-      description: description.trim() || undefined,
-      visibility: audience
-    });
-    for (const sparkId of selectedSparkIds) {
-      await addSparkToList(list.id, sparkId);
+    setSaving(true);
+    try {
+      const list = await createList({
+        title: title.trim(),
+        description: description.trim() || undefined,
+        visibility: audience
+      });
+      for (const sparkId of selectedSparkIds) {
+        await addSparkToList(list.id, sparkId);
+      }
+      navigation.replace('SparkListPreview', { listId: list.id });
+    } finally {
+      setSaving(false);
     }
-    navigation.replace('ListDetail', { listId: list.id });
   }
 
   function toggleSpark(id: string) {
@@ -100,7 +107,8 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         </View>
         <View style={styles.divider} />
         <Text style={styles.sectionTitle}>Add Sparks</Text>
-        <Text style={styles.caption}>Hold and Drag to Reorder</Text>
+        <Text style={styles.caption}>Hold and order</Text>
+        {!selectedSparkIds.length ? <Text style={styles.helper}>You can post now and add sparks later.</Text> : null}
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search sparks" />
         <View style={styles.sparkGrid}>
           {filteredSparks.map((spark) => {
@@ -128,7 +136,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         <AudienceSelector value={audience} onChange={(value) => value !== 'private' ? setAudience(value) : undefined} options={['public', 'friends']} />
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
-        <CTAButton label="Post List" onPress={save} />
+        <CTAButton label={saving ? 'Posting...' : 'Post List'} onPress={save} disabled={saving} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -145,6 +153,7 @@ const styles = StyleSheet.create({
   divider: { height: 1, backgroundColor: colors.main, marginVertical: 4 },
   sectionTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
   caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 14 },
+  helper: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
   sparkGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, paddingTop: 8, paddingBottom: 12 },
   footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 12, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.neutral },
 });

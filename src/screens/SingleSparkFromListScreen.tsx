@@ -46,7 +46,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
     <View style={styles.root}>
       <View style={[styles.header, { paddingTop: insets.top + 6 }]}>
         <View style={styles.headerTitleWrap}>
-          <Pressable onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} style={styles.back}>
+          <Pressable onPress={() => navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} style={styles.back}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
           <Text style={styles.headerTitle}>Spark</Text>
@@ -69,7 +69,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
           <Metric icon="arrowForward" label="18" />
         </View>
         <View style={styles.switcher}>
-          <CTAButton label={previousSpark ? 'Previous spark' : 'Back to list'} onPress={() => previousSpark ? navigation.replace('SingleSparkFromList', { listId: list.id, sparkId: previousSpark.id }) : navigation.navigate('SparkListPreview', { listId: list.id })} />
+          <CTAButton label={previousSpark ? 'Previous spark' : 'Back to list'} onPress={() => previousSpark ? navigation.replace('SingleSparkFromList', { listId: list.id, sparkId: previousSpark.id }) : navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} />
           <CTAButton label={nextSpark ? 'Next spark' : 'Start exploring'} onPress={() => nextSpark ? navigation.replace('SingleSparkFromList', { listId: list.id, sparkId: nextSpark.id }) : navigation.navigate('GuideRoute', { listId: list.id })} />
         </View>
       </ScrollView>

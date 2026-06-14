@@ -18,7 +18,7 @@ type ListCardProps = {
 export function ListCard({ list, sparks = [], onPress }: ListCardProps) {
   const thumbnail = list.thumbnailUri || sparks.flatMap((spark) => spark.media || []).find((media) => media.mediaType === 'photo')?.url;
   return (
-    <Pressable accessibilityRole="button" onPress={onPress} style={styles.card}>
+    <Pressable accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.preview}>
         {thumbnail ? (
           <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: cardStyles.borderColor
   },
+  pressed: { opacity: 0.78 },
   preview: {
     height: 116,
     backgroundColor: cardStyles.previewBackground,

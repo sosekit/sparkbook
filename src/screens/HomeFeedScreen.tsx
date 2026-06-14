@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
@@ -29,8 +29,11 @@ export function HomeFeedScreen({ navigation }: Props) {
   const { lists } = useLists();
   const { bookmarks, toggleBookmark } = useBookmarks();
   const [filter, setFilter] = useState<'all' | 'hidden' | 'friends'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [focusedSparkId, setFocusedSparkId] = useState<string | undefined>();
+  const [panelScrollOffset, setPanelScrollOffset] = useState(0);
+  const lastPanelOffset = useRef(0);
   const screenHeight = Dimensions.get('window').height;
   const expandedTop = insets.top + 70;
   const midTop = Math.max(insets.top + 280, Math.round(screenHeight * 0.54));
@@ -40,12 +43,15 @@ export function HomeFeedScreen({ navigation }: Props) {
     [sparks]
   );
   const filtered = useMemo(
-    () => filter === 'hidden'
-      ? active.filter((spark) => spark.categoryId === 'hidden')
-      : filter === 'friends'
-        ? active.filter((spark) => spark.audience === 'friends' || spark.visibility === 'friends')
-        : active,
-    [active, filter]
+    () => {
+      const filterBase = filter === 'hidden'
+        ? active.filter((spark) => spark.categoryId === 'hidden')
+        : filter === 'friends'
+          ? active.filter((spark) => spark.audience === 'friends' || spark.visibility === 'friends')
+          : active;
+      return categoryFilter ? filterBase.filter((spark) => spark.categoryId === categoryFilter) : filterBase;
+    },
+    [active, categoryFilter, filter]
   );
   const visibleLists = useMemo(
     () => lists.filter((list) => list.status === 'active'),
@@ -83,10 +89,35 @@ export function HomeFeedScreen({ navigation }: Props) {
         }}
       />
 
-      <DraggableHomePanel expandedTop={expandedTop} midTop={midTop} collapsedTop={collapsedTop} bottomInset={insets.bottom}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.feed}>
+      <DraggableHomePanel expandedTop={expandedTop} midTop={midTop} collapsedTop={collapsedTop} bottomInset={insets.bottom} scrollOffset={panelScrollOffset}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.feed}
+          scrollEventThrottle={16}
+          onScroll={(event) => {
+            const nextOffset = event.nativeEvent.contentOffset.y;
+            if (Math.abs(nextOffset - lastPanelOffset.current) > 2) {
+              lastPanelOffset.current = nextOffset;
+              setPanelScrollOffset(nextOffset);
+            }
+          }}
+        >
           <SearchBar value={query} onChangeText={setQuery} placeholder="Search Toronto places" />
-          <SearchResultsList results={results} query={query} searching={searching} onSelect={selectSearchResult} />
+          <SearchResultsList
+            results={results}
+            query={query}
+            searching={searching}
+            onSelect={selectSearchResult}
+            onCreateFromQuery={(term) => navigation.navigate('CreateSpark', {
+              prefillLocation: {
+                id: `custom-${Date.now()}`,
+                displayName: term,
+                addressLabel: 'Toronto, CA',
+                latitude: 43.6532,
+                longitude: -79.3832
+              }
+            })}
+          />
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tags}>
             {[
               { id: 'all' as const, label: 'Nearby' },
@@ -95,12 +126,13 @@ export function HomeFeedScreen({ navigation }: Props) {
             ].map((item) => (
               <SmallButton key={item.id} label={item.label} selected={filter === item.id} onPress={() => setFilter(item.id)} />
             ))}
+            {categoryFilter ? <SmallButton label="Clear" onPress={() => setCategoryFilter(null)} /> : null}
           </ScrollView>
 
           <Text style={styles.sectionTitle}>Nearby Sparks</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewRow}>
-            {(filtered.length ? filtered : active).slice(0, 5).map((spark) => (
-              <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
+            {(categoryFilter ? filtered : filtered.length ? filtered : active).slice(0, 5).map((spark) => (
+              <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
             ))}
           </ScrollView>
 
@@ -108,7 +140,7 @@ export function HomeFeedScreen({ navigation }: Props) {
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.listRow}>
             {visibleLists.map((list) => (
               <View key={list.id} style={styles.listPreview}>
-                <ListCard list={list} sparks={active.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('ListDetail', { listId: list.id })} />
+                <ListCard list={list} sparks={active.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
               </View>
             ))}
           </ScrollView>
@@ -116,14 +148,14 @@ export function HomeFeedScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>Following</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewRow}>
             {following.slice(0, 4).map((spark) => (
-              <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
+              <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
             ))}
           </ScrollView>
 
           <Text style={styles.sectionTitle}>Trending in Toronto</Text>
           <View style={styles.verticalList}>
             {active.slice(0, 3).map((spark) => (
-              <SparkCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />
+              <SparkCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />
             ))}
           </View>
         </ScrollView>

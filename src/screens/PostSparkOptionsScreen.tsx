@@ -25,8 +25,7 @@ export function PostSparkOptionsScreen({ route, navigation }: Props) {
       </View>
       <ScrollView contentContainerStyle={styles.content}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
-          {spark ? <SparkPreviewCard spark={spark} /> : null}
-          {spark ? <SparkPreviewCard spark={spark} /> : null}
+          {spark ? <SparkPreviewCard spark={spark} onPress={() => navigation.replace('SparkDetail', { sparkId: route.params.sparkId })} /> : null}
         </ScrollView>
         <View style={styles.details}>
           <Text style={styles.title}>{spark?.title || 'Spark published'}</Text>

@@ -13,14 +13,15 @@ type SparkCardProps = {
   onPress: () => void;
   bookmarked?: boolean;
   onBookmark?: () => void;
+  onCategoryPress?: () => void;
 };
 
-export function SparkCard({ spark, onPress, bookmarked, onBookmark }: SparkCardProps) {
+export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPress }: SparkCardProps) {
   if (!spark?.id) return null;
   const category = getCategoryForSpark(spark);
   const showBookmark = typeof bookmarked === 'boolean' && onBookmark;
   return (
-    <Pressable onPress={onPress} style={styles.card}>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.preview}>
         <CategoryIcon categoryId={category.id} size={28} />
       </View>
@@ -28,9 +29,21 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark }: SparkCardP
         <Text style={styles.title} numberOfLines={1}>{spark.title}</Text>
         <Text style={styles.meta} numberOfLines={1}>{formatCardLocation(spark.addressLabel)}</Text>
         <View style={styles.bottomRow}>
-          <View style={styles.tag}>
-            <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
-          </View>
+          {onCategoryPress ? (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation?.();
+                onCategoryPress();
+              }}
+              style={({ pressed }) => [styles.tag, pressed ? styles.tagPressed : null]}
+            >
+              <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
+            </Pressable>
+          ) : (
+            <View style={styles.tag}>
+              <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
+            </View>
+          )}
           {showBookmark ? <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={24} /> : null}
         </View>
       </View>
@@ -49,6 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     overflow: 'hidden'
   },
+  pressed: { opacity: 0.78 },
   preview: {
     width: 50,
     alignItems: 'center',
@@ -71,6 +85,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.surface
   },
+  tagPressed: { backgroundColor: colors.neutral },
   tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 9, lineHeight: 11 }
 });
 

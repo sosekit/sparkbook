@@ -53,7 +53,7 @@ export function ListDetailScreen({ route, navigation }: Props) {
       <BackButton onPress={() => navigation.goBack()} />
       <Text style={styles.title}>{list.title}</Text>
       <Text style={styles.subtitle}>{list.description}</Text>
-      <Text style={styles.reorderHint}>Hold and drag to reorder</Text>
+      <Text style={styles.reorderHint}>Hold and order</Text>
       <Button label="Start guide" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} />
       <DraggableSparkList
         sparks={listSparks}

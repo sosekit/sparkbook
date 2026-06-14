@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Spark } from '../types/spark';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -8,12 +8,12 @@ import { CategoryIcon } from './CategoryIcon';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { cardStyles } from './Card';
 
-export function SparkPreviewCard({ spark }: { spark?: Spark | null }) {
+export function SparkPreviewCard({ spark, onPress }: { spark?: Spark | null; onPress?: () => void }) {
   if (!spark?.id) return null;
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
 
-  return (
-    <View style={styles.card}>
+  const content = (
+    <>
       <View style={styles.media}>
         {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" /> : <CategoryIcon categoryId={spark.categoryId} selected size={42} />}
       </View>
@@ -25,6 +25,20 @@ export function SparkPreviewCard({ spark }: { spark?: Spark | null }) {
           <Text style={styles.location} numberOfLines={1}>{spark.addressLabel}</Text>
         </View>
       </View>
+    </>
+  );
+
+  if (onPress) {
+    return (
+      <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
+        {content}
+      </Pressable>
+    );
+  }
+
+  return (
+    <View style={styles.card}>
+      {content}
     </View>
   );
 }
@@ -40,6 +54,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: cardStyles.borderColor
   },
+  pressed: { opacity: 0.78 },
   media: {
     height: 178,
     alignItems: 'center',

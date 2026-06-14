@@ -46,6 +46,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   const [locationResults, setLocationResults] = useState<LocationSearchResult[]>(locationSearchService.fallbackResults);
   const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | null>(null);
   const [searching, setSearching] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [categoryId, setCategoryId] = useState('coffee');
   const [selectedMediaId, setSelectedMediaId] = useState<string | undefined>();
   const [mediaUri, setMediaUri] = useState<string | undefined>();
@@ -188,7 +189,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     if (step === 'content') {
       const titleError = validateContentStep({ title });
       if (titleError) {
-        setErrors((current) => ({ ...current, title: titleError, caption: description.trim() ? undefined : 'Continue without a caption?' }));
+        setErrors((current) => ({ ...current, title: titleError, caption: undefined }));
         return;
       }
       setStep('location');
@@ -198,6 +199,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   }
 
   async function saveSpark() {
+    if (saving) return;
     const completeError = validateCompleteSpark({ title, locationSelected: Boolean(selectedLocation) });
     if (completeError && !title.trim() && !selectedLocation) {
       setErrors((current) => ({ ...current, action: completeError }));
@@ -217,10 +219,38 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     const media = mediaUri
       ? [{ id: selectedMediaId || `media-${Date.now()}`, sparkId: editingSparkId || 'pending', mediaType: mediaType || 'photo', url: mediaUri, mutedByDefault: true, sortOrder: 0, createdAt: new Date().toISOString() }]
       : [];
+    setSaving(true);
     if (editingSparkId) {
-      const updated = await sparkService.updateSpark(editingSparkId, {
+      try {
+        const updated = await sparkService.updateSpark(editingSparkId, {
+          title: safeTitle,
+          placeName: location.displayName,
+          description: description.trim() || undefined,
+          caption: description.trim() || undefined,
+          reflectionNote: reflectionNote.trim() || undefined,
+          addressLabel: location.addressLabel,
+          location: location.displayName,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          categoryId,
+          category: categoryId,
+          moodTags: selectedContextTags,
+          contextTags: selectedContextTags,
+          visibility: audience,
+          audience,
+          tags: [getCategoryById(categoryId).name, ...selectedContextTags],
+          media
+        });
+        navigation.replace('SparkDetail', { sparkId: updated?.id || editingSparkId });
+      } finally {
+        setSaving(false);
+      }
+      return;
+    }
+    try {
+      const spark = await sparkService.createSpark({
+        createdBy: 'profile-ray',
         title: safeTitle,
-        placeName: location.displayName,
         description: description.trim() || undefined,
         caption: description.trim() || undefined,
         reflectionNote: reflectionNote.trim() || undefined,
@@ -234,34 +264,15 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         contextTags: selectedContextTags,
         visibility: audience,
         audience,
+        status: 'active',
         tags: [getCategoryById(categoryId).name, ...selectedContextTags],
         media
       });
-      navigation.replace('SparkDetail', { sparkId: updated?.id || editingSparkId });
-      return;
+      await sparkService.clearDraft();
+      navigation.replace('PostSparkOptions', { sparkId: spark.id });
+    } finally {
+      setSaving(false);
     }
-    const spark = await sparkService.createSpark({
-      createdBy: 'profile-ray',
-      title: safeTitle,
-      description: description.trim() || undefined,
-      caption: description.trim() || undefined,
-      reflectionNote: reflectionNote.trim() || undefined,
-      addressLabel: location.addressLabel,
-      location: location.displayName,
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      categoryId,
-      category: categoryId,
-      moodTags: selectedContextTags,
-      contextTags: selectedContextTags,
-      visibility: audience,
-      audience,
-      status: 'active',
-      tags: [getCategoryById(categoryId).name, ...selectedContextTags],
-      media
-    });
-    await sparkService.clearDraft();
-    navigation.replace('PostSparkOptions', { sparkId: spark.id });
   }
 
   function back() {
@@ -403,8 +414,9 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <CTAButton
-          label={editingSparkId && step === 'location' ? 'Save changes' : step === 'media' ? 'Next' : step === 'content' ? 'Next' : 'Post Spark'}
+          label={saving ? 'Saving...' : editingSparkId && step === 'location' ? 'Save changes' : step === 'media' ? 'Next' : step === 'content' ? 'Next' : 'Post Spark'}
           onPress={goNext}
+          disabled={saving}
         />
       </View>
     </KeyboardAvoidingView>
