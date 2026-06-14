@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { Spark, SparkMedia } from '../types/spark';
 import { getCategoryForSpark } from '../utils/category';
 import { CategoryIcon } from './CategoryIcon';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
 
 type SparkMediaGalleryProps = {
   spark: Spark;
@@ -49,6 +51,16 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
 
 function GalleryItem({ item, style, categoryId }: { item: SparkMedia; style: object; categoryId: string }) {
   const [failed, setFailed] = useState(false);
+  const demoAsset = getDemoMediaAsset(item.url);
+
+  if (isDemoMediaUri(item.url)) {
+    return (
+      <View style={style}>
+        <DemoMediaArtwork categoryId={demoAsset?.categoryId || categoryId} label={demoAsset?.title} />
+      </View>
+    );
+  }
+
   if (item.mediaType !== 'photo') {
     return (
       <View style={style}>

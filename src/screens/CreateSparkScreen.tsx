@@ -1,23 +1,21 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import * as MediaLibrary from 'expo-media-library';
 import { Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AudienceSelector } from '../components/AudienceSelector';
 import { CategoryIcon } from '../components/CategoryIcon';
 import { CTAButton } from '../components/CTAButton';
+import { DemoMediaArtwork } from '../components/DemoMediaArtwork';
 import { InlineError } from '../components/InlineError';
 import { MediaGrid } from '../components/MediaGrid';
 import { ProgressBar } from '../components/ProgressBar';
 import { SearchBar } from '../components/SearchBar';
 import { TextField } from '../components/TextField';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
-import { DEMO_MODE } from '../config/demoMode';
 import { categories } from '../data/categories';
+import { DemoMediaAsset, demoMediaLibrary, getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { useCurrentLocation } from '../hooks/useCurrentLocation';
-import { useMediaLibrary } from '../hooks/useMediaLibrary';
 import { LocationSearchResult, locationSearchService } from '../services/locationSearchService';
-import { mediaService } from '../services/mediaService';
 import { sparkService } from '../services/sparkService';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -31,14 +29,15 @@ import { validateCompleteSpark, validateContentStep, validateLocationStep, valid
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateSpark'>;
 type Step = 'media' | 'content' | 'location';
 const stepProgress: Record<Step, number> = { media: 0.33, content: 0.66, location: 1 };
-const contextTags = ['Quiet', 'Study', 'Date spot', 'Comfort food', 'Inspiring', 'Good for friends', 'Solo visit', 'Hidden gem', 'Want to revisit', 'Recommended'];
+const contextTags = ['Quiet', 'Study', 'Date spot', 'Comfort food', 'Good for friends', 'Hidden gem'];
+
+type SelectedMedia = DemoMediaAsset;
 
 export function CreateSparkScreen({ route, navigation }: Props) {
   const insets = useSafeAreaInsets();
   const editingSparkId = route.params?.sparkId;
   const prefillLocation = route.params?.prefillLocation;
-  const { getLocation, permissionDenied } = useCurrentLocation();
-  const mediaLibrary = useMediaLibrary();
+  const { permissionDenied } = useCurrentLocation();
   const [step, setStep] = useState<Step>(editingSparkId ? 'content' : 'media');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -49,9 +48,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
   const [categoryId, setCategoryId] = useState('coffee');
-  const [selectedMediaId, setSelectedMediaId] = useState<string | undefined>();
-  const [mediaUri, setMediaUri] = useState<string | undefined>();
-  const [mediaType, setMediaType] = useState<'photo' | 'video' | undefined>();
+  const [selectedMedia, setSelectedMedia] = useState<SelectedMedia[]>([]);
   const [audience, setAudience] = useState<Visibility>('public');
   const [selectedContextTags, setSelectedContextTags] = useState<string[]>([]);
   const [errors, setErrors] = useState<{ media?: string; title?: string; caption?: string; location?: string; action?: string }>({});
@@ -66,9 +63,20 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         }
         const firstMedia = (spark.media || [])[0];
         if (firstMedia) {
-          setSelectedMediaId(firstMedia.id);
-          setMediaUri(firstMedia.url);
-          setMediaType(firstMedia.mediaType);
+          const restored = spark.media
+            .filter((item) => item?.url)
+            .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+            .map((item) => {
+              const demoAsset = getDemoMediaAsset(item.url);
+              return demoAsset || {
+                id: item.id,
+                uri: item.url,
+                mediaType: item.mediaType,
+                title: 'Selected photo',
+                categoryId: spark.categoryId || 'custom'
+              };
+            });
+          setSelectedMedia(restored);
         }
         setTitle(spark.title || '');
         setDescription(spark.caption || spark.description || '');
@@ -95,11 +103,17 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         setDraftRestored(true);
         return;
       }
-      if (draft.selectedMedia?.uri) {
-        setSelectedMediaId(draft.selectedMedia.id);
-        setMediaUri(draft.selectedMedia.uri);
-        setMediaType(draft.selectedMedia.mediaType);
-      }
+      const draftMedia = draft.selectedMediaItems?.length ? draft.selectedMediaItems : draft.selectedMedia ? [draft.selectedMedia] : [];
+      setSelectedMedia(draftMedia.map((item, index) => {
+        const demoAsset = getDemoMediaAsset(item.uri || item.id);
+        return demoAsset || {
+          id: item.id || `draft-media-${index}`,
+          uri: item.uri,
+          mediaType: item.mediaType,
+          title: 'Selected photo',
+          categoryId: draft.categoryId || 'custom'
+        };
+      }));
       setTitle(draft.title || '');
       setDescription(draft.caption || '');
       setReflectionNote(draft.reflectionNote || '');
@@ -119,7 +133,8 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     if (!draftRestored || editingSparkId) return;
     const timer = setTimeout(() => {
       sparkService.saveDraft({
-        selectedMedia: mediaUri ? { id: selectedMediaId, uri: mediaUri, mediaType: mediaType || 'photo' } : undefined,
+        selectedMedia: selectedMedia[0] ? { id: selectedMedia[0].id, uri: selectedMedia[0].uri, mediaType: selectedMedia[0].mediaType } : undefined,
+        selectedMediaItems: selectedMedia.map((item) => ({ id: item.id, uri: item.uri, mediaType: item.mediaType })),
         title,
         caption: description,
         reflectionNote,
@@ -131,7 +146,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
       });
     }, 350);
     return () => clearTimeout(timer);
-  }, [audience, categoryId, description, draftRestored, editingSparkId, mediaType, mediaUri, reflectionNote, selectedContextTags, selectedLocation, selectedMediaId, title]);
+  }, [audience, categoryId, description, draftRestored, editingSparkId, reflectionNote, selectedContextTags, selectedLocation, selectedMedia, title]);
 
   useEffect(() => {
     if (step !== 'location') return;
@@ -150,10 +165,8 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     return () => clearTimeout(timer);
   }, [locationQuery, selectedLocation, step]);
 
-  function selectMedia(asset: MediaLibrary.Asset) {
-    setSelectedMediaId(asset.id);
-    setMediaUri(asset.uri);
-    setMediaType(asset.mediaType === MediaLibrary.MediaType.video ? 'video' : 'photo');
+  function toggleMedia(asset: DemoMediaAsset) {
+    setSelectedMedia((current) => current.some((item) => item.id === asset.id) ? current.filter((item) => item.id !== asset.id) : [...current, asset]);
     setErrors((current) => ({ ...current, media: undefined }));
   }
 
@@ -164,37 +177,9 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     setErrors((current) => ({ ...current, location: undefined, action: undefined }));
   }
 
-  async function pickFromLibrary() {
-    const result = await mediaService.pickMedia();
-    if (result.error) {
-      if (DEMO_MODE) {
-        useDemoMediaFallback();
-        return;
-      }
-      setErrors((current) => ({ ...current, media: result.error || undefined }));
-      return;
-    }
-    if (!result.media) {
-      if (DEMO_MODE) useDemoMediaFallback();
-      return;
-    }
-    setSelectedMediaId(result.media.assetId || result.media.uri);
-    setMediaUri(result.media.uri);
-    setMediaType(result.media.type === 'video' ? 'video' : 'photo');
-    setErrors((current) => ({ ...current, media: undefined }));
-  }
-
-  function useDemoMediaFallback() {
-    setSelectedMediaId('demo-category-fallback');
-    setMediaUri(undefined);
-    setMediaType('photo');
-    setErrors((current) => ({ ...current, media: undefined }));
-    setStep('content');
-  }
-
   function goNext() {
     if (step === 'media') {
-      const mediaError = validateMediaStep({ mediaUri });
+      const mediaError = validateMediaStep({ mediaUri: selectedMedia[0]?.uri });
       if (mediaError) {
         setErrors((current) => ({ ...current, media: mediaError }));
         return;
@@ -232,9 +217,15 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     if (!location) return;
     const coords = location;
     const safeTitle = title.trim() || location.displayName;
-    const media = mediaUri
-      ? [{ id: selectedMediaId || `media-${Date.now()}`, sparkId: editingSparkId || 'pending', mediaType: mediaType || 'photo', url: mediaUri, mutedByDefault: true, sortOrder: 0, createdAt: new Date().toISOString() }]
-      : [];
+    const media = selectedMedia.map((item, index) => ({
+      id: item.id || `media-${Date.now()}-${index}`,
+      sparkId: editingSparkId || 'pending',
+      mediaType: item.mediaType,
+      url: item.uri,
+      mutedByDefault: true,
+      sortOrder: index,
+      createdAt: new Date().toISOString()
+    }));
     setSaving(true);
     if (editingSparkId) {
       try {
@@ -312,28 +303,33 @@ export function CreateSparkScreen({ route, navigation }: Props) {
       {step === 'media' ? (
         <View style={styles.mediaStep}>
           <MediaGrid
-            assets={mediaLibrary.assets}
-            selectedId={selectedMediaId}
-            loading={mediaLibrary.loading}
-            permissionDenied={mediaLibrary.permissionDenied}
-            fallbackRecommended={mediaLibrary.fallbackRecommended}
-            error={errors.media || mediaLibrary.error || undefined}
-            onSelect={selectMedia}
-            onRequestPermission={mediaLibrary.reload}
-            onPickFromLibrary={pickFromLibrary}
+            assets={demoMediaLibrary}
+            selectedIds={selectedMedia.map((item) => item.id)}
+            error={errors.media}
+            onToggle={toggleMedia}
           />
         </View>
       ) : null}
 
       {step === 'content' ? (
         <ScrollView contentContainerStyle={styles.content}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewStrip}>
-            {[0, 1].map((item) => (
-              <View key={item} style={styles.largePreview}>
-                {mediaUri ? <Image source={{ uri: mediaUri }} style={styles.mediaImage} /> : <View style={styles.largePlaceholder}><CategoryIcon categoryId={categoryId} selected size={48} /></View>}
+          {selectedMedia.length === 1 ? (
+            <View style={styles.singlePreviewRow}>
+              <SelectedMediaPreview item={selectedMedia[0]} categoryId={categoryId} style={styles.largePreview} />
+            </View>
+          ) : selectedMedia.length > 1 ? (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewStrip}>
+              {selectedMedia.map((item) => (
+                <SelectedMediaPreview key={item.id} item={item} categoryId={categoryId} style={styles.largePreview} />
+              ))}
+            </ScrollView>
+          ) : (
+            <View style={styles.singlePreviewRow}>
+              <View style={styles.largePreview}>
+                <View style={styles.largePlaceholder}><CategoryIcon categoryId={categoryId} selected size={48} /></View>
               </View>
-            ))}
-          </ScrollView>
+            </View>
+          )}
           {editingSparkId ? (
             <Pressable onPress={() => setStep('media')} style={({ pressed }) => [styles.changePhotoButton, pressed ? styles.changePhotoButtonPressed : null]}>
               <Text style={styles.changePhotoText}>Add or change photo</Text>
@@ -370,7 +366,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
                   onPress={() => setSelectedContextTags((current) => selected ? current.filter((item) => item !== tag) : [...current, tag])}
                   style={[styles.contextChip, selected ? styles.contextChipSelected : null]}
                 >
-                  <Text style={[styles.contextText, selected ? styles.contextTextSelected : null]}>{tag}</Text>
+                  <Text style={[styles.contextText, selected ? styles.contextTextSelected : null]}>#{tag}</Text>
                 </Pressable>
               );
             })}
@@ -447,6 +443,22 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   );
 }
 
+function SelectedMediaPreview({ item, categoryId, style }: { item: SelectedMedia; categoryId: string; style: object }) {
+  const demoAsset = getDemoMediaAsset(item.uri || item.id);
+  if (isDemoMediaUri(item.uri)) {
+    return (
+      <View style={style}>
+        <DemoMediaArtwork categoryId={demoAsset?.categoryId || item.categoryId || categoryId} label={demoAsset?.title || item.title} />
+      </View>
+    );
+  }
+  return (
+    <View style={style}>
+      <Image source={{ uri: item.uri }} style={styles.mediaImage} />
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, gap: 10, backgroundColor: colors.surface },
@@ -456,6 +468,7 @@ const styles = StyleSheet.create({
   mediaStep: { flex: 1, paddingHorizontal: 0 },
   mediaImage: { width: '100%', height: '100%' },
   content: { paddingHorizontal: 16, paddingBottom: 112, gap: 12 },
+  singlePreviewRow: { width: '100%', alignItems: 'center', paddingTop: 6 },
   previewStrip: { gap: 6, paddingTop: 6 },
   largePreview: { width: 168, height: 260, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.neutral },
   largePlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.neutral },

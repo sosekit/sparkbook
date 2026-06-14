@@ -1,5 +1,6 @@
 import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { SparkList } from '../types/list';
@@ -7,6 +8,7 @@ import { Spark } from '../types/spark';
 import { cardStyles } from './Card';
 import { CategoryIcon } from './CategoryIcon';
 import { Avatar } from './Avatar';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
 
 export type SparkListCardProps = {
   list: SparkList;
@@ -21,6 +23,7 @@ export type SparkListCardProps = {
 export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, onBookmark, selected = false, style }: SparkListCardProps) {
   const coverSpark = sparks.find((spark) => spark.id === list.coverSparkId) || sparks[0];
   const thumbnail = list.thumbnailUri || coverSpark?.media?.find((media) => media.mediaType === 'photo')?.url;
+  const demoThumbnail = getDemoMediaAsset(thumbnail);
   const locationLabel = getListLocationLabel(sparks);
   const creatorName = list.createdBy === 'profile-ray' ? 'Raymond Zhang' : list.createdBy.replace(/^profile-/, '').replace(/-/g, ' ');
 
@@ -32,7 +35,9 @@ export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, 
       style={({ pressed }) => [styles.card, selected ? styles.selected : null, pressed ? styles.pressed : null, style]}
     >
       <View style={styles.preview}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" /> : null}
+        {thumbnail ? (
+          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} label={demoThumbnail?.title} style={styles.thumbnail} /> : <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+        ) : null}
         {!thumbnail ? (
           <View style={styles.emptyPreview}>
             <CategoryIcon categoryId={list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} size={36} selected />

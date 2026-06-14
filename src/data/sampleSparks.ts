@@ -2,15 +2,16 @@ import { Spark } from '../types/spark';
 
 const now = '2026-06-14T10:00:00.000Z';
 
-function demoSpark(input: Omit<Spark, 'createdBy' | 'visibility' | 'audience' | 'status' | 'media' | 'createdAt' | 'updatedAt'> & { createdAt?: string }): Spark {
+function demoSpark(input: Omit<Spark, 'createdBy' | 'visibility' | 'audience' | 'status' | 'media' | 'createdAt' | 'updatedAt'> & { createdAt?: string; createdBy?: string; visibility?: Spark['visibility']; audience?: Spark['audience'] }): Spark {
+  const { createdAt, createdBy, visibility, audience, ...spark } = input;
   return {
-    ...input,
-    createdBy: 'profile-ray',
-    visibility: 'public',
-    audience: 'public',
+    ...spark,
+    createdBy: createdBy || 'profile-ray',
+    visibility: visibility || 'public',
+    audience: audience || visibility || 'public',
     status: 'active',
     media: [],
-    createdAt: input.createdAt || now,
+    createdAt: createdAt || now,
     updatedAt: now
   };
 }
@@ -80,7 +81,9 @@ export const sampleSparks: Spark[] = [
     wantToRevisit: false,
     revisitCount: 2,
     lastVisitedAt: '2026-06-01T00:30:00.000Z',
-    createdAt: '2026-06-03T12:00:00.000Z'
+    createdAt: '2026-06-03T12:00:00.000Z',
+    visibility: 'friends',
+    audience: 'friends'
   }),
   demoSpark({
     id: 'spark-trillium-park',
@@ -212,7 +215,9 @@ export const sampleSparks: Spark[] = [
     wantToRevisit: false,
     revisitCount: 2,
     lastVisitedAt: '2026-05-29T23:00:00.000Z',
-    createdAt: '2026-06-09T18:00:00.000Z'
+    createdAt: '2026-06-09T18:00:00.000Z',
+    visibility: 'friends',
+    audience: 'friends'
   }),
   demoSpark({
     id: 'spark-harbourfront-centre',

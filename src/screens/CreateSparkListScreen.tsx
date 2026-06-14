@@ -15,6 +15,7 @@ import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
 import { RootStackParamList } from '../types/navigation';
+import { Visibility } from '../types/spark';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateSparkList'>;
 
@@ -27,7 +28,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
   const [query, setQuery] = useState('');
   const [titleError, setTitleError] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
-  const [audience, setAudience] = useState<'public' | 'friends'>('public');
+  const [audience, setAudience] = useState<Visibility>('public');
   const [selectedSparkIds, setSelectedSparkIds] = useState<string[]>(route.params?.initialSparkId ? [route.params.initialSparkId] : []);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const lastStep = useRef(0);
@@ -97,9 +98,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         </Pressable>
         <Text style={styles.headerTitle}>New list</Text>
       </View>
-      <View style={styles.progressWrap}>
-        <ProgressBar progress={selectedSparkIds.length ? 1 : 0.5} width="25%" />
-      </View>
+      <ProgressBar progress={selectedSparkIds.length ? 1 : 0.5} />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.titleGroup}>
           <TextField label="" placeholder="Add a title for your list" value={title} onChangeText={(value) => { setTitle(value); setTitleError(undefined); }} variant="creationTitle" error={titleError} />
@@ -107,7 +106,6 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         </View>
         <View style={styles.divider} />
         <Text style={styles.sectionTitle}>Add sparks</Text>
-        <Text style={styles.caption}>Hold to reorder</Text>
         {!selectedSparkIds.length ? <Text style={styles.helper}>You can post now and add sparks later.</Text> : null}
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
         <View style={styles.sparkGrid}>
@@ -133,7 +131,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
             );
           })}
         </View>
-        <AudienceSelector value={audience} onChange={(value) => value !== 'private' ? setAudience(value) : undefined} options={['public', 'friends']} />
+        <AudienceSelector value={audience} onChange={setAudience} options={['public', 'friends', 'private']} />
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <CTAButton label={saving ? 'Saving' : 'Save list'} onPress={save} disabled={saving} />
@@ -148,12 +146,10 @@ const styles = StyleSheet.create({
   close: { width: 44, height: 44, justifyContent: 'center' },
   closePressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
-  progressWrap: { paddingHorizontal: 16, paddingBottom: 12 },
   content: { paddingHorizontal: 16, paddingTop: 18, paddingBottom: 110, gap: 6 },
   titleGroup: { minHeight: 64 },
   divider: { height: 1, backgroundColor: colors.main, marginVertical: 4 },
   sectionTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
-  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 14 },
   helper: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
   sparkGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, paddingTop: 8, paddingBottom: 12 },
   footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 12, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.dividerMuted },

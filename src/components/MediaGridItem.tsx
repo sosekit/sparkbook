@@ -1,10 +1,11 @@
-import * as MediaLibrary from 'expo-media-library';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { DemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
 import { SelectionCheckmark } from './SelectionCheckmark';
 
-export function MediaGridItem({ asset, selected, onPress, size }: { asset: MediaLibrary.Asset; selected?: boolean; onPress: () => void; size: number }) {
+export function MediaGridItem({ asset, selected, onPress, size }: { asset: DemoMediaAsset; selected?: boolean; onPress: () => void; size: number }) {
   return (
     <Pressable
       accessibilityRole="button"
@@ -13,7 +14,11 @@ export function MediaGridItem({ asset, selected, onPress, size }: { asset: Media
       onPress={onPress}
       style={({ pressed }) => [styles.tile, { width: size, height: size }, selected ? styles.selected : null, pressed ? styles.pressed : null]}
     >
-      <Image source={{ uri: asset.uri }} style={styles.image} resizeMode="cover" />
+      {isDemoMediaUri(asset.uri) ? (
+        <DemoMediaArtwork categoryId={asset.categoryId} label={asset.title} />
+      ) : (
+        <Image source={{ uri: asset.uri }} style={styles.image} resizeMode="cover" />
+      )}
       <View style={styles.indicator}>
         <SelectionCheckmark selected={selected} />
       </View>

@@ -56,6 +56,7 @@ export type Spark = {
 
 export type SparkDraft = {
   selectedMedia?: { id?: string; uri: string; mediaType: MediaType };
+  selectedMediaItems?: { id?: string; uri: string; mediaType: MediaType }[];
   title?: string;
   caption?: string;
   reflectionNote?: string;

@@ -1,4 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { Spark } from '../types/spark';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
@@ -6,6 +7,7 @@ import { CategoryIcon } from './CategoryIcon';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { cardStyles } from './Card';
 import { Avatar } from './Avatar';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
 
 type SparkPreviewCardProps = {
   spark?: Spark | null;
@@ -18,16 +20,21 @@ type SparkPreviewCardProps = {
 export function SparkPreviewCard({ spark, onPress, selected = false, variant = 'spark-card', wide = true }: SparkPreviewCardProps) {
   if (!spark?.id) return null;
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
+  const demoThumbnail = getDemoMediaAsset(thumbnail);
   const cardStyle = variant === 'media' ? styles.mediaCard : wide ? styles.wideCard : styles.card;
 
   const content = variant === 'media' ? (
     <View style={styles.mediaOnly}>
-      {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.coverImage} resizeMode="cover" /> : <CategoryIcon categoryId={spark.categoryId} selected size={48} />}
+      {thumbnail ? (
+        isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || spark.categoryId} label={demoThumbnail?.title} style={styles.coverImage} /> : <Image source={{ uri: thumbnail }} style={styles.coverImage} resizeMode="cover" />
+      ) : <CategoryIcon categoryId={spark.categoryId} selected size={48} />}
     </View>
   ) : (
     <>
       <View style={styles.sparkImage}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.coverImage} resizeMode="cover" /> : null}
+        {thumbnail ? (
+          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || spark.categoryId} label={demoThumbnail?.title} style={styles.coverImage} /> : <Image source={{ uri: thumbnail }} style={styles.coverImage} resizeMode="cover" />
+        ) : null}
         {!thumbnail ? <View style={styles.emptyMedia}><CategoryIcon categoryId={spark.categoryId} selected size={30} /></View> : null}
         <View style={styles.topRow}>
           <View style={styles.avatarWrap}>

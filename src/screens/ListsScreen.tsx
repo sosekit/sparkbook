@@ -21,9 +21,10 @@ export function ListsScreen({ navigation }: Props) {
   const { lists } = useLists();
   const { sparks } = useSparks();
   const active = lists.filter((list) => list.status === 'active');
-  const recentlyCreated = active.filter((list) => list.createdBy === 'profile-ray' && list.listType === 'collected');
-  const recentIds = new Set(recentlyCreated.map((list) => list.id));
-  const publicLists = active.filter((list) => !recentIds.has(list.id) && (list.visibility === 'public' || list.listType !== 'collected'));
+  const createdLists = active.filter((list) => list.createdBy === 'profile-ray' && list.listType === 'collected' && list.visibility !== 'private');
+  const privateLists = active.filter((list) => list.createdBy === 'profile-ray' && list.visibility === 'private');
+  const createdIds = new Set([...createdLists, ...privateLists].map((list) => list.id));
+  const savedLists = active.filter((list) => !createdIds.has(list.id) && list.visibility !== 'private');
 
   return (
     <View style={styles.root}>
@@ -35,8 +36,9 @@ export function ListsScreen({ navigation }: Props) {
           <Text style={styles.createText}>Create new list</Text>
           <SparkbookIcon name="add" color={colors.main} size={14} />
         </Pressable>
-        <ListSection title="Recently Created Lists" lists={recentlyCreated} sparks={sparks} onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
-        <ListSection title="Public Lists" lists={publicLists} sparks={sparks} onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        <ListSection title="Recently Created Lists" lists={createdLists} sparks={sparks} onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        <ListSection title="Private Lists" lists={privateLists} sparks={sparks} emptyMessage="Private routes you create will stay here." onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        <ListSection title="Saved Lists" lists={savedLists} sparks={sparks} emptyMessage="Save a public or friends list to revisit it here." onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
         {!active.length ? <EmptyState title="No lists yet" message="Create or save lists to guide future exploration." /> : null}
       </ScrollView>
       <BottomNav active="lists" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => navigation.navigate('Bookmarks')} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => undefined} onProfile={() => navigation.navigate('Profile')} />
@@ -44,16 +46,20 @@ export function ListsScreen({ navigation }: Props) {
   );
 }
 
-function ListSection({ title, lists, sparks, onOpen }: { title: string; lists: SparkList[]; sparks: ReturnType<typeof useSparks>['sparks']; onOpen: (listId: string) => void }) {
-  if (!lists.length) return null;
+function ListSection({ title, lists, sparks, emptyMessage, onOpen }: { title: string; lists: SparkList[]; sparks: ReturnType<typeof useSparks>['sparks']; emptyMessage?: string; onOpen: (listId: string) => void }) {
+  if (!lists.length && !emptyMessage) return null;
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
-      <View style={styles.cardStack}>
-        {lists.map((list) => (
-          <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => onOpen(list.id)} />
-        ))}
-      </View>
+      {lists.length ? (
+        <View style={styles.cardStack}>
+          {lists.map((list) => (
+            <ListCard key={list.id} list={list} sparks={sparks.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => onOpen(list.id)} />
+          ))}
+        </View>
+      ) : (
+        <Text style={styles.emptySectionText}>{emptyMessage}</Text>
+      )}
     </View>
   );
 }
@@ -108,5 +114,11 @@ const styles = StyleSheet.create({
   },
   cardStack: {
     gap: 16
+  },
+  emptySectionText: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 12,
+    lineHeight: 17
   }
 });

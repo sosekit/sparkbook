@@ -47,21 +47,25 @@ const styles = StyleSheet.create({
     borderColor: colors.fieldBorder,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
+    paddingVertical: 0,
     color: colors.ink,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: fontFamilies.secondary
+    fontFamily: fontFamilies.secondary,
+    textAlignVertical: 'center'
   },
   creationTitle: {
-    minHeight: 42,
+    minHeight: 44,
     borderWidth: 0,
     borderBottomWidth: 1,
     borderBottomColor: colors.divider,
     borderRadius: 0,
     paddingHorizontal: 0,
+    paddingVertical: 0,
     fontFamily: fontFamilies.primaryRegular,
     fontSize: 20,
-    lineHeight: 27
+    lineHeight: 26,
+    textAlignVertical: 'center'
   },
   creationCaption: {
     minHeight: 82,

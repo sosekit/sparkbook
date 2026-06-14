@@ -1,4 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { Spark } from '../types/spark';
@@ -7,6 +8,7 @@ import { Avatar } from './Avatar';
 import { BookmarkToggle } from './BookmarkToggle';
 import { cardStyles } from './Card';
 import { CategoryIcon } from './CategoryIcon';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
 
 type FeedCardProps = {
   spark?: Spark | null;
@@ -21,12 +23,15 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
   if (!spark?.id) return null;
   const category = getCategoryForSpark(spark);
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
+  const demoThumbnail = getDemoMediaAsset(thumbnail);
   const isOwnSpark = spark.createdBy === 'profile-ray';
   const creatorName = getCreatorName(spark.createdBy, spark.recommendedBy);
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.image}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" /> : null}
+        {thumbnail ? (
+          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.thumbnail} /> : <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+        ) : null}
         {!thumbnail ? <CategoryIcon categoryId={category.id} selected size={30} /> : null}
         <View style={styles.bookmarkOverlay}>
           <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={36} variant="circle" />

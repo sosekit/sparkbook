@@ -1,5 +1,6 @@
 import { GestureResponderHandlers, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
@@ -7,6 +8,7 @@ import { Spark } from '../types/spark';
 import { getCategoryForSpark } from '../utils/category';
 import { CategoryIcon } from './CategoryIcon';
 import { cardStyles } from './Card';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
 
 type SparkGridItemProps = {
   spark?: Spark | null;
@@ -22,6 +24,7 @@ export function SparkGridItem({ spark, selected = false, order, dragging = false
   if (!spark?.id) return null;
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
   const category = getCategoryForSpark(spark);
+  const demoThumbnail = getDemoMediaAsset(thumbnail);
 
   return (
     <Pressable
@@ -33,7 +36,9 @@ export function SparkGridItem({ spark, selected = false, order, dragging = false
       {...panHandlers}
     >
       <View style={styles.preview}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" /> : <CategoryIcon categoryId={category.id} selected size={48} />}
+        {thumbnail ? (
+          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.image} /> : <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" />
+        ) : <CategoryIcon categoryId={category.id} selected size={48} />}
         <View style={[styles.check, selected ? styles.checkSelected : null]}>
           {selected ? <SparkbookIcon name="check" color={colors.white} size={14} /> : null}
         </View>

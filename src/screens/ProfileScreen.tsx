@@ -6,7 +6,6 @@ import { Avatar } from '../components/Avatar';
 import { BottomNav } from '../components/BottomNav';
 import { Button } from '../components/Button';
 import { SearchBar } from '../components/SearchBar';
-import { SmallButton } from '../components/SmallButton';
 import { SparkCard } from '../components/SparkCard';
 import { useAuth } from '../hooks/useAuth';
 import { useRevisit } from '../hooks/useRevisit';
@@ -54,9 +53,6 @@ export function ProfileScreen({ navigation }: Props) {
         <Text style={styles.section}>Personal archive</Text>
         <Text style={styles.archiveCopy}>Recently saved places, notes for future you, and sparks you may want to revisit.</Text>
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
-        <View style={styles.timeline}>
-          <SmallButton label="Timeline" selected />
-        </View>
         {revisitState.events.length ? (
           <>
             <Text style={styles.section}>Recent revisits</Text>
@@ -102,6 +98,5 @@ const styles = StyleSheet.create({
   stat: { flex: 1, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.neutral, borderRadius: radius.md, padding: spacing.sm },
   statNumber: { color: colors.main, fontFamily: fontFamilies.primaryBold, fontSize: 20 },
   statLabel: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 10 },
-  archiveCopy: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 },
-  timeline: { flexDirection: 'row', gap: spacing.xs }
+  archiveCopy: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 }
 });
