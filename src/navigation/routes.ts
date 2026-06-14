@@ -1,0 +1,19 @@
+export const routes = {
+  homeFeed: 'HomeFeed',
+  homeMap: 'HomeMap',
+  createSpark: 'CreateSpark',
+  postSparkOptions: 'PostSparkOptions',
+  sparkDetail: 'SparkDetail',
+  addSparkToList: 'AddSparkToList',
+  savedSparks: 'SavedSparks',
+  lists: 'Lists',
+  sparkListPreview: 'SparkListPreview',
+  savedListError: 'SavedListError',
+  listDetail: 'ListDetail',
+  guideRoute: 'GuideRoute',
+  bookmarks: 'Bookmarks',
+  profile: 'Profile',
+  editProfile: 'EditProfile',
+  deletedContent: 'DeletedContentSuggestion',
+  emptyLocation: 'EmptyLocationSuggestion'
+} as const;

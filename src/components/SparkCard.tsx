@@ -1,0 +1,81 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors } from '../theme/colors';
+import { spacing } from '../theme/spacing';
+import { fontFamilies } from '../theme/typography';
+import { Spark } from '../types/spark';
+import { getCategoryForSpark } from '../utils/category';
+import { BookmarkToggle } from './BookmarkToggle';
+import { cardStyles } from './Card';
+import { CategoryIcon } from './CategoryIcon';
+
+type SparkCardProps = {
+  spark?: Spark | null;
+  onPress: () => void;
+  bookmarked?: boolean;
+  onBookmark?: () => void;
+};
+
+export function SparkCard({ spark, onPress, bookmarked, onBookmark }: SparkCardProps) {
+  if (!spark?.id) return null;
+  const category = getCategoryForSpark(spark);
+  const showBookmark = typeof bookmarked === 'boolean' && onBookmark;
+  return (
+    <Pressable onPress={onPress} style={styles.card}>
+      <View style={styles.preview}>
+        <CategoryIcon categoryId={category.id} size={32} />
+      </View>
+      <View style={styles.copy}>
+        <Text style={styles.title} numberOfLines={1}>{spark.title}</Text>
+        <Text style={styles.meta} numberOfLines={1}>{formatCardLocation(spark.addressLabel)}</Text>
+        <View style={styles.bottomRow}>
+          <View style={styles.tag}>
+            <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
+          </View>
+          {showBookmark ? <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={26} /> : null}
+        </View>
+      </View>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    backgroundColor: colors.neutral,
+    borderWidth: 1,
+    borderColor: cardStyles.borderColor,
+    borderRadius: cardStyles.radius,
+    minHeight: 64,
+    alignItems: 'stretch',
+    overflow: 'hidden'
+  },
+  preview: {
+    width: 58,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: cardStyles.previewBackground,
+    borderRightWidth: 1,
+    borderRightColor: cardStyles.dividerColor
+  },
+  copy: { flex: 1, gap: 4, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
+  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 14, lineHeight: 18 },
+  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 15 },
+  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 24 },
+  tag: {
+    alignSelf: 'flex-start',
+    minHeight: 22,
+    borderRadius: 11,
+    borderWidth: 1,
+    borderColor: 'rgba(46, 91, 173, 0.22)',
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+    backgroundColor: colors.surface
+  },
+  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 10, lineHeight: 12 }
+});
+
+function formatCardLocation(address: string) {
+  if (address.toLowerCase().includes('toronto')) return 'Toronto, CA';
+  const city = address.split(',').map((part) => part.trim()).find((part) => part.length > 1) || 'Toronto';
+  return `${city}, CA`;
+}

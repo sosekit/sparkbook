@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Sparkbook",
+    "slug": "sparkbook-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Sparkbook uses your location to help you create and explore saved sparks.",
+        "NSPhotoLibraryUsageDescription": "Sparkbook lets you add photos and videos to your sparks."
+      }
+    },
+    "android": {
+      "permissions": ["ACCESS_FINE_LOCATION", "READ_MEDIA_IMAGES"]
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

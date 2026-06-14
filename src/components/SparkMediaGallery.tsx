@@ -1,0 +1,106 @@
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { colors } from '../theme/colors';
+import { radius } from '../theme/radius';
+import { fontFamilies } from '../theme/typography';
+import { Spark, SparkMedia } from '../types/spark';
+import { getCategoryForSpark } from '../utils/category';
+import { CategoryIcon } from './CategoryIcon';
+
+type SparkMediaGalleryProps = {
+  spark: Spark;
+  relatedMedia?: SparkMedia[];
+  compact?: boolean;
+  horizontalPadding?: number;
+};
+
+export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, horizontalPadding = 16 }: SparkMediaGalleryProps) {
+  const category = getCategoryForSpark(spark);
+  const media = [...(spark.media || []), ...relatedMedia]
+    .filter((item) => item?.url)
+    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+  const cardStyle = compact ? styles.compactCard : styles.card;
+
+  if (!media.length) {
+    return (
+      <View style={[cardStyle, compact ? styles.compactEmptyCard : styles.emptyCardSize, styles.emptyCard, { marginHorizontal: horizontalPadding }]}>
+        <CategoryIcon categoryId={category.id} selected size={compact ? 42 : 56} />
+        <Text style={styles.emptyText}>No media saved yet</Text>
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.row, { paddingHorizontal: horizontalPadding }]}>
+      {media.map((item) => (
+        <View key={item.id || item.url} style={cardStyle}>
+          {item.mediaType === 'photo' ? (
+            <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover" />
+          ) : (
+            <View style={styles.videoFallback}>
+              <SparkbookIcon name="spark" color={colors.white} size={30} />
+              <Text style={styles.videoText}>Video</Text>
+            </View>
+          )}
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  row: {
+    gap: 6,
+    paddingHorizontal: 16
+  },
+  card: {
+    width: 198,
+    height: 348,
+    borderRadius: 4,
+    overflow: 'hidden',
+    backgroundColor: colors.neutral,
+    borderWidth: 1,
+    borderColor: 'rgba(78, 101, 133, 0.18)'
+  },
+  compactCard: {
+    width: 178,
+    height: 286,
+    borderRadius: radius.sm,
+    overflow: 'hidden',
+    backgroundColor: colors.neutral,
+    borderWidth: 1,
+    borderColor: 'rgba(78, 101, 133, 0.18)'
+  },
+  image: {
+    width: '100%',
+    height: '100%'
+  },
+  emptyCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8
+  },
+  emptyCardSize: {
+    height: 168
+  },
+  compactEmptyCard: {
+    height: 148
+  },
+  emptyText: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 12
+  },
+  videoFallback: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.main
+  },
+  videoText: {
+    color: colors.white,
+    fontFamily: fontFamilies.secondaryBold,
+    fontSize: 12
+  }
+});

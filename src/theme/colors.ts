@@ -1,0 +1,22 @@
+export const colors = {
+  main: '#2E5BAD',
+  highlight: '#7BA3E0',
+  neutral: '#F2F4F7',
+  text: '#0F1A2E',
+  altText: '#4E6585',
+  background: '#F2F4F7',
+  surface: '#FFFFFF',
+  surfaceMuted: '#F2F4F7',
+  mapWater: '#7BA3E0',
+  mapLand: '#F2F4F7',
+  mapRoad: '#FFFFFF',
+  ink: '#0F1A2E',
+  muted: '#4E6585',
+  subtle: '#4E6585',
+  border: '#7BA3E0',
+  accent: '#2E5BAD',
+  accentPressed: '#2E5BAD',
+  accentSoft: '#F2F4F7',
+  danger: '#B42318',
+  white: '#FFFFFF'
+};
