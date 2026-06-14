@@ -33,7 +33,7 @@ export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onPr
   ] as const;
 
   return (
-    <View style={[styles.bar, { height: 64 + insets.bottom, paddingBottom: insets.bottom }]}>
+    <View style={[styles.bar, { height: 60 + insets.bottom, paddingBottom: Math.max(insets.bottom - 20, 4) }]}>
       {items.map(([key, label, onPress]) => (
         <Pressable
           key={key}
@@ -72,8 +72,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 16,
     paddingHorizontal: 16,
+    paddingTop: 8,
     borderTopWidth: 1,
-    borderColor: colors.text
+    borderColor: colors.dividerMuted
   },
   item: {
     width: 60,
