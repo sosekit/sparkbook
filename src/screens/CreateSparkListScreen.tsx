@@ -99,7 +99,9 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         </Pressable>
         <Text style={styles.headerTitle}>New list</Text>
       </View>
-      <ProgressBar progress={listProgress} />
+      <View style={styles.progressRail}>
+        <ProgressBar progress={listProgress} />
+      </View>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.titleGroup}>
           <TextField label="" placeholder="Add a title for your list" value={title} onChangeText={(value) => { setTitle(value); setTitleError(undefined); }} variant="creationTitle" error={titleError} />
@@ -147,6 +149,7 @@ const styles = StyleSheet.create({
   close: { width: 44, height: 44, justifyContent: 'center' },
   closePressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
+  progressRail: { marginLeft: 22 },
   content: { paddingHorizontal: 16, paddingTop: 18, paddingBottom: 110, gap: 6 },
   titleGroup: { minHeight: 64 },
   divider: { height: 1, backgroundColor: colors.main, marginVertical: 4 },
