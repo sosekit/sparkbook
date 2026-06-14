@@ -47,26 +47,6 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
       ) : null}
       <View style={styles.copy}>
         <Text style={styles.title} numberOfLines={2}>{spark.title}</Text>
-        <Text style={styles.meta} numberOfLines={1}>{formatCardLocation(spark.addressLabel)}</Text>
-        <View style={styles.bottomRow}>
-          {onCategoryPress ? (
-            <Pressable
-              accessibilityRole="button"
-              hitSlop={8}
-              onPress={(event) => {
-                event.stopPropagation?.();
-                onCategoryPress();
-              }}
-              style={({ pressed }) => [styles.tag, pressed ? styles.tagPressed : null]}
-            >
-              <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
-            </Pressable>
-          ) : (
-            <View style={styles.tag}>
-              <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
-            </View>
-          )}
-        </View>
       </View>
     </Pressable>
   );
@@ -74,70 +54,39 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
 
 const styles = StyleSheet.create({
   card: {
-    width: 132,
-    height: 218,
-    borderRadius: cardStyles.radius,
+    width: 124,
+    height: 200,
+    borderRadius: 4,
     backgroundColor: colors.neutral,
     overflow: 'hidden',
-    marginRight: 0,
-    borderWidth: 1,
-    borderColor: cardStyles.borderColor
+    marginRight: 0
   },
   pressed: { opacity: 0.78 },
   image: {
-    height: 124,
+    height: 152,
     backgroundColor: cardStyles.previewBackground,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: cardStyles.dividerColor
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    overflow: 'hidden'
   },
   thumbnail: {
     ...StyleSheet.absoluteFillObject
   },
   copy: {
-    flex: 1,
-    paddingHorizontal: 8,
-    paddingTop: 8,
-    paddingBottom: 10,
-    gap: 4
+    height: 48,
+    padding: 8,
+    justifyContent: 'center',
+    backgroundColor: cardStyles.contentBackground,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 12,
-    lineHeight: 16,
-    minHeight: 32
-  },
-  meta: {
-    color: colors.altText,
-    fontFamily: fontFamilies.secondary,
-    fontSize: 11,
-    lineHeight: 14
-  },
-  bottomRow: {
-    marginTop: 'auto',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    gap: 5
-  },
-  tag: {
-    maxWidth: 78,
-    minHeight: 22,
-    borderRadius: 11,
-    borderWidth: 1,
-    borderColor: colors.borderSoft,
-    paddingHorizontal: 6,
-    justifyContent: 'center',
-    backgroundColor: colors.surface
-  },
-  tagPressed: { backgroundColor: colors.neutral },
-  tagText: {
-    color: colors.main,
-    fontFamily: fontFamilies.secondaryBold,
-    fontSize: 10,
-    lineHeight: 12
+    fontSize: 13,
+    lineHeight: 16
   },
   creator: {
     position: 'absolute',
@@ -150,16 +99,10 @@ const styles = StyleSheet.create({
   },
   bookmarkOverlay: {
     position: 'absolute',
-    right: 5,
-    top: 5
+    right: 8,
+    top: 8
   }
 });
-
-function formatCardLocation(address: string) {
-  if (address.toLowerCase().includes('toronto')) return 'Toronto, CA';
-  const city = address.split(',').map((part) => part.trim()).find((part) => part.length > 1) || 'Toronto';
-  return `${city}, CA`;
-}
 
 function getCreatorName(createdBy: string, recommendedBy?: string) {
   if (recommendedBy) return recommendedBy;

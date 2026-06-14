@@ -85,12 +85,11 @@ function getListLocationLabel(sparks: Spark[]) {
 const styles = StyleSheet.create({
   card: {
     width: '100%',
-    minHeight: 228,
+    minHeight: 232,
     backgroundColor: colors.surface,
-    borderRadius: cardStyles.radius,
+    borderRadius: 4,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: cardStyles.borderColor
+    borderWidth: 0
   },
   selected: {
     borderColor: colors.main,
@@ -105,8 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: cardStyles.previewBackground,
     overflow: 'hidden',
-    borderBottomWidth: 1,
-    borderBottomColor: cardStyles.dividerColor
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4
   },
   thumbnail: {
     ...StyleSheet.absoluteFillObject,
@@ -151,10 +150,10 @@ const styles = StyleSheet.create({
   },
   locationPill: {
     alignSelf: 'flex-start',
-    minHeight: 24,
-    maxWidth: '86%',
+    minHeight: 30,
+    maxWidth: '88%',
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: colors.white,
     backgroundColor: colors.main,
     flexDirection: 'row',
@@ -170,10 +169,12 @@ const styles = StyleSheet.create({
     lineHeight: 16
   },
   copy: {
-    minHeight: 74,
+    minHeight: 80,
     gap: 4,
     padding: 8,
-    backgroundColor: colors.neutral
+    backgroundColor: cardStyles.contentBackground,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4
   },
   title: {
     color: colors.text,

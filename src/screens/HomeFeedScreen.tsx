@@ -136,7 +136,7 @@ export function HomeFeedScreen({ navigation }: Props) {
             ))}
           </ScrollView>
 
-          <Text style={styles.sectionTitle}>Lists around you</Text>
+          <Text style={styles.sectionTitle}>Spark Lists to{'\n'}explore around you</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.listRow}>
             {visibleLists.map((list) => (
               <View key={list.id} style={styles.listPreview}>
@@ -167,11 +167,11 @@ export function HomeFeedScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
-  tags: { paddingVertical: 8, gap: 8 },
-  feed: { paddingHorizontal: 12, paddingTop: 0, gap: 8 },
-  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23, marginTop: 0 },
-  previewRow: { gap: 6, paddingRight: 12 },
-  listRow: { gap: 6, paddingRight: 12 },
+  tags: { gap: 10 },
+  feed: { paddingHorizontal: 16, paddingTop: 0, gap: 16 },
+  sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 22, lineHeight: 32, marginTop: 0 },
+  previewRow: { gap: 8, paddingRight: 16 },
+  listRow: { gap: 8, paddingRight: 16 },
   listPreview: { width: 242 },
   verticalList: { gap: 6 }
 });
