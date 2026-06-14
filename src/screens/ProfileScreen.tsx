@@ -38,7 +38,7 @@ export function ProfileScreen({ navigation }: Props) {
     <View style={styles.root}>
       <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <View style={styles.profileCard}>
-          <Avatar name={profile?.displayName} size={72} />
+          <Avatar name={profile?.displayName} size={72} initialsFontSize={30} />
           <View style={styles.profileCopy}>
             <Text style={styles.title}>{profile?.displayName || 'Create profile'}</Text>
             <Text style={styles.subtitle}>@{profile?.username || 'sparkbook'}</Text>

@@ -7,11 +7,12 @@ type AvatarProps = {
   name?: string;
   size?: number;
   color?: string;
+  initialsFontSize?: number;
 };
 
-export function Avatar({ name = 'Raymond Zhang', size = 40, color = colors.main }: AvatarProps) {
+export function Avatar({ name = 'Raymond Zhang', size = 40, color = colors.main, initialsFontSize }: AvatarProps) {
   const initials = initialsForName(name);
-  const fontSize = avatarFontSize(size);
+  const fontSize = initialsFontSize ?? avatarFontSize(size);
 
   return (
     <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: color }]}>
