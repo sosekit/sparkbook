@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    left: 22,
-    fontSize: 16,
-    lineHeight: 18
+    left: 22
   }
 });
