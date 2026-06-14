@@ -12,11 +12,13 @@ export type SparkListCardProps = {
   list: SparkList;
   sparks?: Spark[];
   onPress: () => void;
+  bookmarked?: boolean;
+  onBookmark?: () => void;
   selected?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
-export function SparkListCard({ list, sparks = [], onPress, selected = false, style }: SparkListCardProps) {
+export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, onBookmark, selected = false, style }: SparkListCardProps) {
   const coverSpark = sparks.find((spark) => spark.id === list.coverSparkId) || sparks[0];
   const thumbnail = list.thumbnailUri || coverSpark?.media?.find((media) => media.mediaType === 'photo')?.url;
   const locationLabel = getListLocationLabel(sparks);
@@ -40,9 +42,21 @@ export function SparkListCard({ list, sparks = [], onPress, selected = false, st
           <View style={styles.avatarWrap}>
             <Avatar name={creatorName} size={24} />
           </View>
-          <View style={styles.bookmarkIcon}>
-            <SparkbookIcon name="bookmark" color={colors.main} size={20} />
-          </View>
+          {onBookmark ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={bookmarked ? 'Remove list from saved' : 'Save list'}
+              accessibilityState={{ selected: bookmarked }}
+              hitSlop={8}
+              onPress={(event) => {
+                event.stopPropagation?.();
+                onBookmark();
+              }}
+              style={({ pressed }) => [styles.bookmarkIcon, bookmarked ? styles.bookmarkIconSaved : null, pressed ? styles.bookmarkIconPressed : null]}
+            >
+              <SparkbookIcon name={bookmarked ? 'bookmarkFilled' : 'bookmark'} color={bookmarked ? colors.white : colors.main} size={20} />
+            </Pressable>
+          ) : null}
         </View>
         <View style={styles.locationPill}>
           <SparkbookIcon name="location" color={colors.white} size={16} />
@@ -126,6 +140,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  bookmarkIconSaved: {
+    borderColor: colors.main,
+    backgroundColor: colors.main
+  },
+  bookmarkIconPressed: {
+    borderColor: colors.highlight,
+    backgroundColor: colors.highlight
   },
   locationPill: {
     alignSelf: 'flex-start',

@@ -1,3 +1,4 @@
+import { DEMO_MODE } from '../config/demoMode';
 import { sampleLists } from '../data/sampleLists';
 import { sampleSparks } from '../data/sampleSparks';
 import { SparkList, SparkListItem } from '../types/list';
@@ -19,11 +20,12 @@ export class ListServiceError extends Error {
 
 export const listService = {
   async fetchLists() {
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase.from('spark_lists').select('*, spark_list_items(*)').order('created_at', { ascending: false });
       if (!error && data) return data.map(fromSupabaseList).map(normalizeList);
     }
     const local = await localStore.loadLists(sampleLists);
+    if (DEMO_MODE) return local.map(normalizeList).filter((list) => list.status === 'active');
     return mergeGeneratedLists(local.map(normalizeList), await localStore.loadSparks([]));
   },
   async fetchList(id: string) {
@@ -85,7 +87,7 @@ export const listService = {
     } catch (error) {
       throw new ListServiceError('save-failed', error instanceof Error ? error.message : 'Couldn’t save list changes.');
     }
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('spark_list_items').upsert(
         { id: `${listId}-${sparkId}`, list_id: listId, spark_id: sparkId, sort_order: nextSortOrder, created_at: now },
         { onConflict: 'list_id,spark_id' }
@@ -103,7 +105,7 @@ export const listService = {
     const now = new Date().toISOString();
     const next = lists.map((list) => (list.id === listId ? { ...list, sparkIds: list.sparkIds.filter((id) => id !== sparkId), items: (list.items || []).filter((item) => item.sparkId !== sparkId), updatedAt: now } : list));
     await localStore.saveLists(next);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('spark_list_items').delete().eq('list_id', listId).eq('spark_id', sparkId);
     }
   },
@@ -112,7 +114,7 @@ export const listService = {
     const deletedAt = new Date().toISOString();
     const next = lists.map((list) => (list.id === listId ? { ...list, status: 'deleted' as const, deletedAt, updatedAt: deletedAt } : list));
     await localStore.saveLists(next);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('spark_lists').update({ status: 'deleted', deleted_at: deletedAt }).eq('id', listId);
       await dataClient.supabase.from('deleted_content_events').insert({ content_type: 'list', content_id: listId, replacement_reason: 'List removed' });
     }
@@ -131,7 +133,7 @@ export const listService = {
       };
     });
     await localStore.saveLists(next);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await Promise.all(sparkIds.map((sparkId, index) =>
         dataClient.supabase!.from('spark_list_items').upsert({ list_id: listId, spark_id: sparkId, sort_order: index })
       ));

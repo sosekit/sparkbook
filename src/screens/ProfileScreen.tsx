@@ -56,7 +56,6 @@ export function ProfileScreen({ navigation }: Props) {
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
         <View style={styles.timeline}>
           <SmallButton label="Timeline" selected />
-          <SmallButton label="Journal" />
         </View>
         {revisitState.events.length ? (
           <>

@@ -25,7 +25,7 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
     return (
       <View style={[cardStyle, compact ? styles.compactEmptyCard : styles.emptyCardSize, styles.emptyCard, { marginHorizontal: horizontalPadding }]}>
         <CategoryIcon categoryId={category.id} selected size={compact ? 42 : 56} />
-        <Text style={styles.emptyText}>No media yet</Text>
+        <Text style={styles.emptyText}>Saved location</Text>
       </View>
     );
   }
@@ -59,7 +59,7 @@ function GalleryItem({ item, style, categoryId }: { item: SparkMedia; style: obj
       ) : (
         <View style={styles.invalidFallback}>
           <CategoryIcon categoryId={categoryId} selected size={44} />
-          <Text style={styles.emptyText}>Media unavailable</Text>
+          <Text style={styles.emptyText}>Saved location</Text>
         </View>
       )}
     </View>

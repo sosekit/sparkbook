@@ -6,7 +6,7 @@ import { dataClient } from './dataClient';
 
 export const sparkService = {
   async fetchFeedSparks() {
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase.from('sparks').select('*').is('deleted_at', null).order('created_at', { ascending: false });
       if (!error && data) return data.map(fromSupabaseSpark);
     }
@@ -23,7 +23,7 @@ export const sparkService = {
     const sparks = await localStore.loadSparks(sampleSparks);
     const now = new Date().toISOString();
     const spark: Spark = { ...input, id: `spark-${Date.now()}`, createdAt: now, updatedAt: now };
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('sparks').insert(toSupabaseSpark(spark));
       for (const media of spark.media) {
         await dataClient.supabase.from('spark_media').insert({
@@ -47,7 +47,7 @@ export const sparkService = {
     const next = sparks.map((spark) => (spark.id === id ? { ...spark, ...input, id, updatedAt: now } : spark));
     const updated = next.find((spark) => spark.id === id) || null;
     await localStore.saveSparks(next);
-    if (updated && dataClient.supabase) {
+    if (updated && dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('sparks').update(toSupabaseSpark(updated)).eq('id', id);
     }
     return updated;
@@ -98,7 +98,7 @@ export const sparkService = {
     const deletedAt = new Date().toISOString();
     const next = sparks.map((spark) => (spark.id === id ? { ...spark, status: 'deleted' as const, deletedAt } : spark));
     await localStore.saveSparks(next);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('sparks').update({ status: 'deleted', deleted_at: deletedAt }).eq('id', id);
       await dataClient.supabase.from('deleted_content_events').insert({ content_type: 'spark', content_id: id, replacement_reason: 'Spark removed' });
     }

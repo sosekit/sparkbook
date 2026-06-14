@@ -1,3 +1,5 @@
+import { DEMO_MODE } from '../config/demoMode';
+
 export type SparkDraftValidationInput = {
   mediaUri?: string;
   title?: string;
@@ -5,6 +7,7 @@ export type SparkDraftValidationInput = {
 };
 
 export function validateMediaStep(input: SparkDraftValidationInput) {
+  if (DEMO_MODE) return undefined;
   return input.mediaUri ? undefined : 'Select a photo or video to continue.';
 }
 

@@ -1,10 +1,14 @@
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import { DEMO_MODE } from './src/config/demoMode';
 import { AppNavigator } from './src/navigation/AppNavigator';
+import { ensureDemoData } from './src/services/demoDataService';
 import { colors } from './src/theme/colors';
 
 export default function App() {
+  const [demoReady, setDemoReady] = useState(!DEMO_MODE);
   const [fontsLoaded] = useFonts({
     'PlantinMTPro-Regular': require('./assets/fonts/PlantinMTProRg.ttf'),
     'PlantinMTPro-SemiBold': require('./assets/fonts/PlantinMTProSmBd.ttf'),
@@ -14,7 +18,18 @@ export default function App() {
     'Helvetica-Light': require('./assets/fonts/Helvetica-Light.ttf')
   });
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    let mounted = true;
+    if (!DEMO_MODE) return;
+    ensureDemoData().finally(() => {
+      if (mounted) setDemoReady(true);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!fontsLoaded || !demoReady) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background }}>
         <ActivityIndicator color={colors.accent} />

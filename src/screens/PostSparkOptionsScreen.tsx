@@ -35,7 +35,7 @@ export function PostSparkOptionsScreen({ route, navigation }: Props) {
         <View style={styles.cta}>
           <CTAButton label="Add this spark to a list" onPress={() => navigation.navigate('AddSparkToList', { sparkId: route.params.sparkId })} />
           <Pressable onPress={() => navigation.replace('SparkDetail', { sparkId: route.params.sparkId })}>
-            <Text style={styles.leave}>Save as an individual spark</Text>
+            <Text style={styles.leave}>Leave as individual spark</Text>
           </Pressable>
         </View>
       </ScrollView>

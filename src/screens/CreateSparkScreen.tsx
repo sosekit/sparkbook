@@ -12,6 +12,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { SearchBar } from '../components/SearchBar';
 import { TextField } from '../components/TextField';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { DEMO_MODE } from '../config/demoMode';
 import { categories } from '../data/categories';
 import { useCurrentLocation } from '../hooks/useCurrentLocation';
 import { useMediaLibrary } from '../hooks/useMediaLibrary';
@@ -166,14 +167,29 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   async function pickFromLibrary() {
     const result = await mediaService.pickMedia();
     if (result.error) {
+      if (DEMO_MODE) {
+        useDemoMediaFallback();
+        return;
+      }
       setErrors((current) => ({ ...current, media: result.error || undefined }));
       return;
     }
-    if (!result.media) return;
+    if (!result.media) {
+      if (DEMO_MODE) useDemoMediaFallback();
+      return;
+    }
     setSelectedMediaId(result.media.assetId || result.media.uri);
     setMediaUri(result.media.uri);
     setMediaType(result.media.type === 'video' ? 'video' : 'photo');
     setErrors((current) => ({ ...current, media: undefined }));
+  }
+
+  function useDemoMediaFallback() {
+    setSelectedMediaId('demo-category-fallback');
+    setMediaUri(undefined);
+    setMediaType('photo');
+    setErrors((current) => ({ ...current, media: undefined }));
+    setStep('content');
   }
 
   function goNext() {

@@ -4,7 +4,7 @@ import { sampleSparks } from '../data/sampleSparks';
 
 export const bookmarkService = {
   async fetchBookmarks() {
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase.from('bookmarks').select('spark_id');
       if (!error && data) return data.map((item) => item.spark_id as string);
     }
@@ -15,7 +15,7 @@ export const bookmarkService = {
     const next = current.includes(sparkId) ? current : [sparkId, ...current];
     await localStore.saveBookmarks(next);
     await syncSparkBookmarkState(sparkId, true);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('bookmarks').upsert({ user_id: 'local-user', spark_id: sparkId });
     }
     return next;
@@ -25,7 +25,7 @@ export const bookmarkService = {
     const next = current.filter((id) => id !== sparkId);
     await localStore.saveBookmarks(next);
     await syncSparkBookmarkState(sparkId, false);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('bookmarks').delete().eq('spark_id', sparkId);
     }
     return next;

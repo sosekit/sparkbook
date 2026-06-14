@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { DEMO_MODE } from '../config/demoMode';
 import { Avatar } from '../components/Avatar';
 import { BackButton } from '../components/BackButton';
 import { BookmarkToggle } from '../components/BookmarkToggle';
@@ -125,7 +126,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
       </View>
       <CommentsSection targetType="spark" targetId={spark.id} />
       <CTAButton label="Add to list" onPress={() => navigation.navigate('AddSparkToList', { sparkId: spark.id })} />
-      {isOwnSpark ? (
+      {isOwnSpark && !DEMO_MODE ? (
         <View style={styles.secondaryActions}>
           <Button label="Delete spark" onPress={removeSpark} variant="ghost" />
         </View>

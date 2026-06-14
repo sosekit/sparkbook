@@ -7,7 +7,7 @@ export const defaultProfile: Profile = sampleProfiles[0];
 
 export const profileService = {
   async getProfile(userId = 'local-user') {
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase.from('profiles').select('*').eq('user_id', userId).maybeSingle();
       if (!error && data) {
         return {
@@ -29,7 +29,7 @@ export const profileService = {
   },
   async getProfileById(profileId: string) {
     if (profileId === defaultProfile.id) return localStore.loadProfile(defaultProfile);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase.from('profiles').select('*').eq('id', profileId).maybeSingle();
       if (!error && data) return fromSupabaseProfile(data);
     }
@@ -41,7 +41,7 @@ export const profileService = {
   },
   updateProfile: async (profile: Profile) => {
     const updated = { ...profile, updatedAt: new Date().toISOString() };
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('profiles').upsert({
         id: updated.id,
         user_id: updated.userId,

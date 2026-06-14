@@ -5,7 +5,7 @@ import { dataClient } from './dataClient';
 
 export const commentService = {
   async fetchComments(targetType: CommentTargetType, targetId: string) {
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase
         .from('comments')
         .select('*')
@@ -38,7 +38,7 @@ export const commentService = {
       updatedAt: now
     };
     await localStore.saveComments([...comments, comment]);
-    if (dataClient.supabase) {
+    if (dataClient.isSupabase && dataClient.supabase) {
       await dataClient.supabase.from('comments').insert(toSupabaseComment(comment));
     }
     return comment;

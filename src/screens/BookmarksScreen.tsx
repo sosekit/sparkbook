@@ -19,7 +19,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Bookmarks'>;
 export function BookmarksScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
   const { sparks } = useSparks();
-  const { bookmarks } = useBookmarks();
+  const { bookmarks, toggleBookmark } = useBookmarks();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'bookmarked' | 'revisit' | 'friends'>('all');
   const saved = useMemo(() => {
@@ -52,7 +52,15 @@ export function BookmarksScreen({ navigation }: Props) {
             <SmallButton key={id} label={label} selected={filter === id} onPress={() => setFilter(id as typeof filter)} />
           ))}
         </ScrollView>
-        {saved.length ? saved.map((spark) => <SparkCard key={spark.id} spark={spark} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />) : <EmptyState title="No sparks found" message="Your places will appear here when they match this search." actionLabel="Explore sparks" onAction={() => navigation.navigate('HomeFeed')} />}
+        {saved.length ? saved.map((spark) => (
+          <SparkCard
+            key={spark.id}
+            spark={spark}
+            bookmarked={bookmarks.includes(spark.id)}
+            onBookmark={() => toggleBookmark(spark.id)}
+            onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })}
+          />
+        )) : <EmptyState title="No sparks found" message="Your places will appear here when they match this search." actionLabel="Explore sparks" onAction={() => navigation.navigate('HomeFeed')} />}
       </ScrollView>
       <BottomNav active="bookmarks" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => undefined} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => navigation.navigate('Lists')} onProfile={() => navigation.navigate('Profile')} />
     </View>

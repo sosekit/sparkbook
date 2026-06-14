@@ -145,7 +145,7 @@ export function HomeFeedScreen({ navigation }: Props) {
             ))}
           </ScrollView>
 
-          <Text style={styles.sectionTitle}>Following</Text>
+          <Text style={styles.sectionTitle}>To revisit</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewRow}>
             {following.slice(0, 4).map((spark) => (
               <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
