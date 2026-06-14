@@ -32,8 +32,6 @@ export function useSparks() {
     setSparks,
     createSpark: sparkService.createSpark,
     updateSpark: sparkService.updateSpark,
-    markRevisited: sparkService.markRevisited,
-    fetchRevisitEvents: sparkService.fetchRevisitEvents,
     loadDraft: sparkService.loadDraft,
     saveDraft: sparkService.saveDraft,
     clearDraft: sparkService.clearDraft,

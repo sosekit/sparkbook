@@ -30,7 +30,7 @@ export async function resetDemoData() {
 
 export async function loadDemoData() {
   const bookmarkedSparkIds = sampleSparks
-    .filter((spark) => spark.status === 'active' && (spark.isBookmarked || spark.wantToRevisit))
+    .filter((spark) => spark.status === 'active' && spark.isBookmarked)
     .map((spark) => spark.id);
 
   await Promise.all([

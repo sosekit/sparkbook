@@ -27,7 +27,7 @@ export function HomeMapScreen({ navigation }: Props) {
       <Logo style={[styles.logo, { top: insets.top + 16 }]} />
       <View style={[styles.panel, { bottom: insets.bottom + 84 }]}>
         <Text style={styles.title}>Nearby sparks</Text>
-        <Text style={styles.body}>Tap a spark to revisit the place and the note saved with it.</Text>
+        <Text style={styles.body}>Tap a spark to open the place and the note saved with it.</Text>
         <Button label="Back to feed" onPress={() => navigation.navigate('HomeFeed')} variant="secondary" />
       </View>
       <BottomNav active="home" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => navigation.navigate('Bookmarks')} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => navigation.navigate('Lists')} onProfile={() => navigation.navigate('Profile')} />

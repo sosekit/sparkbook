@@ -10,7 +10,7 @@ export function MediaPicker({ uri, mediaType, onPick }: { uri?: string; mediaTyp
     <View style={styles.wrap}>
       <View style={styles.copy}>
         <Text style={styles.title}>Photo or video</Text>
-        <Text style={styles.body}>Add a photo or video to help this spark feel easier to revisit.</Text>
+        <Text style={styles.body}>Add a photo or video to help this spark feel easier to remember.</Text>
       </View>
       {uri && mediaType !== 'video' ? <Image source={{ uri }} style={styles.preview} resizeMode="cover" /> : null}
       {uri && mediaType === 'video' ? <Text style={styles.video}>Video selected</Text> : null}

@@ -52,7 +52,7 @@ export function HomeFeedScreen({ navigation }: Props) {
   const filtered = useMemo(
     () => {
       const filterBase = filter === 'trending'
-        ? [...active].sort((a, b) => (b.revisitCount || 0) - (a.revisitCount || 0) || b.createdAt.localeCompare(a.createdAt))
+        ? [...active].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
         : filter === 'friends'
           ? active.filter(isFriendSpark)
           : active;
@@ -70,11 +70,7 @@ export function HomeFeedScreen({ navigation }: Props) {
     if (filter === 'trending') return [...visibleLists].sort((a, b) => b.sparkIds.length - a.sparkIds.length || b.updatedAt.localeCompare(a.updatedAt));
     return visibleLists;
   }, [active, filter, visibleLists]);
-  const following = useMemo(() => {
-    const bookmarked = filtered.filter((spark) => bookmarks.includes(spark.id));
-    return bookmarked.length ? bookmarked : filtered.slice(0, 3);
-  }, [bookmarks, filtered]);
-  const trendingSparks = useMemo(() => [...filtered].sort((a, b) => (b.revisitCount || 0) - (a.revisitCount || 0) || b.createdAt.localeCompare(a.createdAt)).slice(0, 3), [filtered]);
+  const trendingSparks = useMemo(() => [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3), [filtered]);
   const { results, searching } = useSearch(query, active, visibleLists);
 
   function selectSearchResult(result: SearchResult) {
@@ -156,13 +152,6 @@ export function HomeFeedScreen({ navigation }: Props) {
               <View key={list.id} style={styles.listPreview}>
                 <ListCard list={list} sparks={active.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
               </View>
-            ))}
-          </ScrollView>
-
-          <Text style={styles.sectionTitle}>To revisit</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewRow}>
-            {following.slice(0, 4).map((spark) => (
-              <FeedCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} onCreatorPress={() => navigation.navigate('CreatorProfile', { profileId: spark.createdBy })} />
             ))}
           </ScrollView>
 

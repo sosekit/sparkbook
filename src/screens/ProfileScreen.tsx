@@ -8,7 +8,7 @@ import { Button } from '../components/Button';
 import { SearchBar } from '../components/SearchBar';
 import { SparkCard } from '../components/SparkCard';
 import { useAuth } from '../hooks/useAuth';
-import { useRevisit } from '../hooks/useRevisit';
+import { useBookmarks } from '../hooks/useBookmarks';
 import { useSparks } from '../hooks/useSparks';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -22,7 +22,7 @@ export function ProfileScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
   const { profile } = useAuth();
   const { sparks } = useSparks();
-  const revisitState = useRevisit();
+  const { bookmarks } = useBookmarks();
   const [query, setQuery] = useState('');
   const created = sparks.filter((spark) => spark.createdBy === 'profile-ray' && spark.status === 'active');
   const timeline = useMemo(() => created
@@ -31,7 +31,7 @@ export function ProfileScreen({ navigation }: Props) {
       return text.includes(query.trim().toLowerCase());
     })
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt)), [created, query]);
-  const revisitCount = created.filter((spark) => spark.wantToRevisit).length;
+  const savedCount = bookmarks.length;
 
   return (
     <View style={styles.root}>
@@ -47,22 +47,12 @@ export function ProfileScreen({ navigation }: Props) {
         <Button label="Edit profile" onPress={() => navigation.navigate('EditProfile')} />
         <View style={styles.stats}>
           <View style={styles.stat}><Text style={styles.statNumber}>{created.length}</Text><Text style={styles.statLabel}>Sparks</Text></View>
-          <View style={styles.stat}><Text style={styles.statNumber}>{revisitCount}</Text><Text style={styles.statLabel}>To revisit</Text></View>
+          <View style={styles.stat}><Text style={styles.statNumber}>{savedCount}</Text><Text style={styles.statLabel}>Saved</Text></View>
           <View style={styles.stat}><Text style={styles.statNumber}>{created.filter((spark) => spark.visibility === 'friends').length}</Text><Text style={styles.statLabel}>Shared</Text></View>
         </View>
         <Text style={styles.section}>Personal archive</Text>
-        <Text style={styles.archiveCopy}>Recently saved places, notes for future you, and sparks you may want to revisit.</Text>
+        <Text style={styles.archiveCopy}>Recently saved places, notes for future you, and sparks from your archive.</Text>
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
-        {revisitState.events.length ? (
-          <>
-            <Text style={styles.section}>Recent revisits</Text>
-            {revisitState.events.slice(0, 3).map((event) => {
-              const spark = sparks.find((item) => item.id === event.sparkId);
-              if (!spark) return null;
-              return <SparkCard key={event.id} spark={spark} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />;
-            })}
-          </>
-        ) : null}
         {timeline.map((spark) => (
           <SparkCard key={spark.id} spark={spark} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />
         ))}

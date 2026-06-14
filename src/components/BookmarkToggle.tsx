@@ -18,7 +18,7 @@ export function BookmarkToggle({ saved = false, onPress, size = 30, variant = 'p
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={saved ? 'Remove from To Revisit' : 'Save to To Revisit'}
+      accessibilityLabel={saved ? 'Remove bookmark' : 'Bookmark spark'}
       accessibilityState={{ selected: saved }}
       hitSlop={10}
       onPress={(event) => {

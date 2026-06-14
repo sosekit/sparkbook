@@ -21,14 +21,13 @@ export function BookmarksScreen({ navigation }: Props) {
   const { sparks } = useSparks();
   const { bookmarks, toggleBookmark } = useBookmarks();
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<'all' | 'bookmarked' | 'revisit' | 'friends'>('all');
+  const [filter, setFilter] = useState<'all' | 'friends'>('all');
   const saved = useMemo(() => {
-    const toRevisitIds = new Set(bookmarks);
     return sparks
       .filter(Boolean)
       .filter((spark) => spark.id && spark.status === 'active')
-      .filter((spark) => bookmarks.includes(spark.id) || spark.wantToRevisit)
-      .filter((spark) => filter === 'all' || (filter === 'bookmarked' ? bookmarks.includes(spark.id) : filter === 'revisit' ? toRevisitIds.has(spark.id) || spark.wantToRevisit : spark.visibility === 'friends' || spark.audience === 'friends'))
+      .filter((spark) => bookmarks.includes(spark.id))
+      .filter((spark) => filter === 'all' || spark.visibility === 'friends' || spark.audience === 'friends')
       .filter((spark) => {
       const text = `${spark.title} ${spark.addressLabel} ${spark.description || ''} ${spark.reflectionNote || ''} ${(spark.tags || []).join(' ')} ${(spark.contextTags || []).join(' ')}`.toLowerCase();
       return text.includes(query.trim().toLowerCase());
@@ -39,14 +38,12 @@ export function BookmarksScreen({ navigation }: Props) {
     <View style={styles.root}>
       <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <Text style={styles.title}>Saved sparks</Text>
-        <Text style={styles.subtitle}>Bookmarked places you want to come back to.</Text>
+        <Text style={styles.subtitle}>Bookmarked places saved for later.</Text>
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
-        <Text style={styles.section}>To revisit</Text>
+        <Text style={styles.section}>Bookmarked</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
           {[
             ['all', 'All'],
-            ['bookmarked', 'Bookmarked'],
-            ['revisit', 'Want to revisit'],
             ['friends', 'Close Friends']
           ].map(([id, label]) => (
             <SmallButton key={id} label={label} selected={filter === id} onPress={() => setFilter(id as typeof filter)} />

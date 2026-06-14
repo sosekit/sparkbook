@@ -12,14 +12,18 @@ type CommentsSectionProps = {
   targetType: CommentTargetType;
   targetId: string;
   inputPlaceholder?: string;
+  maxVisible?: number;
+  compact?: boolean;
 };
 
-export function CommentsSection({ targetType, targetId, inputPlaceholder }: CommentsSectionProps) {
+export function CommentsSection({ targetType, targetId, inputPlaceholder, maxVisible = 2, compact = false }: CommentsSectionProps) {
   const { comments, loading, addComment } = useComments(targetType, targetId);
+  const visibleComments = comments.slice(0, maxVisible);
+  const hiddenCount = Math.max(comments.length - visibleComments.length, 0);
 
   return (
-    <View style={styles.panel}>
-      <Text style={styles.title}>Comments</Text>
+    <View style={[styles.panel, compact ? styles.compactPanel : null]}>
+      <Text style={styles.title}>Comments{comments.length ? ` (${comments.length})` : ''}</Text>
       {loading ? (
         <View style={styles.loading}>
           <ActivityIndicator color={colors.main} />
@@ -27,13 +31,15 @@ export function CommentsSection({ targetType, targetId, inputPlaceholder }: Comm
         </View>
       ) : comments.length ? (
         <View style={styles.list}>
-          {comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)}
+          {visibleComments.map((comment) => <CommentItem key={comment.id} comment={comment} compact={compact} />)}
+          {hiddenCount ? <Text style={styles.hiddenText}>{hiddenCount} more comment{hiddenCount === 1 ? '' : 's'}</Text> : null}
         </View>
       ) : (
         <Text style={styles.emptyText}>No comments yet</Text>
       )}
       <CommentInput
         placeholder={inputPlaceholder || 'Add a comment'}
+        compact={compact}
         onSubmit={async (body) => {
           await addComment(body);
         }}
@@ -51,6 +57,10 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
     gap: spacing.sm
   },
+  compactPanel: {
+    padding: spacing.xs,
+    gap: spacing.xs
+  },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
@@ -58,6 +68,12 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: spacing.xs
+  },
+  hiddenText: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 11,
+    lineHeight: 15
   },
   loading: {
     minHeight: 56,

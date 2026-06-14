@@ -1,5 +1,5 @@
 import { sampleSparks } from '../data/sampleSparks';
-import { RevisitEvent, Spark, SparkDraft } from '../types/spark';
+import { Spark, SparkDraft } from '../types/spark';
 import { localStore } from '../utils/storage';
 import { distanceKm } from '../utils/distance';
 import { dataClient } from './dataClient';
@@ -62,36 +62,6 @@ export const sparkService = {
   },
   async clearDraft() {
     await localStore.saveSparkDraft(null);
-  },
-  async markRevisited(id: string, note?: string) {
-    const sparks = await localStore.loadSparks(sampleSparks);
-    const now = new Date().toISOString();
-    const next = sparks.map((spark) => spark.id === id ? {
-      ...spark,
-      isBookmarked: false,
-      wantToRevisit: false,
-      revisitCount: (spark.revisitCount || 0) + 1,
-      lastVisitedAt: now,
-      revisitNote: note?.trim() || spark.revisitNote,
-      updatedAt: now
-    } : spark);
-    const event: RevisitEvent = {
-      id: `revisit-${Date.now()}`,
-      sparkId: id,
-      userId: 'profile-ray',
-      note: note?.trim() || undefined,
-      visitedAt: now,
-      createdAt: now
-    };
-    const events = await localStore.loadRevisitEvents([]);
-    const bookmarks = await localStore.loadBookmarks([]);
-    await localStore.saveSparks(next);
-    await localStore.saveBookmarks(bookmarks.filter((sparkId) => sparkId !== id));
-    await localStore.saveRevisitEvents([event, ...events]);
-    return next.find((spark) => spark.id === id) || null;
-  },
-  async fetchRevisitEvents() {
-    return localStore.loadRevisitEvents([]);
   },
   async softDeleteSpark(id: string) {
     const sparks = await localStore.loadSparks(sampleSparks);

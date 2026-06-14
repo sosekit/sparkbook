@@ -10,9 +10,10 @@ import { TextField } from './TextField';
 type CommentInputProps = {
   placeholder?: string;
   onSubmit: (body: string) => Promise<void> | void;
+  compact?: boolean;
 };
 
-export function CommentInput({ placeholder = 'Add a comment', onSubmit }: CommentInputProps) {
+export function CommentInput({ placeholder = 'Add a comment', onSubmit, compact = false }: CommentInputProps) {
   const [body, setBody] = useState('');
   const [error, setError] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
@@ -32,7 +33,7 @@ export function CommentInput({ placeholder = 'Add a comment', onSubmit }: Commen
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.row}>
-        <Avatar name="Raymond Zhang" size={28} />
+        <Avatar name="Raymond Zhang" size={compact ? 22 : 28} />
         <View style={styles.inputWrap}>
           <TextField
             label=""
@@ -43,7 +44,7 @@ export function CommentInput({ placeholder = 'Add a comment', onSubmit }: Commen
             }}
             placeholder={placeholder}
             multiline
-            style={styles.input}
+            style={[styles.input, compact ? styles.compactInput : null]}
           />
           <InlineError message={error} />
           <View style={styles.action}>
@@ -68,6 +69,9 @@ const styles = StyleSheet.create({
   input: {
     minHeight: 56,
     backgroundColor: colors.surface
+  },
+  compactInput: {
+    minHeight: 44
   },
   action: {
     alignSelf: 'flex-start'

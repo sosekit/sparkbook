@@ -14,7 +14,6 @@ import { SmallButton } from '../components/SmallButton';
 import { SparkMediaGallery } from '../components/SparkMediaGallery';
 import { useBookmarks } from '../hooks/useBookmarks';
 import { useFollows } from '../hooks/useFollows';
-import { useRevisit } from '../hooks/useRevisit';
 import { useSparks } from '../hooks/useSparks';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -28,11 +27,10 @@ type Props = NativeStackScreenProps<RootStackParamList, 'SparkDetail'>;
 
 export function SparkDetailScreen({ route, navigation }: Props) {
   const insets = useSafeAreaInsets();
-  const { sparks, softDeleteSpark, refresh } = useSparks();
-  const { bookmarks, toggleBookmark, refresh: refreshBookmarks } = useBookmarks();
+  const { sparks, softDeleteSpark } = useSparks();
+  const { bookmarks, toggleBookmark } = useBookmarks();
   const follows = useFollows();
   const spark = sparks.find((item) => item.id === route.params.sparkId);
-  const revisitState = useRevisit(route.params.sparkId);
 
   if (!spark || spark.status === 'deleted') {
     return <View style={styles.center}><Button label="Find a replacement" onPress={() => navigation.replace('DeletedContentSuggestion', { contentType: 'spark', contentId: route.params.sparkId })} /></View>;
@@ -49,12 +47,6 @@ export function SparkDetailScreen({ route, navigation }: Props) {
     : spark.audience === 'private' || spark.visibility === 'private'
       ? 'Private spark'
       : 'Public spark';
-
-  async function revisit() {
-    await revisitState.markRevisited('Marked from Sparkbook detail');
-    await refresh();
-    await refreshBookmarks();
-  }
 
   async function removeSpark() {
     await softDeleteSpark(sparkId);
@@ -104,27 +96,12 @@ export function SparkDetailScreen({ route, navigation }: Props) {
           {contextTags.length ? contextTags.map((tag) => <SmallButton key={tag} label={tag} />) : <SmallButton label="No context yet" />}
         </View>
       </View>
-      <View style={styles.actionsRow}>
-        <View style={styles.revisitMeta}>
-          <SparkbookIcon name="bookmark" color={colors.main} size={16} />
-          <Text style={styles.revisitMetaText} numberOfLines={1}>
-            {bookmarks.includes(spark.id)
-              ? 'To revisit'
-              : spark.lastVisitedAt
-                ? `Last revisited ${formatSavedDate(spark.lastVisitedAt)}`
-                : 'Not bookmarked'}
-          </Text>
-        </View>
-        <Pressable accessibilityRole="button" onPress={revisit} style={({ pressed }) => [styles.revisitButton, pressed ? styles.revisitPressed : null]}>
-          <Text style={styles.revisitText}>Mark as revisited</Text>
-        </Pressable>
-      </View>
       <Text style={styles.tags}>{tags.map((tag) => `#${tag}`).join(' ') || '#custom'}</Text>
       <View style={styles.locationPanel}>
         <Text style={styles.section}>Location</Text>
         <MapPreview locations={[spark]} selectedId={spark.id} height={156} />
       </View>
-      <CommentsSection targetType="spark" targetId={spark.id} />
+      <CommentsSection targetType="spark" targetId={spark.id} maxVisible={2} compact />
       <CTAButton label="Add to list" onPress={() => navigation.navigate('AddSparkToList', { sparkId: spark.id })} />
       {isOwnSpark && !DEMO_MODE ? (
         <View style={styles.secondaryActions}>
@@ -158,12 +135,6 @@ const styles = StyleSheet.create({
   source: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 4 },
   tags: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800', fontSize: 12 },
-  actionsRow: { minHeight: 44, borderRadius: radius.md, borderWidth: 1, borderColor: colors.borderSoft, backgroundColor: colors.surface, paddingHorizontal: spacing.sm, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
-  revisitMeta: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6 },
-  revisitMetaText: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 11 },
-  revisitButton: { minHeight: 36, borderRadius: 18, borderWidth: 1, borderColor: colors.main, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.sm },
-  revisitPressed: { backgroundColor: colors.neutral },
-  revisitText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   locationPanel: { gap: spacing.sm },
   secondaryActions: { gap: spacing.sm }
 });

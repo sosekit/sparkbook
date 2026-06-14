@@ -7,16 +7,16 @@ import { fontFamilies } from '../theme/typography';
 import { formatSavedDate } from '../utils/date';
 import { Avatar } from './Avatar';
 
-export function CommentItem({ comment }: { comment: Comment }) {
+export function CommentItem({ comment, compact = false }: { comment: Comment; compact?: boolean }) {
   return (
-    <View style={styles.row}>
-      <Avatar name={comment.userName} size={28} />
-      <View style={styles.bubble}>
+    <View style={[styles.row, compact ? styles.compactRow : null]}>
+      <Avatar name={comment.userName} size={compact ? 22 : 28} />
+      <View style={[styles.bubble, compact ? styles.compactBubble : null]}>
         <View style={styles.header}>
           <Text style={styles.name}>{comment.userName}</Text>
           <Text style={styles.date}>{formatSavedDate(comment.createdAt)}</Text>
         </View>
-        <Text style={styles.body}>{comment.body}</Text>
+        <Text style={styles.body} numberOfLines={compact ? 1 : undefined}>{comment.body}</Text>
       </View>
     </View>
   );
@@ -28,6 +28,9 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     alignItems: 'flex-start'
   },
+  compactRow: {
+    gap: spacing.xs
+  },
   bubble: {
     flex: 1,
     borderRadius: radius.md,
@@ -36,6 +39,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.sm,
     gap: 2
+  },
+  compactBubble: {
+    paddingVertical: 6,
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.sm
   },
   header: {
     flexDirection: 'row',

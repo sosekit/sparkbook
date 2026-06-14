@@ -70,7 +70,7 @@ export function ListDetailScreen({ route, navigation }: Props) {
           }}
           onOpenSpark={(sparkId) => navigation.navigate('SingleSparkFromList', { listId: list.id, sparkId })}
         />
-      ) : <EmptyState title="This list is empty" message="Add sparks to build a route you can revisit." />}
+      ) : <EmptyState title="This list is empty" message="Add sparks to build a route you can save." />}
       <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Add a comment" />
     </ScrollView>
   );
