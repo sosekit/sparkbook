@@ -9,6 +9,7 @@ import { cardStyles } from './Card';
 import { CategoryIcon } from './CategoryIcon';
 import { Avatar } from './Avatar';
 import { DemoMediaArtwork } from './DemoMediaArtwork';
+import { ThumbnailOverlay } from './ThumbnailOverlay';
 
 export type SparkListCardProps = {
   list: SparkList;
@@ -36,8 +37,15 @@ export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, 
     >
       <View style={styles.preview}>
         {thumbnail ? (
-          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} label={demoThumbnail?.title} style={styles.thumbnail} /> : <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+          demoThumbnail?.source ? (
+            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="cover" />
+          ) : isDemoMediaUri(thumbnail) ? (
+            <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} label={demoThumbnail?.title} style={styles.thumbnail} />
+          ) : (
+            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+          )
         ) : null}
+        {thumbnail ? <ThumbnailOverlay /> : null}
         {!thumbnail ? (
           <View style={styles.emptyPreview}>
             <CategoryIcon categoryId={list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} size={36} selected />

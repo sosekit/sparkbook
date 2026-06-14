@@ -9,6 +9,7 @@ import { getCategoryForSpark } from '../utils/category';
 import { CategoryIcon } from './CategoryIcon';
 import { cardStyles } from './Card';
 import { DemoMediaArtwork } from './DemoMediaArtwork';
+import { ThumbnailOverlay } from './ThumbnailOverlay';
 
 type SparkGridItemProps = {
   spark?: Spark | null;
@@ -37,8 +38,15 @@ export function SparkGridItem({ spark, selected = false, order, dragging = false
     >
       <View style={styles.preview}>
         {thumbnail ? (
-          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.image} /> : <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" />
+          demoThumbnail?.source ? (
+            <Image source={demoThumbnail.source} style={styles.image} resizeMode="cover" />
+          ) : isDemoMediaUri(thumbnail) ? (
+            <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.image} />
+          ) : (
+            <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" />
+          )
         ) : <CategoryIcon categoryId={category.id} selected size={48} />}
+        {thumbnail ? <ThumbnailOverlay /> : null}
         <View style={[styles.check, selected ? styles.checkSelected : null]}>
           {selected ? <SparkbookIcon name="check" color={colors.white} size={14} /> : null}
         </View>

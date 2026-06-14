@@ -15,7 +15,9 @@ export function MediaGridItem({ asset, selected, selectedOrder, onPress, size }:
       onPress={onPress}
       style={({ pressed }) => [styles.tile, { width: size, height: size }, selected ? styles.selected : null, pressed ? styles.pressed : null]}
     >
-      {isDemoMediaUri(asset.uri) ? (
+      {asset.source ? (
+        <Image source={asset.source} style={styles.image} resizeMode="cover" />
+      ) : isDemoMediaUri(asset.uri) ? (
         <DemoMediaArtwork categoryId={asset.categoryId} label={asset.title} />
       ) : (
         <Image source={{ uri: asset.uri }} style={styles.image} resizeMode="cover" />

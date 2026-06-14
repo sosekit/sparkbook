@@ -9,6 +9,7 @@ import { BookmarkToggle } from './BookmarkToggle';
 import { cardStyles } from './Card';
 import { CategoryIcon } from './CategoryIcon';
 import { DemoMediaArtwork } from './DemoMediaArtwork';
+import { ThumbnailOverlay } from './ThumbnailOverlay';
 
 type FeedCardProps = {
   spark?: Spark | null;
@@ -30,8 +31,15 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
     <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.image}>
         {thumbnail ? (
-          isDemoMediaUri(thumbnail) ? <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.thumbnail} /> : <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+          demoThumbnail?.source ? (
+            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="cover" />
+          ) : isDemoMediaUri(thumbnail) ? (
+            <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.thumbnail} />
+          ) : (
+            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+          )
         ) : null}
+        {thumbnail ? <ThumbnailOverlay /> : null}
         {!thumbnail ? <CategoryIcon categoryId={category.id} selected size={30} /> : null}
         <View style={styles.bookmarkOverlay}>
           <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={36} variant="circle" />

@@ -1,11 +1,14 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { Spark } from '../types/spark';
 import { getCategoryForSpark } from '../utils/category';
 import { cardStyles } from './Card';
 import { CategoryIcon } from './CategoryIcon';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
+import { ThumbnailOverlay } from './ThumbnailOverlay';
 
 type SparkListItemCardProps = {
   spark?: Spark | null;
@@ -19,6 +22,7 @@ export function SparkListItemCard({ spark, order, dragging = false, onPress, onL
   if (!spark?.id) return null;
   const category = getCategoryForSpark(spark);
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
+  const demoThumbnail = getDemoMediaAsset(thumbnail);
 
   return (
     <Pressable
@@ -29,7 +33,16 @@ export function SparkListItemCard({ spark, order, dragging = false, onPress, onL
       style={({ pressed }) => [styles.card, dragging ? styles.dragging : null, pressed ? styles.pressed : null]}
     >
       <View style={styles.preview}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" /> : <CategoryIcon categoryId={category.id} selected size={38} />}
+        {thumbnail ? (
+          demoThumbnail?.source ? (
+            <Image source={demoThumbnail.source} style={styles.image} resizeMode="cover" />
+          ) : isDemoMediaUri(thumbnail) ? (
+            <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.image} />
+          ) : (
+            <Image source={{ uri: thumbnail }} style={styles.image} resizeMode="cover" />
+          )
+        ) : <CategoryIcon categoryId={category.id} selected size={38} />}
+        {thumbnail ? <ThumbnailOverlay /> : null}
         <View style={styles.order}>
           <Text style={styles.orderText}>{order}</Text>
         </View>

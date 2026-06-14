@@ -53,6 +53,14 @@ function GalleryItem({ item, style, categoryId }: { item: SparkMedia; style: obj
   const [failed, setFailed] = useState(false);
   const demoAsset = getDemoMediaAsset(item.url);
 
+  if (demoAsset?.source) {
+    return (
+      <View style={style}>
+        <Image source={demoAsset.source} style={styles.image} resizeMode="cover" />
+      </View>
+    );
+  }
+
   if (isDemoMediaUri(item.url)) {
     return (
       <View style={style}>

@@ -1,39 +1,27 @@
-# Sparkbook Demo Photo Slots
+# Sparkbook Demo Photos
 
-Use real project-approved photos here. Do not add stock, generated, or unrelated placeholder images.
+These photos are supplied project assets for the Sparkbook prototype demo. They are bundled into `demoMediaLibrary.ts` and reused by seeded sparks, lists, and the create-spark media picker.
 
-## Spark Preview Card Covers
+Card thumbnails receive the app's overlay treatment in code. Spark detail/gallery media renders without that overlay.
 
-- `spark-evergreen-brick-works.jpg` for Evergreen Brick Works
-- `spark-high-park.jpg` for High Park
-- `spark-riverdale-park-east.jpg` for Riverdale Park East
-- `spark-trillium-park.jpg` for Trillium Park
-- `spark-st-lawrence-market.jpg` for St. Lawrence Market
-- `spark-toronto-reference-library.jpg` for Toronto Reference Library
-- `spark-kensington-market.jpg` for Kensington Market
-- `spark-ago.jpg` for Art Gallery of Ontario
-- `spark-trinity-bellwoods.jpg` for Trinity Bellwoods Park
-- `spark-harbourfront-centre.jpg` for Harbourfront Centre
+## Files
 
-## List Covers
-
-List covers can reuse the first spark cover in the list, or use separate photos:
-
-- `list-first-toronto-weekend.jpg`
-- `list-waterfront-reset-route.jpg`
-- `list-study-art-afternoon.jpg`
-
-## Spark Creation Demo Library
-
-Add 8 to 12 phone-style photos for the create-spark media picker:
-
-- `create-01.jpg`
-- `create-02.jpg`
-- `create-03.jpg`
-- `create-04.jpg`
-- `create-05.jpg`
-- `create-06.jpg`
-- `create-07.jpg`
-- `create-08.jpg`
-
-Vertical 3:4 or 4:5 photos work best for the prototype cards. Use Toronto place photos where possible.
+- `evergreen-ravine.png`
+- `high-park-waterfront.png`
+- `waterfront-paddle.png`
+- `st-lawrence-market.png`
+- `tea-house.png`
+- `library-corner.png`
+- `drinks-guide-cocktails.png`
+- `drinks-guide-flight.png`
+- `drinks-guide-spritz.png`
+- `art-date.png`
+- `poke-date.png`
+- `bug-date-cups.png`
+- `bug-date-specimens.png`
+- `trinity-bellwoods.png`
+- `gallery-skyroom.png`
+- `gallery-stair.png`
+- `gallery-lightbox.png`
+- `gallery-lightbox-alt.png`
+- `gallery-porcelain-room.png`

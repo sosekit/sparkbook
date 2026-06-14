@@ -1,22 +1,35 @@
+import type { ImageSourcePropType } from 'react-native';
 import { MediaType } from '../types/spark';
 
 export type DemoMediaAsset = {
   id: string;
   uri: string;
+  source?: ImageSourcePropType;
   mediaType: MediaType;
   title: string;
   categoryId: string;
 };
 
 export const demoMediaLibrary: DemoMediaAsset[] = [
-  { id: 'create-01', uri: 'sparkbook-demo://create-01', mediaType: 'photo', title: 'Morning table', categoryId: 'coffee' },
-  { id: 'create-02', uri: 'sparkbook-demo://create-02', mediaType: 'photo', title: 'Park walk', categoryId: 'outdoors' },
-  { id: 'create-03', uri: 'sparkbook-demo://create-03', mediaType: 'photo', title: 'Market stop', categoryId: 'food' },
-  { id: 'create-04', uri: 'sparkbook-demo://create-04', mediaType: 'photo', title: 'Study corner', categoryId: 'study' },
-  { id: 'create-05', uri: 'sparkbook-demo://create-05', mediaType: 'photo', title: 'Gallery day', categoryId: 'art' },
-  { id: 'create-06', uri: 'sparkbook-demo://create-06', mediaType: 'photo', title: 'City route', categoryId: 'landmark' },
-  { id: 'create-07', uri: 'sparkbook-demo://create-07', mediaType: 'photo', title: 'Small shop', categoryId: 'shopping' },
-  { id: 'create-08', uri: 'sparkbook-demo://create-08', mediaType: 'photo', title: 'Hidden path', categoryId: 'hidden' }
+  { id: 'evergreen-ravine', uri: 'sparkbook-demo://evergreen-ravine', source: require('../assets/images/demo-library/evergreen-ravine.png'), mediaType: 'photo', title: 'Evergreen ravine', categoryId: 'outdoors' },
+  { id: 'high-park-waterfront', uri: 'sparkbook-demo://high-park-waterfront', source: require('../assets/images/demo-library/high-park-waterfront.png'), mediaType: 'photo', title: 'High Park waterfront', categoryId: 'outdoors' },
+  { id: 'waterfront-paddle', uri: 'sparkbook-demo://waterfront-paddle', source: require('../assets/images/demo-library/waterfront-paddle.png'), mediaType: 'photo', title: 'Waterfront paddle', categoryId: 'outdoors' },
+  { id: 'st-lawrence-market', uri: 'sparkbook-demo://st-lawrence-market', source: require('../assets/images/demo-library/st-lawrence-market.png'), mediaType: 'photo', title: 'St. Lawrence Market', categoryId: 'food' },
+  { id: 'tea-house', uri: 'sparkbook-demo://tea-house', source: require('../assets/images/demo-library/tea-house.png'), mediaType: 'photo', title: 'Tea house', categoryId: 'coffee' },
+  { id: 'library-corner', uri: 'sparkbook-demo://library-corner', source: require('../assets/images/demo-library/library-corner.png'), mediaType: 'photo', title: 'Library corner', categoryId: 'study' },
+  { id: 'drinks-guide-cocktails', uri: 'sparkbook-demo://drinks-guide-cocktails', source: require('../assets/images/demo-library/drinks-guide-cocktails.png'), mediaType: 'photo', title: 'Cocktail table', categoryId: 'nightlife' },
+  { id: 'drinks-guide-flight', uri: 'sparkbook-demo://drinks-guide-flight', source: require('../assets/images/demo-library/drinks-guide-flight.png'), mediaType: 'photo', title: 'Beer flight', categoryId: 'nightlife' },
+  { id: 'drinks-guide-spritz', uri: 'sparkbook-demo://drinks-guide-spritz', source: require('../assets/images/demo-library/drinks-guide-spritz.png'), mediaType: 'photo', title: 'Bar spritz', categoryId: 'nightlife' },
+  { id: 'art-date', uri: 'sparkbook-demo://art-date', source: require('../assets/images/demo-library/art-date.png'), mediaType: 'photo', title: 'Art date', categoryId: 'art' },
+  { id: 'poke-date', uri: 'sparkbook-demo://poke-date', source: require('../assets/images/demo-library/poke-date.png'), mediaType: 'photo', title: 'Poke date', categoryId: 'food' },
+  { id: 'bug-date-cups', uri: 'sparkbook-demo://bug-date-cups', source: require('../assets/images/demo-library/bug-date-cups.png'), mediaType: 'photo', title: 'Bug date setup', categoryId: 'hidden' },
+  { id: 'bug-date-specimens', uri: 'sparkbook-demo://bug-date-specimens', source: require('../assets/images/demo-library/bug-date-specimens.png'), mediaType: 'photo', title: 'Specimen case', categoryId: 'hidden' },
+  { id: 'trinity-bellwoods', uri: 'sparkbook-demo://trinity-bellwoods', source: require('../assets/images/demo-library/trinity-bellwoods.png'), mediaType: 'photo', title: 'Trinity Bellwoods', categoryId: 'outdoors' },
+  { id: 'gallery-skyroom', uri: 'sparkbook-demo://gallery-skyroom', source: require('../assets/images/demo-library/gallery-skyroom.png'), mediaType: 'photo', title: 'Gallery skylight', categoryId: 'art' },
+  { id: 'gallery-stair', uri: 'sparkbook-demo://gallery-stair', source: require('../assets/images/demo-library/gallery-stair.png'), mediaType: 'photo', title: 'Gallery stair', categoryId: 'art' },
+  { id: 'gallery-lightbox', uri: 'sparkbook-demo://gallery-lightbox', source: require('../assets/images/demo-library/gallery-lightbox.png'), mediaType: 'photo', title: 'Lightbox installation', categoryId: 'art' },
+  { id: 'gallery-lightbox-alt', uri: 'sparkbook-demo://gallery-lightbox-alt', source: require('../assets/images/demo-library/gallery-lightbox-alt.png'), mediaType: 'photo', title: 'Installation detail', categoryId: 'art' },
+  { id: 'gallery-porcelain-room', uri: 'sparkbook-demo://gallery-porcelain-room', source: require('../assets/images/demo-library/gallery-porcelain-room.png'), mediaType: 'photo', title: 'Porcelain room', categoryId: 'art' }
 ];
 
 export function isDemoMediaUri(uri?: string) {

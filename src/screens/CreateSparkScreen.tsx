@@ -450,6 +450,13 @@ function mediaNextLabel(count: number) {
 
 function SelectedMediaPreview({ item, categoryId, style }: { item: SelectedMedia; categoryId: string; style: object }) {
   const demoAsset = getDemoMediaAsset(item.uri || item.id);
+  if (demoAsset?.source) {
+    return (
+      <View style={style}>
+        <Image source={demoAsset.source} style={styles.mediaImage} resizeMode="cover" />
+      </View>
+    );
+  }
   if (isDemoMediaUri(item.uri)) {
     return (
       <View style={style}>
