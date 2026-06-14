@@ -170,6 +170,11 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     setErrors((current) => ({ ...current, media: undefined }));
   }
 
+  function removeSelectedMedia(id: string) {
+    setSelectedMedia((current) => current.filter((item) => item.id !== id));
+    setErrors((current) => ({ ...current, media: undefined }));
+  }
+
   function applyPrefillLocation(location: LocationSearchResult) {
     setSelectedLocation(location);
     setLocationQuery(location.displayName);
@@ -313,28 +318,18 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
       {step === 'content' ? (
         <ScrollView contentContainerStyle={styles.content}>
-          {selectedMedia.length === 1 ? (
-            <View style={styles.singlePreviewRow}>
-              <SelectedMediaPreview item={selectedMedia[0]} categoryId={categoryId} style={styles.largePreview} />
-            </View>
-          ) : selectedMedia.length > 1 ? (
+          {selectedMedia.length ? (
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.previewStrip}>
               {selectedMedia.map((item) => (
-                <SelectedMediaPreview key={item.id} item={item} categoryId={categoryId} style={styles.largePreview} />
+                <SelectedMediaPreview key={item.id} item={item} categoryId={categoryId} onRemove={() => removeSelectedMedia(item.id)} style={styles.largePreview} />
               ))}
+              <AddMediaTile onPress={() => setStep('media')} style={styles.largePreview} />
             </ScrollView>
           ) : (
             <View style={styles.singlePreviewRow}>
-              <View style={styles.largePreview}>
-                <View style={styles.largePlaceholder}><CategoryIcon categoryId={categoryId} selected size={48} /></View>
-              </View>
+              <AddMediaTile onPress={() => setStep('media')} style={styles.largePreview} />
             </View>
           )}
-          {selectedMedia.length ? (
-            <Pressable onPress={() => setStep('media')} style={({ pressed }) => [styles.changePhotoButton, pressed ? styles.changePhotoButtonPressed : null]}>
-              <Text style={styles.changePhotoText}>Change photos</Text>
-            </Pressable>
-          ) : null}
           {prefillLocation ? (
             <View style={styles.prefillNotice}>
               <Text style={styles.prefillTitle}>No spark here yet.</Text>
@@ -448,26 +443,57 @@ function mediaNextLabel(count: number) {
   return `Next (${count})`;
 }
 
-function SelectedMediaPreview({ item, categoryId, style }: { item: SelectedMedia; categoryId: string; style: object }) {
+function AddMediaTile({ onPress, style }: { onPress: () => void; style: object }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Add more photos"
+      onPress={onPress}
+      style={({ pressed }) => [style, styles.addMediaCard, pressed ? styles.addMediaCardPressed : null]}
+    >
+      <View style={styles.addMediaIconPlate}>
+        <SparkbookIcon name="add" color={colors.main} size={24} />
+      </View>
+    </Pressable>
+  );
+}
+
+function SelectedMediaPreview({ item, categoryId, onRemove, style }: { item: SelectedMedia; categoryId: string; onRemove: () => void; style: object }) {
+  const [showRemove, setShowRemove] = useState(Platform.OS !== 'web');
   const demoAsset = getDemoMediaAsset(item.uri || item.id);
+  const removeButton = showRemove ? (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`Remove ${item.title || 'photo'}`}
+      hitSlop={8}
+      onPress={onRemove}
+      style={({ pressed }) => [styles.removeMediaButton, pressed ? styles.removeMediaButtonPressed : null]}
+    >
+      <SparkbookIcon name="close" color={colors.text} size={14} />
+    </Pressable>
+  ) : null;
+
   if (demoAsset?.source) {
     return (
-      <View style={style}>
+      <Pressable onHoverIn={() => setShowRemove(true)} onHoverOut={() => setShowRemove(Platform.OS !== 'web')} style={style}>
         <Image source={demoAsset.source} style={styles.mediaImage} resizeMode="cover" />
-      </View>
+        {removeButton}
+      </Pressable>
     );
   }
   if (isDemoMediaUri(item.uri)) {
     return (
-      <View style={style}>
+      <Pressable onHoverIn={() => setShowRemove(true)} onHoverOut={() => setShowRemove(Platform.OS !== 'web')} style={style}>
         <DemoMediaArtwork categoryId={demoAsset?.categoryId || item.categoryId || categoryId} label={demoAsset?.title || item.title} />
-      </View>
+        {removeButton}
+      </Pressable>
     );
   }
   return (
-    <View style={style}>
+    <Pressable onHoverIn={() => setShowRemove(true)} onHoverOut={() => setShowRemove(Platform.OS !== 'web')} style={style}>
       <Image source={{ uri: item.uri }} style={styles.mediaImage} />
-    </View>
+      {removeButton}
+    </Pressable>
   );
 }
 
@@ -481,12 +507,13 @@ const styles = StyleSheet.create({
   mediaImage: { width: '100%', height: '100%' },
   content: { paddingHorizontal: 16, paddingBottom: 112, gap: 12 },
   singlePreviewRow: { width: '100%', alignItems: 'center', paddingTop: 6 },
-  previewStrip: { gap: 6, paddingTop: 6 },
+  previewStrip: { gap: 6, paddingTop: 6, paddingRight: 16 },
   largePreview: { width: 168, height: 260, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.neutral },
-  largePlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.neutral },
-  changePhotoButton: { minHeight: 44, borderRadius: 22, backgroundColor: colors.main, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', paddingHorizontal: 18 },
-  changePhotoButtonPressed: { backgroundColor: colors.highlight },
-  changePhotoText: { color: colors.white, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
+  addMediaCard: { borderWidth: 1, borderColor: colors.borderSoft, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
+  addMediaCardPressed: { borderColor: colors.highlight, backgroundColor: colors.surfaceMuted },
+  addMediaIconPlate: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.borderSoft, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
+  removeMediaButton: { position: 'absolute', top: 8, right: 8, width: 28, height: 28, borderRadius: 14, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.borderSoft, alignItems: 'center', justifyContent: 'center' },
+  removeMediaButtonPressed: { backgroundColor: colors.neutral, borderColor: colors.highlight },
   prefillNotice: { borderRadius: radius.sm, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.neutral, padding: spacing.sm, gap: 2 },
   prefillTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15 },
   prefillText: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },

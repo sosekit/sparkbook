@@ -24,6 +24,7 @@ const navIcons: Record<Exclude<NavKey, 'create'>, { active: SparkbookIconName; i
 
 export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onProfile }: BottomNavProps) {
   const insets = useSafeAreaInsets();
+  const bottomPadding = Math.max(6, Math.min(insets.bottom, 10));
   const items = [
     ['home', 'Home', onHome],
     ['bookmarks', 'Bookmark', onBookmarks],
@@ -33,7 +34,7 @@ export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onPr
   ] as const;
 
   return (
-    <View style={[styles.bar, { height: 64 + insets.bottom, paddingBottom: insets.bottom }]}>
+    <View style={[styles.bar, { height: 58 + bottomPadding, paddingBottom: bottomPadding }]}>
       {items.map(([key, label, onPress]) => (
         <Pressable
           key={key}

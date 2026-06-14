@@ -39,6 +39,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
     if (!normalized) return activeSparks;
     return activeSparks.filter((spark) => `${spark.title} ${spark.placeName || ''} ${spark.addressLabel} ${(spark.contextTags || []).join(' ')}`.toLowerCase().includes(normalized));
   }, [activeSparks, query]);
+  const listProgress = selectedSparkIds.length ? 1 : title.trim() || description.trim() ? 0.44 : 0.18;
 
   async function save() {
     if (saving) return;
@@ -98,7 +99,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         </Pressable>
         <Text style={styles.headerTitle}>New list</Text>
       </View>
-      <ProgressBar progress={selectedSparkIds.length ? 1 : 0.5} />
+      <ProgressBar progress={listProgress} />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.titleGroup}>
           <TextField label="" placeholder="Add a title for your list" value={title} onChangeText={(value) => { setTitle(value); setTitleError(undefined); }} variant="creationTitle" error={titleError} />
