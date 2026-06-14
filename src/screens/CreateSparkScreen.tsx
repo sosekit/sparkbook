@@ -299,7 +299,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
             loading={mediaLibrary.loading}
             permissionDenied={mediaLibrary.permissionDenied}
             fallbackRecommended={mediaLibrary.fallbackRecommended}
-            error={errors.media}
+            error={errors.media || mediaLibrary.error || undefined}
             onSelect={selectMedia}
             onRequestPermission={mediaLibrary.reload}
             onPickFromLibrary={pickFromLibrary}
@@ -426,27 +426,27 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, gap: 10, backgroundColor: colors.surface },
-  headerIcon: { width: 28, height: 44, alignItems: 'flex-start', justifyContent: 'center' },
+  headerIcon: { width: 44, height: 44, alignItems: 'flex-start', justifyContent: 'center' },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
   mediaStep: { flex: 1, paddingHorizontal: 0 },
   mediaImage: { width: '100%', height: '100%' },
-  content: { paddingHorizontal: 14, paddingBottom: 96, gap: 8 },
+  content: { paddingHorizontal: 16, paddingBottom: 112, gap: 12 },
   previewStrip: { gap: 6, paddingTop: 6 },
   largePreview: { width: 168, height: 260, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.neutral },
   largePlaceholder: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.neutral },
-  changePhotoButton: { height: 34, borderRadius: 17, backgroundColor: colors.main, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', paddingHorizontal: 14 },
+  changePhotoButton: { minHeight: 44, borderRadius: 22, backgroundColor: colors.main, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-start', paddingHorizontal: 18 },
   changePhotoButtonPressed: { backgroundColor: colors.highlight },
   changePhotoText: { color: colors.white, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   prefillNotice: { borderRadius: radius.sm, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.neutral, padding: spacing.sm, gap: 2 },
   prefillTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15 },
   prefillText: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
-  locationRow: { minHeight: 42, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 1, borderBottomColor: colors.neutral },
-  locationText: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
-  label: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12 },
+  locationRow: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 1, borderBottomColor: colors.neutral },
+  locationText: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
+  label: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
   contextGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  contextChip: { height: 24, borderRadius: 12, paddingHorizontal: 8, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
+  contextChip: { minHeight: 30, borderRadius: 15, paddingHorizontal: 10, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
   contextChipSelected: { backgroundColor: colors.main },
-  contextText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 11 },
+  contextText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   contextTextSelected: { color: colors.white },
   helper: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
   unable: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
@@ -457,10 +457,10 @@ const styles = StyleSheet.create({
   resultTitle: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
   resultAddress: { color: '#B8BDC6', fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
   tagGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  tag: { minHeight: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.highlight, flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 8, backgroundColor: colors.surface },
+  tag: { minHeight: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.highlight, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, backgroundColor: colors.surface },
   tagSelected: { backgroundColor: colors.main, borderColor: colors.main },
   tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   tagTextSelected: { color: colors.white },
   warning: { color: colors.danger, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 14, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.neutral, backgroundColor: colors.surface }
+  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.neutral, backgroundColor: colors.surface }
 });

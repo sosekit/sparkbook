@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   input: {
-    minHeight: 42,
+    minHeight: 44,
     borderRadius: radii.md,
     borderWidth: 1,
     borderColor: colors.border,
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     color: colors.ink,
     fontSize: 14,
+    lineHeight: 20,
     fontFamily: fontFamilies.secondary
   },
   creationTitle: {
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
   error: {
     color: colors.danger,
     fontSize: 12,
+    lineHeight: 16,
     fontFamily: fontFamilies.secondary
   }
 });

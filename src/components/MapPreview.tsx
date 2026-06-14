@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { GuideRouteSegment } from '../types/list';
@@ -226,7 +226,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
   return (
     <View style={[styles.wrap, fullBleed ? styles.fullBleed : null, { height }]}>
       {mapFailed ? (
-        <Fallback locations={safeLocations} liveLocation={liveLocation} />
+        <Fallback locations={safeLocations} selectedId={selected?.id} liveLocation={liveLocation} onMarkerPress={onMarkerPress} />
       ) : (
         <WebView
           originWhitelist={['*']}
@@ -260,7 +260,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
               // Ignore malformed map bridge messages.
             }
           }}
-          renderError={() => <Fallback locations={safeLocations} liveLocation={liveLocation} />}
+          renderError={() => <Fallback locations={safeLocations} selectedId={selected?.id} liveLocation={liveLocation} onMarkerPress={onMarkerPress} />}
         />
       )}
       {!loaded ? (
@@ -273,24 +273,58 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
   );
 }
 
-function Fallback({ locations, liveLocation }: { locations: Spark[]; liveLocation?: { latitude: number; longitude: number } | null }) {
+function Fallback({ locations, selectedId, liveLocation, onMarkerPress }: { locations: Spark[]; selectedId?: string; liveLocation?: { latitude: number; longitude: number } | null; onMarkerPress?: (sparkId: string) => void }) {
+  const pins = projectFallbackPins(locations);
   return (
     <View style={styles.fallback}>
-      <Text style={styles.fallbackLabel}>Spark map</Text>
-      {locations.filter(Boolean).slice(0, 5).map((item, index) => (
-        <View
+      <View style={styles.fallbackGrid} />
+      <View style={styles.fallbackCopy}>
+        <Text style={styles.fallbackLabel}>Spark map</Text>
+        <Text style={styles.fallbackText}>Map tiles are loading slowly. Spark pins are still available.</Text>
+      </View>
+      {pins.map(({ item, left, top }) => {
+        const selected = item.id === selectedId;
+        return (
+        <Pressable
           key={item.id}
+          accessibilityRole="button"
+          accessibilityLabel={`Open ${item.title}`}
+          onPress={() => onMarkerPress?.(item.id)}
           style={[
             styles.pin,
-            { left: `${18 + index * 15}%`, top: `${30 + (index % 3) * 16}%` }
+            selected ? styles.pinSelected : null,
+            { left: `${left}%`, top: `${top}%` }
           ]}
         >
-          <SparkbookIcon name="spark" color={colors.white} size={9} />
-        </View>
-      ))}
+          <SparkbookIcon name="spark" color={colors.white} size={16} />
+        </Pressable>
+      );
+      })}
       {liveLocation ? <View style={styles.liveFallback} /> : null}
     </View>
   );
+}
+
+function projectFallbackPins(locations: Spark[]) {
+  const safe = locations.filter((item) => item?.id && Number.isFinite(item.latitude) && Number.isFinite(item.longitude)).slice(0, 12);
+  if (!safe.length) return [];
+  const latitudes = safe.map((item) => item.latitude);
+  const longitudes = safe.map((item) => item.longitude);
+  const minLat = Math.min(...latitudes);
+  const maxLat = Math.max(...latitudes);
+  const minLng = Math.min(...longitudes);
+  const maxLng = Math.max(...longitudes);
+  const latSpan = Math.max(0.01, maxLat - minLat);
+  const lngSpan = Math.max(0.01, maxLng - minLng);
+  return safe.map((item) => ({
+    item,
+    left: clamp(10 + ((item.longitude - minLng) / lngSpan) * 80, 10, 90),
+    top: clamp(10 + ((maxLat - item.latitude) / latSpan) * 80, 10, 90)
+  }));
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
 }
 
 const styles = StyleSheet.create({
@@ -322,29 +356,64 @@ const styles = StyleSheet.create({
   loadingText: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
-    fontSize: 12
+    fontSize: 14,
+    lineHeight: 20
   },
   fallback: {
     flex: 1,
     backgroundColor: colors.mapLand,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden'
+  },
+  fallbackGrid: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.52,
+    backgroundColor: colors.neutral,
+    borderWidth: 1,
+    borderColor: 'rgba(78, 101, 133, 0.10)'
+  },
+  fallbackCopy: {
+    maxWidth: 220,
+    padding: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(242, 244, 247, 0.78)',
+    alignItems: 'center',
+    gap: 4
   },
   fallbackLabel: {
     color: colors.accent,
     fontFamily: fontFamilies.primarySemiBold,
-    fontWeight: '800'
+    fontSize: 18,
+    lineHeight: 24
+  },
+  fallbackText: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 12,
+    lineHeight: 16,
+    textAlign: 'center'
   },
   pin: {
     position: 'absolute',
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: colors.accent,
-    borderWidth: 3,
+    width: 40,
+    height: 40,
+    marginLeft: -20,
+    marginTop: -20,
+    borderRadius: 20,
+    backgroundColor: colors.highlight,
+    borderWidth: 2,
     borderColor: colors.white,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    shadowColor: colors.text,
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2
+  },
+  pinSelected: {
+    backgroundColor: colors.main
   },
   liveFallback: {
     position: 'absolute',

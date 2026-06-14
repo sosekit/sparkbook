@@ -20,7 +20,7 @@ export function SmallButton({ label, selected = false, onPress }: SmallButtonPro
   }
 
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.button, selected ? styles.selected : null, pressed ? styles.pressed : null]}>
+    <Pressable hitSlop={6} onPress={onPress} style={({ pressed }) => [styles.button, selected ? styles.selected : null, pressed ? styles.pressed : null]}>
       {content}
     </Pressable>
   );
@@ -28,10 +28,10 @@ export function SmallButton({ label, selected = false, onPress }: SmallButtonPro
 
 const styles = StyleSheet.create({
   button: {
-    height: 22,
-    minWidth: 52,
-    borderRadius: 11,
-    paddingHorizontal: 8,
+    minHeight: 30,
+    minWidth: 58,
+    borderRadius: 15,
+    paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.neutral
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
   label: {
     color: colors.main,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 10,
-    lineHeight: 12
+    fontSize: 12,
+    lineHeight: 16
   },
   selectedLabel: {
     color: colors.white

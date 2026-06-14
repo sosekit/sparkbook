@@ -16,7 +16,7 @@ export function MediaGridItem({ asset, selected, onPress }: { asset: MediaLibrar
 
 const styles = StyleSheet.create({
   tile: {
-    width: '32.6%',
+    width: '32%',
     aspectRatio: 1,
     borderRadius: 4,
     overflow: 'hidden',

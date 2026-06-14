@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { colors } from '../theme/colors';
@@ -32,18 +33,36 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.row, { paddingHorizontal: horizontalPadding }]}>
       {media.map((item) => (
-        <View key={item.id || item.url} style={cardStyle}>
-          {item.mediaType === 'photo' ? (
-            <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover" />
-          ) : (
-            <View style={styles.videoFallback}>
-              <SparkbookIcon name="spark" color={colors.white} size={30} />
-              <Text style={styles.videoText}>Video</Text>
-            </View>
-          )}
-        </View>
+        <GalleryItem key={item.id || item.url} item={item} style={cardStyle} categoryId={category.id} />
       ))}
     </ScrollView>
+  );
+}
+
+function GalleryItem({ item, style, categoryId }: { item: SparkMedia; style: object; categoryId: string }) {
+  const [failed, setFailed] = useState(false);
+  if (item.mediaType !== 'photo') {
+    return (
+      <View style={style}>
+        <View style={styles.videoFallback}>
+          <SparkbookIcon name="spark" color={colors.white} size={30} />
+          <Text style={styles.videoText}>Video</Text>
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={style}>
+      {!failed ? (
+        <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover" onError={() => setFailed(true)} />
+      ) : (
+        <View style={styles.invalidFallback}>
+          <CategoryIcon categoryId={categoryId} selected size={44} />
+          <Text style={styles.emptyText}>Media unavailable</Text>
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -101,5 +120,12 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: fontFamilies.secondaryBold,
     fontSize: 12
+  },
+  invalidFallback: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.neutral
   }
 });

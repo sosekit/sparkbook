@@ -41,9 +41,9 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 40,
-    borderRadius: radii.sm,
-    paddingHorizontal: spacing.sm,
+    minHeight: 44,
+    borderRadius: 22,
+    paddingHorizontal: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -71,10 +71,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral
   },
   disabled: {
-    opacity: 0.45
+    opacity: 0.55
   },
   label: {
     fontSize: 14,
+    lineHeight: 18,
     fontFamily: fontFamilies.secondary,
     fontWeight: '700'
   },

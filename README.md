@@ -135,9 +135,9 @@ If the WebView map cannot load, the app renders a Figma-aligned fallback map sur
 
 ## Media Notes
 
-`expo-image-picker` supports media selection, but the UI renders selected photos as the Figma overlay treatment instead of direct photo thumbnails. Videos are displayed with `expo-av` where needed and are muted by default. Supabase Storage buckets are scaffolded for production media upload.
+`expo-media-library` powers the custom gallery grid where Expo Go supports full library access. `expo-image-picker` is the system picker fallback, so users can still choose a photo when the custom grid is unavailable. Selected photos preview in Create Spark and display in Spark detail galleries. Videos are displayed with `expo-av` where needed and are muted by default. Supabase Storage buckets are scaffolded for production media upload.
 
-Expo Go on Android may warn that it cannot provide full media-library access. That warning is expected in Expo Go; Sparkbook requests media access once per media screen mount and falls back to the system “Choose from library” picker when the custom grid is unavailable.
+Expo Go on Android may warn that it cannot provide full media-library access. That warning is expected in Expo Go; Sparkbook requests media access once per media screen mount and falls back to the system “Choose from library” picker when the custom grid is unavailable. A full custom gallery grid on Android may require a development build.
 
 Note: Expo warns that `expo-av` is deprecated in newer SDKs. It is not the current runtime crash, but video playback should be migrated to `expo-video` / `expo-audio` in a later media-focused pass.
 

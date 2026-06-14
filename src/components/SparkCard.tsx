@@ -58,27 +58,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: cardStyles.borderColor,
     borderRadius: cardStyles.radius,
-    minHeight: 56,
+    minHeight: 72,
     alignItems: 'stretch',
     overflow: 'hidden'
   },
   pressed: { opacity: 0.78 },
   preview: {
-    width: 50,
+    width: 64,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: cardStyles.previewBackground,
     borderRightWidth: 1,
     borderRightColor: cardStyles.dividerColor
   },
-  copy: { flex: 1, gap: 2, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xxs },
-  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 13, lineHeight: 16 },
-  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 10, lineHeight: 13 },
-  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 22 },
+  copy: { flex: 1, gap: 4, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
+  title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15, lineHeight: 20 },
+  meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
+  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 28 },
   tag: {
     alignSelf: 'flex-start',
-    minHeight: 20,
-    borderRadius: 10,
+    minHeight: 24,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(46, 91, 173, 0.22)',
     paddingHorizontal: 7,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface
   },
   tagPressed: { backgroundColor: colors.neutral },
-  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 9, lineHeight: 11 }
+  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 11, lineHeight: 14 }
 });
 
 function formatCardLocation(address: string) {

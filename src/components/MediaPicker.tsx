@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { Button } from './Button';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -12,7 +12,7 @@ export function MediaPicker({ uri, mediaType, onPick }: { uri?: string; mediaTyp
         <Text style={styles.title}>Photo or video</Text>
         <Text style={styles.body}>Media follows the Figma overlay treatment and stays optional for clarity.</Text>
       </View>
-      {uri && mediaType !== 'video' ? <View style={styles.preview}><Text style={styles.previewText}>Photo selected</Text></View> : null}
+      {uri && mediaType !== 'video' ? <Image source={{ uri }} style={styles.preview} resizeMode="cover" /> : null}
       {uri && mediaType === 'video' ? <Text style={styles.video}>Video selected. It will be muted by default.</Text> : null}
       <Button label={uri ? 'Change media' : 'Add media'} onPress={onPick} variant="secondary" />
     </View>
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
   copy: { gap: 3 },
   title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 16 },
   body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 19 },
-  preview: { width: '100%', height: 100, borderRadius: radius.sm, backgroundColor: colors.highlight, alignItems: 'center', justifyContent: 'center' },
-  previewText: { color: colors.white, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
+  preview: { width: '100%', height: 148, borderRadius: radius.sm, backgroundColor: colors.neutral },
   video: { color: colors.main, fontFamily: fontFamilies.secondary, fontWeight: '800' }
 });

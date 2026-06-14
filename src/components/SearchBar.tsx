@@ -20,16 +20,16 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search' }: { val
 
 const styles = StyleSheet.create({
   search: {
-    height: 32,
-    borderRadius: 16,
+    minHeight: 40,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: '#C8CCD3',
     backgroundColor: colors.surfaceMuted,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingLeft: 6,
-    paddingRight: 12
+    paddingLeft: 8,
+    paddingRight: 14
   },
   input: {
     flex: 1,

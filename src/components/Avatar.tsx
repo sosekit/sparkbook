@@ -3,32 +3,43 @@ import { initialsForName } from '../utils/initials';
 import { fontFamilies } from '../theme/typography';
 import { colors } from '../theme/colors';
 
-const avatarColors = [colors.main, colors.highlight, colors.altText, colors.text];
-
 type AvatarProps = {
   name?: string;
   size?: number;
+  color?: string;
 };
 
-export function Avatar({ name = 'Raymond Zhang', size = 40 }: AvatarProps) {
+export function Avatar({ name = 'Raymond Zhang', size = 40, color = colors.main }: AvatarProps) {
   const initials = initialsForName(name);
-  const color = avatarColors[initials.charCodeAt(0) % avatarColors.length];
+  const fontSize = avatarFontSize(size);
 
   return (
     <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: color }]}>
-      <Text style={[styles.text, { fontSize: size >= 44 ? 14 : 12 }]}>{initials}</Text>
+      <Text style={[styles.text, { fontSize, lineHeight: Math.round(fontSize * 1.12) }]} numberOfLines={1}>
+        {initials}
+      </Text>
     </View>
   );
+}
+
+function avatarFontSize(size: number) {
+  if (size <= 32) return 12;
+  if (size <= 44) return 16;
+  if (size <= 56) return 18;
+  if (size <= 72) return 24;
+  return Math.round(size * 0.34);
 }
 
 const styles = StyleSheet.create({
   avatar: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 4,
+    overflow: 'hidden'
   },
   text: {
     color: colors.white,
-    fontFamily: fontFamilies.secondary,
-    fontWeight: '800'
+    fontFamily: fontFamilies.secondaryBold,
+    textAlign: 'center'
   }
 });

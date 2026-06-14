@@ -21,25 +21,27 @@ export function CTAButton({ label, onPress, disabled = false }: CTAButtonProps) 
         disabled ? styles.disabled : null
       ]}
     >
-      <Text style={styles.label}>{label}</Text>
-      <SparkbookIcon name="arrowForward" color={colors.white} size={16} />
+      <Text style={[styles.label, disabled ? styles.disabledLabel : null]}>{label}</Text>
+      <SparkbookIcon name="arrowForward" color={disabled ? colors.altText : colors.white} size={16} />
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    height: 34,
-    borderRadius: 17,
+    minHeight: 44,
+    borderRadius: 22,
     backgroundColor: colors.main,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 5,
-    paddingHorizontal: 14
+    paddingHorizontal: 18
   },
   disabled: {
     backgroundColor: colors.neutral,
+    borderWidth: 1,
+    borderColor: 'rgba(78, 101, 133, 0.18)',
     opacity: 1
   },
   pressed: {
@@ -48,7 +50,10 @@ const styles = StyleSheet.create({
   label: {
     color: colors.white,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 12,
-    lineHeight: 15
+    fontSize: 14,
+    lineHeight: 18
+  },
+  disabledLabel: {
+    color: colors.altText
   }
 });

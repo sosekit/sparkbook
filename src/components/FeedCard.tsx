@@ -69,8 +69,8 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
 
 const styles = StyleSheet.create({
   card: {
-    width: 116,
-    height: 194,
+    width: 132,
+    height: 218,
     borderRadius: 4,
     backgroundColor: colors.neutral,
     overflow: 'hidden',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   pressed: { opacity: 0.78 },
   image: {
-    height: 112,
+    height: 124,
     backgroundColor: cardStyles.previewBackground,
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
@@ -93,23 +93,23 @@ const styles = StyleSheet.create({
   },
   copy: {
     flex: 1,
-    paddingHorizontal: 7,
-    paddingTop: 6,
-    paddingBottom: 6,
-    gap: 3
+    paddingHorizontal: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    gap: 4
   },
   title: {
     color: colors.text,
     fontFamily: fontFamilies.primarySemiBold,
-    fontSize: 10,
-    lineHeight: 13,
-    minHeight: 26
+    fontSize: 12,
+    lineHeight: 16,
+    minHeight: 32
   },
   meta: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
-    fontSize: 9,
-    lineHeight: 11
+    fontSize: 11,
+    lineHeight: 14
   },
   bottomRow: {
     marginTop: 'auto',
@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
     gap: 5
   },
   tag: {
-    maxWidth: 68,
-    minHeight: 18,
-    borderRadius: 9,
+    maxWidth: 78,
+    minHeight: 22,
+    borderRadius: 11,
     borderWidth: 1,
     borderColor: 'rgba(46, 91, 173, 0.22)',
-    paddingHorizontal: 5,
+    paddingHorizontal: 6,
     justifyContent: 'center',
     backgroundColor: colors.surface
   },
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
   tagText: {
     color: colors.main,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 8,
-    lineHeight: 9
+    fontSize: 10,
+    lineHeight: 12
   },
   creator: {
     position: 'absolute',

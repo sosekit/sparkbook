@@ -45,7 +45,7 @@ export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallb
   }
 
   if (fallbackRecommended) {
-    return (
+    if (!assets.length) return (
       <View style={styles.state}>
         <Text style={styles.title}>Choose media</Text>
         <Text style={styles.stateText}>Use your system library picker for the most reliable Expo Go preview.</Text>
@@ -59,6 +59,17 @@ export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallb
 
   return (
     <ScrollView contentContainerStyle={styles.grid}>
+      {fallbackRecommended ? (
+        <View style={styles.fallbackBanner}>
+          <View style={styles.fallbackCopy}>
+            <Text style={styles.bannerTitle}>Need another photo?</Text>
+            <Text style={styles.bannerText}>Open the system picker for full library access.</Text>
+          </View>
+          <Pressable onPress={onPickFromLibrary} style={({ pressed }) => [styles.bannerButton, pressed ? styles.buttonPressed : null]}>
+            <Text style={styles.permissionText}>Choose</Text>
+          </Pressable>
+        </View>
+      ) : null}
       {assets.map((asset) => (
         <MediaGridItem key={asset.id} asset={asset} selected={asset.id === selectedId} onPress={() => onSelect(asset)} />
       ))}
@@ -80,8 +91,9 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 4,
-    paddingTop: 8,
+    gap: 6,
+    paddingHorizontal: 8,
+    paddingTop: 10,
     paddingBottom: 104
   },
   state: {
@@ -89,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
-    gap: spacing.sm
+    gap: spacing.md
   },
   title: {
     color: colors.text,
@@ -101,20 +113,20 @@ const styles = StyleSheet.create({
   stateText: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 14,
+    lineHeight: 20,
     textAlign: 'center'
   },
   permissionButton: {
-    height: 36,
-    borderRadius: 18,
+    minHeight: 44,
+    borderRadius: 22,
     backgroundColor: colors.main,
     paddingHorizontal: 18,
     justifyContent: 'center'
   },
   secondaryButton: {
-    height: 34,
-    borderRadius: 17,
+    minHeight: 44,
+    borderRadius: 22,
     borderWidth: 1,
     borderColor: colors.main,
     paddingHorizontal: 16,
@@ -123,11 +135,51 @@ const styles = StyleSheet.create({
   permissionText: {
     color: colors.white,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 13
+    fontSize: 14,
+    lineHeight: 18
   },
   secondaryText: {
     color: colors.main,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 13
+    fontSize: 14,
+    lineHeight: 18
+  },
+  fallbackBanner: {
+    width: '100%',
+    minHeight: 62,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(46, 91, 173, 0.18)',
+    backgroundColor: colors.neutral,
+    padding: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm
+  },
+  fallbackCopy: {
+    flex: 1,
+    gap: 2
+  },
+  bannerTitle: {
+    color: colors.text,
+    fontFamily: fontFamilies.secondaryBold,
+    fontSize: 14,
+    lineHeight: 18
+  },
+  bannerText: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 12,
+    lineHeight: 16
+  },
+  bannerButton: {
+    minHeight: 44,
+    borderRadius: 22,
+    backgroundColor: colors.main,
+    paddingHorizontal: 16,
+    justifyContent: 'center'
+  },
+  buttonPressed: {
+    backgroundColor: colors.highlight
   }
 });
