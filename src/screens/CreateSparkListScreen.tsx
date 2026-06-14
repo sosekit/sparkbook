@@ -109,7 +109,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         <Text style={styles.sectionTitle}>Add sparks</Text>
         <Text style={styles.caption}>Hold to reorder</Text>
         {!selectedSparkIds.length ? <Text style={styles.helper}>You can post now and add sparks later.</Text> : null}
-        <SearchBar value={query} onChangeText={setQuery} placeholder="Search sparks" />
+        <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
         <View style={styles.sparkGrid}>
           {filteredSparks.map((spark) => {
             const selected = selectedSparkIds.includes(spark.id);

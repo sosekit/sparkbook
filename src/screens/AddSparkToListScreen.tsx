@@ -62,7 +62,7 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
         <Text style={styles.title}>Add Spark to List</Text>
       </View>
       <View style={styles.searchWrap}>
-        <SearchBar value={query} onChangeText={setQuery} placeholder="Search Lists" />
+        <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
       </View>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.sectionHeader}>

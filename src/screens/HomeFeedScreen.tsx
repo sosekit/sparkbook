@@ -102,7 +102,7 @@ export function HomeFeedScreen({ navigation }: Props) {
             }
           }}
         >
-          <SearchBar value={query} onChangeText={setQuery} placeholder="Search Toronto places" />
+          <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
           <SearchResultsList
             results={results}
             query={query}

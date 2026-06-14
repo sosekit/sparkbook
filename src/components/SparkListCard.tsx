@@ -41,7 +41,7 @@ export function SparkListCard({ list, sparks = [], onPress, selected = false, st
             <Avatar name={creatorName} size={24} />
           </View>
           <View style={styles.bookmarkIcon}>
-            <SparkbookIcon name="bookmark" color={colors.white} size={21} />
+            <SparkbookIcon name="bookmark" color={colors.main} size={20} />
           </View>
         </View>
         <View style={styles.locationPill}>
@@ -118,8 +118,12 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   bookmarkIcon: {
-    width: 26,
-    height: 25,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.borderSoft,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center'
   },

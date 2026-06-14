@@ -46,7 +46,7 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPr
               <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
             </View>
           )}
-          {showBookmark ? <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={24} /> : null}
+          {showBookmark ? <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={36} variant="circle" /> : null}
         </View>
       </View>
     </Pressable>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   copy: { flex: 1, gap: 4, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
   title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15, lineHeight: 20 },
   meta: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
-  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 28 },
+  bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 36 },
   tag: {
     alignSelf: 'flex-start',
     minHeight: 24,

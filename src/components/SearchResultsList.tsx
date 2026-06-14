@@ -18,7 +18,7 @@ export function SearchResultsList({ results, query, searching = false, onSelect,
 
   return (
     <View style={styles.wrap}>
-      {searching ? <Text style={styles.empty}>Searching Toronto places</Text> : null}
+      {searching ? <Text style={styles.empty}>Searching locations</Text> : null}
       {!searching && !results.length ? (
         <Pressable accessibilityRole="button" onPress={() => onCreateFromQuery?.(query.trim())} disabled={!onCreateFromQuery} style={({ pressed }) => [styles.emptyAction, pressed ? styles.emptyPressed : null]}>
           <Text style={styles.empty}>No spark here yet. Tap to start one.</Text>

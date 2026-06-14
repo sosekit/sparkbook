@@ -361,7 +361,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
       {step === 'location' ? (
         <ScrollView contentContainerStyle={styles.content}>
-          <SearchBar value={locationQuery} placeholder="Search Toronto places" onChangeText={(value) => { setLocationQuery(value); setSelectedLocation(null); setErrors((current) => ({ ...current, location: undefined })); }} />
+          <SearchBar value={locationQuery} placeholder="Search Locations" onChangeText={(value) => { setLocationQuery(value); setSelectedLocation(null); setErrors((current) => ({ ...current, location: undefined })); }} />
           <InlineError message={errors.location} />
           {searching ? <Text style={styles.helper}>Searching locations...</Text> : null}
           {!searching && locationQuery.trim().length >= 3 && !locationResults.length ? (

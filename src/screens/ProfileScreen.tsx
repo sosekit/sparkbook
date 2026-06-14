@@ -53,7 +53,7 @@ export function ProfileScreen({ navigation }: Props) {
         </View>
         <Text style={styles.section}>Personal archive</Text>
         <Text style={styles.archiveCopy}>Recently saved places, notes for future you, and sparks you may want to revisit.</Text>
-        <SearchBar value={query} onChangeText={setQuery} placeholder="Search your archive" />
+        <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
         <View style={styles.timeline}>
           <SmallButton label="Timeline" selected />
           <SmallButton label="Journal" />

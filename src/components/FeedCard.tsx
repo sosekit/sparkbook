@@ -26,7 +26,11 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.image}>
-        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" /> : <CategoryIcon categoryId={category.id} selected size={30} />}
+        {thumbnail ? <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" /> : null}
+        {!thumbnail ? <CategoryIcon categoryId={category.id} selected size={30} /> : null}
+        <View style={styles.bookmarkOverlay}>
+          <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={36} variant="circle" />
+        </View>
       </View>
       {!isOwnSpark ? (
         <Pressable
@@ -62,7 +66,6 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
               <Text style={styles.tagText} numberOfLines={1}>{category.name}</Text>
             </View>
           )}
-          <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={24} />
         </View>
       </View>
     </Pressable>
@@ -84,9 +87,8 @@ const styles = StyleSheet.create({
   image: {
     height: 124,
     backgroundColor: cardStyles.previewBackground,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: cardStyles.dividerColor
   },
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
     marginTop: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     gap: 5
   },
   tag: {
@@ -145,6 +147,11 @@ const styles = StyleSheet.create({
     minHeight: 44,
     alignItems: 'flex-start',
     justifyContent: 'flex-start'
+  },
+  bookmarkOverlay: {
+    position: 'absolute',
+    right: 5,
+    top: 5
   }
 });
 

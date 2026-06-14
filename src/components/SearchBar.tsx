@@ -4,7 +4,7 @@ import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
 
-export function SearchBar({ value, onChangeText, placeholder = 'Search' }: { value: string; onChangeText: (value: string) => void; placeholder?: string }) {
+export function SearchBar({ value, onChangeText, placeholder = 'Search Locations' }: { value: string; onChangeText: (value: string) => void; placeholder?: string }) {
   return (
     <View style={styles.search}>
       <SearchIconCircle color={colors.altText} size={13} circleSize={24} backgroundColor={colors.surface} borderColor={colors.fieldBorder} />

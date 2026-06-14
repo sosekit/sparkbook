@@ -40,7 +40,7 @@ export function BookmarksScreen({ navigation }: Props) {
       <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
         <Text style={styles.title}>Saved sparks</Text>
         <Text style={styles.subtitle}>Bookmarked places you want to come back to.</Text>
-        <SearchBar value={query} onChangeText={setQuery} placeholder="Search sparks, notes, tags" />
+        <SearchBar value={query} onChangeText={setQuery} placeholder="Search Locations" />
         <Text style={styles.section}>To revisit</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filters}>
           {[
