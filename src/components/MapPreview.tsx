@@ -266,7 +266,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
       {!loaded ? (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator color={colors.main} />
-          <Text style={styles.loadingText}>Loading map...</Text>
+          <Text style={styles.loadingText}>Loading map</Text>
         </View>
       ) : null}
     </View>
@@ -280,7 +280,7 @@ function Fallback({ locations, selectedId, liveLocation, onMarkerPress }: { loca
       <View style={styles.fallbackGrid} />
       <View style={styles.fallbackCopy}>
         <Text style={styles.fallbackLabel}>Spark map</Text>
-        <Text style={styles.fallbackText}>Map tiles are loading slowly. Spark pins are still available.</Text>
+        <Text style={styles.fallbackText}>Map tiles are loading. Spark pins are still available.</Text>
       </View>
       {pins.map(({ item, left, top }) => {
         const selected = item.id === selectedId;
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: radii.sheet,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSoft,
     backgroundColor: colors.mapLand
   },
   fullBleed: {
@@ -371,13 +371,13 @@ const styles = StyleSheet.create({
     opacity: 0.52,
     backgroundColor: colors.neutral,
     borderWidth: 1,
-    borderColor: 'rgba(78, 101, 133, 0.10)'
+    borderColor: colors.dividerMuted
   },
   fallbackCopy: {
     maxWidth: 220,
     padding: 12,
     borderRadius: 12,
-    backgroundColor: 'rgba(242, 244, 247, 0.78)',
+    backgroundColor: colors.disabledSurface,
     alignItems: 'center',
     gap: 4
   },

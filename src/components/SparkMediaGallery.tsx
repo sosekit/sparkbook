@@ -25,7 +25,7 @@ export function SparkMediaGallery({ spark, relatedMedia = [], compact = false, h
     return (
       <View style={[cardStyle, compact ? styles.compactEmptyCard : styles.emptyCardSize, styles.emptyCard, { marginHorizontal: horizontalPadding }]}>
         <CategoryIcon categoryId={category.id} selected size={compact ? 42 : 56} />
-        <Text style={styles.emptyText}>No media saved yet</Text>
+        <Text style={styles.emptyText}>No media yet</Text>
       </View>
     );
   }
@@ -74,20 +74,20 @@ const styles = StyleSheet.create({
   card: {
     width: 198,
     height: 348,
-    borderRadius: 4,
+    borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
     borderWidth: 1,
-    borderColor: 'rgba(78, 101, 133, 0.18)'
+    borderColor: colors.borderMuted
   },
   compactCard: {
     width: 156,
     height: 200,
-    borderRadius: 4,
+    borderRadius: 8,
     overflow: 'hidden',
     backgroundColor: colors.neutral,
     borderWidth: 1,
-    borderColor: 'rgba(78, 101, 133, 0.18)'
+    borderColor: colors.borderMuted
   },
   image: {
     width: '100%',

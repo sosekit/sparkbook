@@ -36,7 +36,7 @@ export function GuideTimeline({ route, permissionDenied, routeEstimated = true, 
           <Text style={styles.eyebrow}>Sparkbook guide</Text>
           <Text style={styles.title} numberOfLines={1}>{route.title}</Text>
         </View>
-        <Pressable accessibilityRole="button" accessibilityLabel="Exit guide" onPress={onExit} style={styles.exit}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Exit guide" hitSlop={8} onPress={onExit} style={styles.exit}>
           <SparkbookIcon name="close" color={colors.text} size={18} />
         </Pressable>
       </View>
@@ -74,7 +74,7 @@ export function GuideTimeline({ route, permissionDenied, routeEstimated = true, 
         })}
       </ScrollView>
       <View style={styles.actions}>
-        <Pressable onPress={onMarkVisited} style={styles.markButton}>
+        <Pressable accessibilityRole="button" onPress={onMarkVisited} style={({ pressed }) => [styles.markButton, pressed ? styles.markPressed : null]}>
           <Text style={styles.markText}>Mark as visited</Text>
         </Pressable>
         <View style={styles.ctaWrap}>
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
     lineHeight: 30
   },
   exit: {
-    width: 36,
-    height: 36,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   focusCard: {
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: colors.neutral,
+    borderColor: colors.dividerMuted,
     backgroundColor: colors.neutral,
     padding: spacing.sm,
     gap: 2
@@ -221,13 +221,16 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   markButton: {
-    height: 36,
+    minHeight: 44,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: colors.main,
     paddingHorizontal: 14,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  markPressed: {
+    backgroundColor: colors.neutral
   },
   markText: {
     color: colors.main,

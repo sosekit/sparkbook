@@ -14,7 +14,7 @@ export function TextField({ label, error, style, variant = 'default', ...props }
     <View style={styles.wrap}>
       {label ? <Text style={styles.label}>{label}</Text> : null}
       <TextInput
-        placeholderTextColor={colors.subtle}
+        placeholderTextColor={colors.placeholder}
         style={[
           styles.input,
           variant === 'creationTitle' ? styles.creationTitle : null,
@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
     minHeight: 44,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.fieldBorder,
     backgroundColor: colors.surface,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: spacing.md,
     color: colors.ink,
     fontSize: 14,
     lineHeight: 20,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     minHeight: 42,
     borderWidth: 0,
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral,
+    borderBottomColor: colors.divider,
     borderRadius: 0,
     paddingHorizontal: 0,
     fontFamily: fontFamilies.primaryRegular,
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 0,
     paddingHorizontal: 0,
-    paddingTop: 6,
+    paddingTop: spacing.xs,
     fontFamily: fontFamilies.secondary,
     fontSize: 14,
     lineHeight: 20

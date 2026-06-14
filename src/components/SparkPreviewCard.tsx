@@ -69,10 +69,10 @@ export function SparkPreviewCard({ spark, onPress, selected = false, variant = '
 }
 
 function cityLabel(label?: string) {
-  if (!label) return 'Toronto';
-  if (/toronto/i.test(label)) return 'Toronto';
+  if (!label) return 'Toronto, CA';
+  if (/toronto/i.test(label)) return 'Toronto, CA';
   const parts = label.split(',').map((part) => part.trim()).filter(Boolean);
-  return parts[parts.length - 1] || label;
+  return parts[0] ? `${parts[0]}, CA` : label;
 }
 
 const styles = StyleSheet.create({
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: cardStyles.previewBackground,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.86)'
+    borderColor: colors.borderMuted
   },
   selected: {
     borderColor: colors.main,

@@ -47,6 +47,8 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
         <View style={styles.bottomRow}>
           {onCategoryPress ? (
             <Pressable
+              accessibilityRole="button"
+              hitSlop={8}
               onPress={(event) => {
                 event.stopPropagation?.();
                 onCategoryPress();
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
   card: {
     width: 132,
     height: 218,
-    borderRadius: 4,
+    borderRadius: cardStyles.radius,
     backgroundColor: colors.neutral,
     overflow: 'hidden',
     marginRight: 0,
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 8,
     paddingTop: 8,
-    paddingBottom: 8,
+    paddingBottom: 10,
     gap: 4
   },
   title: {
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     minHeight: 22,
     borderRadius: 11,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.22)',
+    borderColor: colors.borderSoft,
     paddingHorizontal: 6,
     justifyContent: 'center',
     backgroundColor: colors.surface
@@ -138,7 +140,11 @@ const styles = StyleSheet.create({
   creator: {
     position: 'absolute',
     left: 5,
-    top: 5
+    top: 5,
+    minWidth: 44,
+    minHeight: 44,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
   }
 });
 

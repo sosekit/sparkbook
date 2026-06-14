@@ -19,13 +19,19 @@ const labels: Record<Visibility, string> = {
 export function AudienceSelector({ value, onChange, options = ['public', 'friends'] }: AudienceSelectorProps) {
   return (
     <View style={styles.wrap}>
-      <Text style={styles.label}>Select Audience</Text>
+      <Text style={styles.label}>Audience</Text>
       <View style={styles.row}>
         {options.map((option) => {
           const selected = value === option;
           const isAvatar = option === 'friends';
           return (
-            <Pressable key={option} onPress={() => onChange(option)} style={({ pressed }) => [styles.pill, selected ? styles.selected : null, isAvatar ? styles.avatarPill : null, pressed ? styles.pressed : null]}>
+            <Pressable
+              key={option}
+              accessibilityRole="button"
+              accessibilityState={{ selected }}
+              onPress={() => onChange(option)}
+              style={({ pressed }) => [styles.pill, selected ? styles.selected : null, isAvatar ? styles.avatarPill : null, pressed ? styles.pressed : null]}
+            >
               <SparkbookIcon name={option === 'private' ? 'visibility' : 'friends'} color={selected ? colors.white : colors.main} size={16} />
               <Text style={[styles.pillText, selected ? styles.selectedText : null]}>{labels[option]}</Text>
             </Pressable>
@@ -38,7 +44,7 @@ export function AudienceSelector({ value, onChange, options = ['public', 'friend
 
 const styles = StyleSheet.create({
   wrap: {
-    width: 237,
+    width: '100%',
     gap: 4
   },
   label: {
@@ -52,9 +58,9 @@ const styles = StyleSheet.create({
     gap: 12
   },
   pill: {
-    height: 36,
+    minHeight: 44,
     minWidth: 100,
-    borderRadius: 18,
+    borderRadius: 22,
     borderWidth: 1,
     borderColor: colors.main,
     paddingHorizontal: 12,

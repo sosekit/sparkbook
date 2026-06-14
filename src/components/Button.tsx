@@ -41,8 +41,8 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 44,
-    borderRadius: 22,
+    minHeight: 46,
+    borderRadius: 18,
     paddingHorizontal: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
   secondary: {
     backgroundColor: colors.accentSoft,
     borderWidth: 1,
-    borderColor: colors.highlight
+    borderColor: colors.fieldBorder
   },
   ghost: {
     backgroundColor: 'transparent'
   },
   primaryPressed: {
-    backgroundColor: colors.highlight
+    backgroundColor: colors.accentPressed
   },
   secondaryPressed: {
     backgroundColor: colors.highlight,

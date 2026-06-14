@@ -42,7 +42,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
   async function save() {
     if (saving) return;
     if (!title.trim()) {
-      setTitleError('Add a list title before posting.');
+      setTitleError('Add a list title before saving.');
       return;
     }
     setSaving(true);
@@ -92,10 +92,10 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.header, { paddingTop: insets.top + 18, minHeight: insets.top + 82 }]}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.close}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.close, pressed ? styles.closePressed : null]}>
           <SparkbookIcon name="close" color={colors.text} size={24} />
         </Pressable>
-        <Text style={styles.headerTitle}>New List</Text>
+        <Text style={styles.headerTitle}>New list</Text>
       </View>
       <View style={styles.progressWrap}>
         <ProgressBar progress={selectedSparkIds.length ? 1 : 0.5} width="25%" />
@@ -103,11 +103,11 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.titleGroup}>
           <TextField label="" placeholder="Add a title for your list" value={title} onChangeText={(value) => { setTitle(value); setTitleError(undefined); }} variant="creationTitle" error={titleError} />
-          <TextField label="" placeholder="Give this List a Description" value={description} onChangeText={setDescription} variant="creationCaption" />
+          <TextField label="" placeholder="Add a description" value={description} onChangeText={setDescription} variant="creationCaption" />
         </View>
         <View style={styles.divider} />
-        <Text style={styles.sectionTitle}>Add Sparks</Text>
-        <Text style={styles.caption}>Hold and order</Text>
+        <Text style={styles.sectionTitle}>Add sparks</Text>
+        <Text style={styles.caption}>Hold to reorder</Text>
         {!selectedSparkIds.length ? <Text style={styles.helper}>You can post now and add sparks later.</Text> : null}
         <SearchBar value={query} onChangeText={setQuery} placeholder="Search sparks" />
         <View style={styles.sparkGrid}>
@@ -136,7 +136,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
         <AudienceSelector value={audience} onChange={(value) => value !== 'private' ? setAudience(value) : undefined} options={['public', 'friends']} />
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
-        <CTAButton label={saving ? 'Posting...' : 'Post List'} onPress={save} disabled={saving} />
+        <CTAButton label={saving ? 'Saving' : 'Save list'} onPress={save} disabled={saving} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -145,7 +145,8 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, gap: 12 },
-  close: { width: 28, height: 44, justifyContent: 'center' },
+  close: { width: 44, height: 44, justifyContent: 'center' },
+  closePressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
   progressWrap: { paddingHorizontal: 16, paddingBottom: 12 },
   content: { paddingHorizontal: 16, paddingTop: 18, paddingBottom: 110, gap: 6 },
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 14 },
   helper: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
   sparkGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 16, paddingTop: 8, paddingBottom: 12 },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 12, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.neutral },
+  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 12, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.dividerMuted },
 });
 
 function moveByStep(ids: string[], id: string, step: number) {

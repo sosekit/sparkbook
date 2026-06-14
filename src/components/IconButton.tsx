@@ -13,7 +13,13 @@ type IconButtonProps = {
 
 export function IconButton({ accessibilityLabel, icon, onPress, color = colors.text }: IconButtonProps) {
   return (
-    <Pressable accessibilityLabel={accessibilityLabel} accessibilityRole="button" onPress={onPress} style={({ pressed }) => [styles.button, pressed ? styles.pressed : null]}>
+    <Pressable
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="button"
+      hitSlop={8}
+      onPress={onPress}
+      style={({ pressed }) => [styles.button, pressed ? styles.pressed : null]}
+    >
       {icon === 'search' ? <SearchIcon color={color} size={16} /> : <SparkbookIcon name={icon} color={color} size={24} />}
     </Pressable>
   );
@@ -28,7 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.round,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.24)'
+    borderColor: colors.borderSoft
   },
   pressed: {
     backgroundColor: colors.highlight,

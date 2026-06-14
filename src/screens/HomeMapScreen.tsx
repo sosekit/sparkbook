@@ -38,7 +38,7 @@ export function HomeMapScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
   logo: { position: 'absolute', left: 18 },
-  panel: { position: 'absolute', left: 16, right: 16, bottom: 84, backgroundColor: 'rgba(255, 255, 255, 0.88)', borderRadius: radius.sheet, borderWidth: 1, borderColor: colors.neutral, padding: spacing.md, gap: spacing.xs },
+  panel: { position: 'absolute', left: 16, right: 16, bottom: 84, backgroundColor: colors.disabledSurface, borderRadius: radius.sheet, borderWidth: 1, borderColor: colors.borderMuted, padding: spacing.md, gap: spacing.xs },
   title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18 },
   body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 }
 });

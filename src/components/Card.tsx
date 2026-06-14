@@ -1,13 +1,14 @@
 import { PropsWithChildren } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { colors } from '../theme/colors';
+import { radius } from '../theme/radius';
 
 export const cardStyles = {
-  borderColor: 'rgba(46, 91, 173, 0.22)',
-  dividerColor: 'rgba(46, 91, 173, 0.18)',
-  radius: 4,
+  borderColor: colors.borderSoft,
+  dividerColor: colors.divider,
+  radius: radius.sm,
   contentBackground: colors.neutral,
-  previewBackground: '#E5E7EB'
+  previewBackground: colors.surfaceMuted
 };
 
 type CardProps = PropsWithChildren<{

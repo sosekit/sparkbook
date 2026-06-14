@@ -23,18 +23,18 @@ export function EmptyState({ title, message, actionLabel, onAction }: EmptyState
 
 const styles = StyleSheet.create({
   wrap: {
-    borderRadius: radii.lg,
+    borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSoft,
     backgroundColor: colors.surface,
-    padding: spacing.md,
-    gap: spacing.xs
+    padding: spacing.lg,
+    gap: spacing.sm
   },
   title: {
     color: colors.ink,
     fontSize: 16,
     fontFamily: fontFamilies.primarySemiBold,
-    fontWeight: '800'
+    lineHeight: 21
   },
   message: {
     color: colors.muted,

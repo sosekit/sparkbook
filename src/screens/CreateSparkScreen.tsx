@@ -284,10 +284,10 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
-        <Pressable accessibilityRole="button" onPress={back} style={styles.headerIcon}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={back} style={({ pressed }) => [styles.headerIcon, pressed ? styles.headerIconPressed : null]}>
           <SparkbookIcon name={step === 'media' ? 'close' : 'chevronLeft'} color={colors.text} size={24} />
         </Pressable>
-        <Text style={styles.headerTitle}>{step === 'location' ? 'Add a Location' : editingSparkId ? 'Edit Spark' : 'New Spark'}</Text>
+        <Text style={styles.headerTitle}>{step === 'location' ? 'Add a location' : editingSparkId ? 'Edit spark' : 'New spark'}</Text>
       </View>
       <ProgressBar progress={stepProgress[step]} />
 
@@ -328,22 +328,25 @@ export function CreateSparkScreen({ route, navigation }: Props) {
             </View>
           ) : null}
           <TextField label="" placeholder="Add a title for your spark" value={title} onChangeText={(value) => { setTitle(value); setErrors((current) => ({ ...current, title: undefined, action: undefined })); }} error={errors.title} variant="creationTitle" />
-          <TextField label="" placeholder="Write a caption for your spark here" value={description} onChangeText={setDescription} multiline variant="creationCaption" />
+          <TextField label="" placeholder="Add a note" value={description} onChangeText={setDescription} multiline variant="creationCaption" />
           <InlineError message={errors.caption} />
-          <TextField label="" placeholder="What made this place worth saving?" value={reflectionNote} onChangeText={setReflectionNote} multiline variant="creationCaption" />
+          <TextField label="" placeholder="Add details for later" value={reflectionNote} onChangeText={setReflectionNote} multiline variant="creationCaption" />
           <Pressable onPress={() => setStep('location')} style={styles.locationRow}>
             <SparkbookIcon name="location" color={colors.text} size={18} />
             <Text style={styles.locationText}>{selectedLocation ? selectedLocation.displayName : 'Add a Location'}</Text>
             <SparkbookIcon name="chevronRight" color={colors.text} size={20} />
           </Pressable>
           <InlineError message={errors.action} />
-          <Text style={styles.label}>Add context</Text>
+          <Text style={styles.label}>Add hashtag</Text>
           <View style={styles.contextGrid}>
             {contextTags.map((tag) => {
               const selected = selectedContextTags.includes(tag);
               return (
                 <Pressable
                   key={tag}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected }}
+                  hitSlop={8}
                   onPress={() => setSelectedContextTags((current) => selected ? current.filter((item) => item !== tag) : [...current, tag])}
                   style={[styles.contextChip, selected ? styles.contextChipSelected : null]}
                 >
@@ -387,6 +390,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           {locationResults.map((result) => (
             <Pressable
               key={result.id}
+              accessibilityRole="button"
               onPress={() => {
                 setSelectedLocation(result);
                 setLocationQuery(result.displayName);
@@ -414,7 +418,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <CTAButton
-          label={saving ? 'Saving...' : editingSparkId && step === 'location' ? 'Save changes' : step === 'media' ? 'Next' : step === 'content' ? 'Next' : 'Post Spark'}
+          label={saving ? 'Saving' : editingSparkId && step === 'location' ? 'Save changes' : step === 'media' ? 'Next' : step === 'content' ? 'Next' : 'Save spark'}
           onPress={goNext}
           disabled={saving}
         />
@@ -427,6 +431,7 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, gap: 10, backgroundColor: colors.surface },
   headerIcon: { width: 44, height: 44, alignItems: 'flex-start', justifyContent: 'center' },
+  headerIconPressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
   mediaStep: { flex: 1, paddingHorizontal: 0 },
   mediaImage: { width: '100%', height: '100%' },
@@ -440,27 +445,27 @@ const styles = StyleSheet.create({
   prefillNotice: { borderRadius: radius.sm, borderWidth: 1, borderColor: colors.highlight, backgroundColor: colors.neutral, padding: spacing.sm, gap: 2 },
   prefillTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15 },
   prefillText: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
-  locationRow: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 1, borderBottomColor: colors.neutral },
+  locationRow: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 1, borderBottomColor: colors.divider },
   locationText: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
   label: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
   contextGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  contextChip: { minHeight: 30, borderRadius: 15, paddingHorizontal: 10, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
-  contextChipSelected: { backgroundColor: colors.main },
+  contextChip: { minHeight: 30, borderRadius: 15, borderWidth: 1, borderColor: colors.borderSoft, paddingHorizontal: 10, backgroundColor: colors.neutral, alignItems: 'center', justifyContent: 'center' },
+  contextChipSelected: { backgroundColor: colors.main, borderColor: colors.main },
   contextText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   contextTextSelected: { color: colors.white },
   helper: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12 },
   unable: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14 },
-  hiddenGemCard: { marginTop: 48, marginHorizontal: 20, minHeight: 220, borderWidth: 2, borderColor: colors.main, borderRadius: 12, alignItems: 'center', justifyContent: 'center', padding: spacing.sm },
+  hiddenGemCard: { marginTop: spacing.lg, marginHorizontal: 20, minHeight: 188, borderWidth: 1, borderColor: colors.main, borderRadius: 12, alignItems: 'center', justifyContent: 'center', padding: spacing.sm },
   hiddenTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, textAlign: 'center' },
   hiddenLink: { color: colors.main, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16, textAlign: 'center', textDecorationLine: 'underline' },
-  locationResult: { gap: 3, paddingVertical: 4 },
+  locationResult: { minHeight: 44, gap: 3, justifyContent: 'center', paddingVertical: 4 },
   resultTitle: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
-  resultAddress: { color: '#B8BDC6', fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
+  resultAddress: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
   tagGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tag: { minHeight: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.highlight, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, backgroundColor: colors.surface },
   tagSelected: { backgroundColor: colors.main, borderColor: colors.main },
   tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
   tagTextSelected: { color: colors.white },
   warning: { color: colors.danger, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.neutral, backgroundColor: colors.surface }
+  footer: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 16, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.dividerMuted, backgroundColor: colors.surface }
 });

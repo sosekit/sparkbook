@@ -28,7 +28,7 @@ export function SearchIconCircle({
   size = 12,
   circleSize = 24,
   backgroundColor = colors.surface,
-  borderColor = '#CACACA'
+  borderColor = colors.fieldBorder
 }: SearchIconCircleProps) {
   return (
     <View

@@ -82,7 +82,7 @@ export function GuideRouteScreen({ route, navigation }: Props) {
         height={820}
       />
       <View style={[styles.header, { top: insets.top + 8 }]}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.back}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
           <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.title}>Explore Mode</Text>
@@ -110,7 +110,8 @@ export function GuideRouteScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
   header: { position: 'absolute', left: 16, right: 16, flexDirection: 'row', alignItems: 'center', gap: 8 },
-  back: { width: 32, height: 40, justifyContent: 'center' },
+  back: { width: 44, height: 44, justifyContent: 'center' },
+  backPressed: { opacity: 0.62 },
   title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
   sheet: { position: 'absolute', left: 0, right: 0, bottom: 0 },
 });

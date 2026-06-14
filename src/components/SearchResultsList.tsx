@@ -18,14 +18,14 @@ export function SearchResultsList({ results, query, searching = false, onSelect,
 
   return (
     <View style={styles.wrap}>
-      {searching ? <Text style={styles.empty}>Searching Toronto places...</Text> : null}
+      {searching ? <Text style={styles.empty}>Searching Toronto places</Text> : null}
       {!searching && !results.length ? (
-        <Pressable onPress={() => onCreateFromQuery?.(query.trim())} disabled={!onCreateFromQuery} style={({ pressed }) => [styles.emptyAction, pressed ? styles.emptyPressed : null]}>
+        <Pressable accessibilityRole="button" onPress={() => onCreateFromQuery?.(query.trim())} disabled={!onCreateFromQuery} style={({ pressed }) => [styles.emptyAction, pressed ? styles.emptyPressed : null]}>
           <Text style={styles.empty}>No spark here yet. Tap to start one.</Text>
         </Pressable>
       ) : null}
       {results.map((result) => (
-        <Pressable key={result.id} onPress={() => onSelect(result)} style={styles.row}>
+        <Pressable key={result.id} accessibilityRole="button" onPress={() => onSelect(result)} style={({ pressed }) => [styles.row, pressed ? styles.rowPressed : null]}>
           <View style={styles.icon}>
             <SparkbookIcon name={result.type === 'list' ? 'listInactive' : result.type === 'place' ? 'location' : 'spark'} color={colors.main} size={16} />
           </View>
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
   wrap: {
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.18)',
-    borderRadius: 10,
+    borderColor: colors.borderMuted,
+    borderRadius: 12,
     overflow: 'hidden'
   },
   row: {
@@ -55,14 +55,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral
+    borderBottomColor: colors.dividerMuted
+  },
+  rowPressed: {
+    backgroundColor: colors.neutral
   },
   icon: {
     width: 26,
     height: 26,
     borderRadius: 13,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.22)',
+    borderColor: colors.borderSoft,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.surface
@@ -72,6 +75,6 @@ const styles = StyleSheet.create({
   subtitle: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
   empty: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16, padding: spacing.sm }
   ,
-  emptyAction: { backgroundColor: colors.surface },
+  emptyAction: { minHeight: 44, backgroundColor: colors.surface, justifyContent: 'center' },
   emptyPressed: { backgroundColor: colors.neutral }
 });

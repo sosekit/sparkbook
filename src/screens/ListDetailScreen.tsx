@@ -58,7 +58,7 @@ export function ListDetailScreen({ route, navigation }: Props) {
         <Text style={styles.meta}>{listSparks.length} {listSparks.length === 1 ? 'spark' : 'sparks'} · {list.visibility}</Text>
       </View>
       <Button label="Start guide" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} />
-      <Text style={styles.reorderHint}>Hold and order</Text>
+      <Text style={styles.reorderHint}>Hold to reorder</Text>
       {listSparks.length ? (
         <DraggableSparkList
           sparks={listSparks}
@@ -71,7 +71,7 @@ export function ListDetailScreen({ route, navigation }: Props) {
           onOpenSpark={(sparkId) => navigation.navigate('SingleSparkFromList', { listId: list.id, sparkId })}
         />
       ) : <EmptyState title="This list is empty" message="Add sparks to build a route you can revisit." />}
-      <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Share a thought about this list" />
+      <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Add a comment" />
     </ScrollView>
   );
 }

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: colors.neutral,
+    borderColor: colors.dividerMuted,
     backgroundColor: colors.surface,
     padding: spacing.sm,
     gap: 2
@@ -45,12 +45,14 @@ const styles = StyleSheet.create({
   name: {
     color: colors.text,
     fontFamily: fontFamilies.secondaryBold,
-    fontSize: 11
+    fontSize: 12,
+    lineHeight: 16
   },
   date: {
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
-    fontSize: 10
+    fontSize: 11,
+    lineHeight: 14
   },
   body: {
     color: colors.text,

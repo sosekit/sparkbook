@@ -20,7 +20,13 @@ export function SmallButton({ label, selected = false, onPress }: SmallButtonPro
   }
 
   return (
-    <Pressable hitSlop={6} onPress={onPress} style={({ pressed }) => [styles.button, selected ? styles.selected : null, pressed ? styles.pressed : null]}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      hitSlop={10}
+      onPress={onPress}
+      style={({ pressed }) => [styles.button, selected ? styles.selected : null, pressed ? styles.pressed : null]}
+    >
       {content}
     </Pressable>
   );
@@ -31,13 +37,16 @@ const styles = StyleSheet.create({
     minHeight: 30,
     minWidth: 58,
     borderRadius: 15,
+    borderWidth: 1,
+    borderColor: colors.borderSoft,
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.neutral
   },
   selected: {
-    backgroundColor: colors.main
+    backgroundColor: colors.main,
+    borderColor: colors.main
   },
   pressed: {
     backgroundColor: colors.highlight

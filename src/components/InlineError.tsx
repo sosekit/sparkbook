@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     color: colors.danger,
     fontFamily: fontFamilies.secondaryBold,
     fontSize: 12,
-    lineHeight: 16
+    lineHeight: 16,
+    paddingTop: 2
   }
 });

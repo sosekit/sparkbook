@@ -29,8 +29,8 @@ export function CTAButton({ label, onPress, disabled = false }: CTAButtonProps) 
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 44,
-    borderRadius: 22,
+    minHeight: 48,
+    borderRadius: 18,
     backgroundColor: colors.main,
     alignItems: 'center',
     justifyContent: 'center',
@@ -39,13 +39,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18
   },
   disabled: {
-    backgroundColor: colors.neutral,
+    backgroundColor: colors.disabledSurface,
     borderWidth: 1,
-    borderColor: 'rgba(78, 101, 133, 0.18)',
+    borderColor: colors.borderMuted,
     opacity: 1
   },
   pressed: {
-    backgroundColor: colors.highlight
+    backgroundColor: colors.accentPressed
   },
   label: {
     color: colors.white,

@@ -7,7 +7,6 @@ import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
 import { CommentInput } from './CommentInput';
 import { CommentItem } from './CommentItem';
-import { EmptyState } from './EmptyState';
 
 type CommentsSectionProps = {
   targetType: CommentTargetType;
@@ -24,17 +23,17 @@ export function CommentsSection({ targetType, targetId, inputPlaceholder }: Comm
       {loading ? (
         <View style={styles.loading}>
           <ActivityIndicator color={colors.main} />
-          <Text style={styles.loadingText}>Loading comments...</Text>
+          <Text style={styles.loadingText}>Loading comments</Text>
         </View>
       ) : comments.length ? (
         <View style={styles.list}>
           {comments.map((comment) => <CommentItem key={comment.id} comment={comment} />)}
         </View>
       ) : (
-        <EmptyState title="No comments yet" message="Start the conversation with a thought about this place." />
+        <Text style={styles.emptyText}>No comments yet</Text>
       )}
       <CommentInput
-        placeholder={inputPlaceholder || (targetType === 'spark' ? 'Share a thought about this spark' : 'Share a thought about this list')}
+        placeholder={inputPlaceholder || 'Add a comment'}
         onSubmit={async (body) => {
           await addComment(body);
         }}
@@ -48,9 +47,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: radius.md,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSoft,
     padding: spacing.sm,
-    gap: spacing.xs
+    gap: spacing.sm
   },
   title: {
     color: colors.text,
@@ -70,5 +69,11 @@ const styles = StyleSheet.create({
     color: colors.altText,
     fontFamily: fontFamilies.secondary,
     fontSize: 12
+  },
+  emptyText: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 13,
+    lineHeight: 18
   }
 });

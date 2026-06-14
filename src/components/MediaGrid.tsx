@@ -1,5 +1,5 @@
 import * as MediaLibrary from 'expo-media-library';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
@@ -19,11 +19,14 @@ type MediaGridProps = {
 };
 
 export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallbackRecommended, error, onSelect, onRequestPermission, onPickFromLibrary }: MediaGridProps) {
+  const { width } = useWindowDimensions();
+  const tileSize = Math.floor((width - 48) / 3);
+
   if (loading) {
     return (
       <View style={styles.state}>
         <ActivityIndicator color={colors.main} />
-        <Text style={styles.stateText}>Loading your library...</Text>
+        <Text style={styles.stateText}>Loading your library</Text>
       </View>
     );
   }
@@ -32,7 +35,7 @@ export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallb
     return (
       <View style={styles.state}>
         <Text style={styles.title}>Photo access is off</Text>
-        <Text style={styles.stateText}>Allow photo access to choose a photo or video for this spark.</Text>
+        <Text style={styles.stateText}>Allow photo access, or use the system picker.</Text>
         <Pressable onPress={onRequestPermission} style={styles.permissionButton}>
           <Text style={styles.permissionText}>Allow access</Text>
         </Pressable>
@@ -48,7 +51,7 @@ export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallb
     if (!assets.length) return (
       <View style={styles.state}>
         <Text style={styles.title}>Choose media</Text>
-        <Text style={styles.stateText}>Use your system library picker for the most reliable Expo Go preview.</Text>
+        <Text style={styles.stateText}>Use the system picker for the most reliable Expo Go preview.</Text>
         <Pressable onPress={onPickFromLibrary} style={styles.permissionButton}>
           <Text style={styles.permissionText}>Choose from library</Text>
         </Pressable>
@@ -62,7 +65,7 @@ export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallb
       {fallbackRecommended ? (
         <View style={styles.fallbackBanner}>
           <View style={styles.fallbackCopy}>
-            <Text style={styles.bannerTitle}>Need another photo?</Text>
+            <Text style={styles.bannerTitle}>Choose another photo</Text>
             <Text style={styles.bannerText}>Open the system picker for full library access.</Text>
           </View>
           <Pressable onPress={onPickFromLibrary} style={({ pressed }) => [styles.bannerButton, pressed ? styles.buttonPressed : null]}>
@@ -71,12 +74,12 @@ export function MediaGrid({ assets, selectedId, loading, permissionDenied, fallb
         </View>
       ) : null}
       {assets.map((asset) => (
-        <MediaGridItem key={asset.id} asset={asset} selected={asset.id === selectedId} onPress={() => onSelect(asset)} />
+        <MediaGridItem key={asset.id} asset={asset} selected={asset.id === selectedId} size={tileSize} onPress={() => onSelect(asset)} />
       ))}
       {!assets.length ? (
         <View style={styles.state}>
           <Text style={styles.title}>No media found</Text>
-          <Text style={styles.stateText}>Your library did not return any recent photos or videos.</Text>
+          <Text style={styles.stateText}>Your library did not return recent photos or videos.</Text>
           <Pressable onPress={onPickFromLibrary} style={styles.permissionButton}>
             <Text style={styles.permissionText}>Choose from library</Text>
           </Pressable>
@@ -91,9 +94,9 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
-    paddingHorizontal: 8,
-    paddingTop: 10,
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 104
   },
   state: {
@@ -149,7 +152,7 @@ const styles = StyleSheet.create({
     minHeight: 62,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.18)',
+    borderColor: colors.borderMuted,
     backgroundColor: colors.neutral,
     padding: spacing.sm,
     flexDirection: 'row',

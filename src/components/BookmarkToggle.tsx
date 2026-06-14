@@ -13,12 +13,13 @@ export function BookmarkToggle({ saved = false, onPress, size = 30 }: BookmarkTo
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={saved ? 'Remove saved spark' : 'Save spark'}
+      accessibilityState={{ selected: saved }}
       hitSlop={10}
       onPress={(event) => {
         event.stopPropagation?.();
         onPress(event);
       }}
-      style={[styles.button, { width: size, height: size }]}
+      style={({ pressed }) => [styles.button, { width: size, height: size }, pressed ? styles.pressed : null]}
     >
       <SparkbookIcon name={saved ? 'bookmarkFilled' : 'bookmark'} color={colors.main} size={Math.round(size * 0.72)} />
     </Pressable>
@@ -29,5 +30,8 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  pressed: {
+    opacity: 0.62
   }
 });

@@ -1,11 +1,18 @@
 import * as MediaLibrary from 'expo-media-library';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { colors } from '../theme/colors';
+import { radius } from '../theme/radius';
 import { SelectionCheckmark } from './SelectionCheckmark';
 
-export function MediaGridItem({ asset, selected, onPress }: { asset: MediaLibrary.Asset; selected?: boolean; onPress: () => void }) {
+export function MediaGridItem({ asset, selected, onPress, size }: { asset: MediaLibrary.Asset; selected?: boolean; onPress: () => void; size: number }) {
   return (
-    <Pressable onPress={onPress} style={styles.tile}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      hitSlop={4}
+      onPress={onPress}
+      style={({ pressed }) => [styles.tile, { width: size, height: size }, selected ? styles.selected : null, pressed ? styles.pressed : null]}
+    >
       <Image source={{ uri: asset.uri }} style={styles.image} resizeMode="cover" />
       <View style={styles.indicator}>
         <SelectionCheckmark selected={selected} />
@@ -16,11 +23,18 @@ export function MediaGridItem({ asset, selected, onPress }: { asset: MediaLibrar
 
 const styles = StyleSheet.create({
   tile: {
-    width: '32%',
-    aspectRatio: 1,
-    borderRadius: 4,
+    borderRadius: radius.md,
     overflow: 'hidden',
-    backgroundColor: colors.neutral
+    backgroundColor: colors.neutral,
+    borderWidth: 1,
+    borderColor: colors.dividerMuted
+  },
+  selected: {
+    borderWidth: 3,
+    borderColor: colors.main
+  },
+  pressed: {
+    opacity: 0.78
   },
   image: {
     width: '100%',

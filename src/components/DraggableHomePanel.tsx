@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: radius.sheet,
     borderTopRightRadius: radius.sheet,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.18)',
+    borderColor: colors.borderMuted,
     overflow: 'hidden'
   }
 });

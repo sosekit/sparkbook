@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     borderWidth: 1,
     borderColor: colors.white,
-    backgroundColor: 'rgba(255,255,255,0.72)',
+    backgroundColor: colors.disabledSurface,
     alignItems: 'center',
     justifyContent: 'center'
   },

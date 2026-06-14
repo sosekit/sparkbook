@@ -12,14 +12,14 @@ type CommentInputProps = {
   onSubmit: (body: string) => Promise<void> | void;
 };
 
-export function CommentInput({ placeholder = 'Share a thought about this spark', onSubmit }: CommentInputProps) {
+export function CommentInput({ placeholder = 'Add a comment', onSubmit }: CommentInputProps) {
   const [body, setBody] = useState('');
   const [error, setError] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
 
   async function submit() {
     if (!body.trim()) {
-      setError('Add a comment before posting.');
+      setError('Add a comment first.');
       return;
     }
     setSaving(true);
@@ -47,7 +47,7 @@ export function CommentInput({ placeholder = 'Share a thought about this spark',
           />
           <InlineError message={error} />
           <View style={styles.action}>
-            <CTAButton label={saving ? 'Posting...' : 'Post'} onPress={submit} disabled={saving} />
+            <CTAButton label={saving ? 'Posting' : 'Post'} onPress={submit} disabled={saving} />
           </View>
         </View>
       </View>

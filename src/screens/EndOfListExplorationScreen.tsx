@@ -40,16 +40,16 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
   return (
     <View style={styles.root}>
       <View style={[styles.closeWrap, { paddingTop: insets.top + 8 }]}>
-        <Pressable onPress={() => navigation.navigate('SparkListPreview', { listId: route.params.listId })} style={styles.close}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.navigate('SparkListPreview', { listId: route.params.listId })} style={({ pressed }) => [styles.close, pressed ? styles.closePressed : null]}>
           <SparkbookIcon name="close" color={colors.text} size={24} />
         </Pressable>
       </View>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
-        <Text style={styles.title}>How was your Spark List experience?</Text>
+        <Text style={styles.title}>Guide complete</Text>
         {list ? (
           <ListCard list={list} sparks={listSparks} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
         ) : null}
-        <Text style={styles.copy}>Leave a comment or save it for later</Text>
+        <Text style={styles.copy}>Add a comment or save this list for later.</Text>
         <View style={styles.metrics}>
           <Metric icon="friends" label="35" />
           <Metric icon="bookmark" label="1128" />
@@ -60,12 +60,12 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
             <Avatar name={creator?.displayName || 'Sparkbook'} size={44} />
             <View>
               <Text style={styles.creatorName}>{creator?.displayName || 'Sparkbook'}</Text>
-              <Text style={styles.creatorMeta}>{listSparks.length} Sparks | Creator</Text>
+              <Text style={styles.creatorMeta}>{listSparks.length} sparks · Creator</Text>
             </View>
           </View>
           {isOwnList ? <SmallButton label="Your list" selected /> : <SmallButton label={follows.isFollowing(creatorId) ? 'Following' : 'Follow'} selected={follows.isFollowing(creatorId)} onPress={() => follows.toggleFollow(creatorId)} />}
         </View>
-        {list ? <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Share a thought about this list" /> : null}
+        {list ? <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Add a comment" /> : null}
         <Text style={styles.section}>Explore other Spark Lists</Text>
         {activeLists.filter((item) => item.id !== route.params.listId).slice(0, 2).map((item) => (
           <ListCard key={item.id} list={item} sparks={sparks.filter((spark) => item.sparkIds.includes(spark.id))} onPress={() => navigation.replace('SparkListPreview', { listId: item.id })} />
@@ -92,14 +92,15 @@ function Metric({ icon, label }: { icon: 'friends' | 'bookmark' | 'arrowForward'
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   closeWrap: { minHeight: 68, paddingHorizontal: 16, justifyContent: 'center' },
-  close: { width: 32, height: 44, justifyContent: 'center' },
+  close: { width: 44, height: 44, justifyContent: 'center' },
+  closePressed: { opacity: 0.62 },
   content: { paddingHorizontal: 16, gap: spacing.sm, alignItems: 'stretch' },
   title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32, textAlign: 'center', paddingHorizontal: 24 },
   copy: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 16, lineHeight: 24, textAlign: 'center' },
   metrics: { flexDirection: 'row', justifyContent: 'center', gap: spacing.md, paddingVertical: 4 },
   metric: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   metricText: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  creatorCard: { borderWidth: 1, borderColor: '#CACACA', borderRadius: radius.lg, padding: spacing.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  creatorCard: { borderWidth: 1, borderColor: colors.borderSoft, borderRadius: radius.lg, padding: spacing.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   creatorInfo: { flexDirection: 'row', alignItems: 'center', gap: 13 },
   creatorName: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 14, lineHeight: 24 },
   creatorMeta: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },

@@ -92,7 +92,7 @@ export function HomeFeedScreen({ navigation }: Props) {
       <DraggableHomePanel expandedTop={expandedTop} midTop={midTop} collapsedTop={collapsedTop} bottomInset={insets.bottom} scrollOffset={panelScrollOffset}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.feed}
+          contentContainerStyle={[styles.feed, { paddingBottom: insets.bottom + 112 }]}
           scrollEventThrottle={16}
           onScroll={(event) => {
             const nextOffset = event.nativeEvent.contentOffset.y;
@@ -168,7 +168,7 @@ export function HomeFeedScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
   tags: { paddingVertical: 8, gap: 8 },
-  feed: { paddingHorizontal: 12, paddingTop: 0, paddingBottom: 96, gap: 8 },
+  feed: { paddingHorizontal: 12, paddingTop: 0, gap: 8 },
   sectionTitle: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 18, lineHeight: 23, marginTop: 0 },
   previewRow: { gap: 6, paddingRight: 12 },
   listRow: { gap: 6, paddingRight: 12 },

@@ -66,7 +66,7 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
       <ListMapPreview sparks={listSparks} selectedId={selectedSpark?.id} onSelect={setSelectedId} />
       <View style={[styles.header, { top: insets.top }]}>
         <View style={styles.headerGroup}>
-          <Pressable onPress={() => navigation.goBack()} style={styles.back}>
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
           <Text style={styles.headerTitle}>Spark List</Text>
@@ -97,7 +97,7 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
             <SparkbookIcon name="location" color={colors.text} size={16} />
             <Text style={styles.location} numberOfLines={1}>{selectedSpark?.addressLabel || `${listSparks.length} saved sparks`}</Text>
           </View>
-          <CTAButton label="Start Exploring" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} disabled={!listSparks.length} />
+          <CTAButton label="Start guide" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} disabled={!listSparks.length} />
         </ScrollView>
       </View>
     </View>
@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.mapLand },
   header: { position: 'absolute', left: 16, right: 16, height: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   headerGroup: { flexDirection: 'row', alignItems: 'center', gap: 16 },
-  back: { width: 24, height: 44, justifyContent: 'center' },
+  back: { width: 44, height: 44, justifyContent: 'center' },
+  backPressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
   sheet: { position: 'absolute', left: 0, right: 0, top: 272, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, paddingHorizontal: 16, paddingTop: 16 },
   handle: { alignSelf: 'center', width: 107, height: 6, borderRadius: 5, backgroundColor: colors.main },
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   detailsScroll: { flex: 1 },
   details: { paddingTop: 8, paddingBottom: 24, gap: spacing.sm },
   titleField: { padding: 8 },
-  captionField: { padding: 8, borderTopWidth: 1, borderTopColor: '#EDEDED', borderRadius: 4 },
+  captionField: { padding: 8, borderTopWidth: 1, borderTopColor: colors.dividerMuted, borderRadius: 4 },
   locationField: { minHeight: 24, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 4 },
   title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 16, lineHeight: 24 },
   caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },

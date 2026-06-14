@@ -31,6 +31,8 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPr
         <View style={styles.bottomRow}>
           {onCategoryPress ? (
             <Pressable
+              accessibilityRole="button"
+              hitSlop={8}
               onPress={(event) => {
                 event.stopPropagation?.();
                 onCategoryPress();
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     minHeight: 24,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(46, 91, 173, 0.22)',
+    borderColor: colors.borderSoft,
     paddingHorizontal: 7,
     justifyContent: 'center',
     backgroundColor: colors.surface

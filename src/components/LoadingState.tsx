@@ -3,7 +3,7 @@ import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
 
-export function LoadingState({ label = 'Loading...' }: { label?: string }) {
+export function LoadingState({ label = 'Loading' }: { label?: string }) {
   return (
     <View style={styles.wrap}>
       <ActivityIndicator color={colors.main} />

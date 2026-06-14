@@ -64,7 +64,7 @@ function getListLocationLabel(sparks: Spark[]) {
   const label = source?.addressLabel || source?.location || '';
   if (/toronto/i.test(label)) return 'Toronto, CA';
   const parts = label.split(',').map((part) => part.trim()).filter(Boolean);
-  if (parts.length >= 2) return `${parts[parts.length - 1]}, CA`;
+  if (parts.length >= 1) return `${parts[0]}, CA`;
   return parts[0] || `${sparks.length} sparks`;
 }
 
@@ -151,12 +151,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.text,
-    fontFamily: fontFamilies.secondaryBold,
+    fontFamily: fontFamilies.primarySemiBold,
     fontSize: 16,
     lineHeight: 24
   },
   body: {
-    color: colors.text,
+    color: colors.altText,
     fontFamily: fontFamilies.secondary,
     fontSize: 12,
     lineHeight: 16

@@ -34,7 +34,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
   if (!spark || !list) {
     return (
       <View style={[styles.root, { paddingTop: insets.top + 16 }]}>
-        <Pressable onPress={() => navigation.goBack()} style={styles.back}>
+        <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
           <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.title}>Spark unavailable</Text>
@@ -46,7 +46,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
     <View style={styles.root}>
       <View style={[styles.header, { paddingTop: insets.top, minHeight: insets.top + 56 }]}>
         <View style={styles.headerTitleWrap}>
-          <Pressable onPress={() => navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} style={styles.back}>
+          <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
           <Text style={styles.headerTitle}>Spark</Text>
@@ -89,14 +89,15 @@ function Metric({ icon, label }: { icon: 'chat' | 'bookmark' | 'arrowForward'; l
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: '#CACACA' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: colors.dividerMuted },
   headerTitleWrap: { flexDirection: 'row', alignItems: 'center', gap: 16 },
-  back: { width: 24, height: 44, justifyContent: 'center' },
+  back: { width: 44, height: 44, justifyContent: 'center' },
+  backPressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
   content: { gap: 8 },
   details: { paddingHorizontal: 16, paddingTop: 8, gap: 12 },
   title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
-  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 16, lineHeight: 24, borderTopWidth: 1, borderTopColor: '#EDEDED', paddingTop: 8 },
+  caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20, borderTopWidth: 1, borderTopColor: colors.dividerMuted, paddingTop: 8 },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 4 },
   location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   stats: { flexDirection: 'row', gap: 4, paddingHorizontal: 16, paddingVertical: 12 },

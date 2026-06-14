@@ -10,17 +10,17 @@ export function MediaPicker({ uri, mediaType, onPick }: { uri?: string; mediaTyp
     <View style={styles.wrap}>
       <View style={styles.copy}>
         <Text style={styles.title}>Photo or video</Text>
-        <Text style={styles.body}>Media follows the Figma overlay treatment and stays optional for clarity.</Text>
+        <Text style={styles.body}>Add a photo or video to help this spark feel easier to revisit.</Text>
       </View>
       {uri && mediaType !== 'video' ? <Image source={{ uri }} style={styles.preview} resizeMode="cover" /> : null}
-      {uri && mediaType === 'video' ? <Text style={styles.video}>Video selected. It will be muted by default.</Text> : null}
+      {uri && mediaType === 'video' ? <Text style={styles.video}>Video selected</Text> : null}
       <Button label={uri ? 'Change media' : 'Add media'} onPress={onPick} variant="secondary" />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: spacing.sm, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, padding: spacing.md },
+  wrap: { gap: spacing.sm, borderRadius: radius.md, borderWidth: 1, borderColor: colors.borderSoft, backgroundColor: colors.surface, padding: spacing.md },
   copy: { gap: 3 },
   title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 16 },
   body: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 19 },
