@@ -43,8 +43,9 @@ export function SparkDetailScreen({ route, navigation }: Props) {
   const isOwnSpark = canEditSpark(spark);
   const creatorName = getCreatorName(spark.createdBy, spark.recommendedBy);
   const contextTags = [...new Set([...(spark.moodTags || []), ...(spark.contextTags || [])])].slice(0, 8);
-  const audienceLabel = spark.audience === 'friends' || spark.visibility === 'friends'
-    ? 'Shared with Close Friends'
+  const isFriendsSpark = spark.audience === 'friends' || spark.visibility === 'friends';
+  const audienceLabel = isFriendsSpark
+    ? 'Friends'
     : spark.audience === 'private' || spark.visibility === 'private'
       ? 'Private spark'
       : 'Public spark';
@@ -78,7 +79,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
       </View>
       <View style={styles.metaRow}>
         <SmallButton label={category.name} selected />
-        <SmallButton label={audienceLabel} />
+        <SmallButton label={audienceLabel} icon={isFriendsSpark ? 'friends' : undefined} />
       </View>
       {!isOwnSpark ? (
         <View style={styles.creatorPanel}>
@@ -93,9 +94,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
         </View>
       ) : null}
       <View style={styles.panel}>
-        <Text style={styles.section}>Add a note</Text>
         <Text style={styles.body}>{spark.reflectionNote || spark.description || spark.caption || 'No note yet.'}</Text>
-        {spark.caption ? <Text style={styles.caption}>{spark.caption}</Text> : null}
         {spark.recommendedBy ? <Text style={styles.source}>Recommended by {spark.recommendedBy}</Text> : null}
         <View style={styles.chips}>
           {contextTags.length ? contextTags.map((tag) => <SmallButton key={tag} label={tag} />) : <SmallButton label="No context yet" />}
