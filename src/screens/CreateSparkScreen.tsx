@@ -24,6 +24,7 @@ import { fontFamilies } from '../theme/typography';
 import { RootStackParamList } from '../types/navigation';
 import { Visibility } from '../types/spark';
 import { getCategoryById } from '../utils/category';
+import { canEditSpark } from '../utils/ownership';
 import { validateCompleteSpark, validateContentStep, validateLocationStep, validateMediaStep } from '../utils/validation';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CreateSpark'>;
@@ -59,6 +60,10 @@ export function CreateSparkScreen({ route, navigation }: Props) {
       sparkService.fetchSparkById(editingSparkId).then((spark) => {
         if (!spark) {
           setDraftRestored(true);
+          return;
+        }
+        if (!canEditSpark(spark)) {
+          navigation.replace('SparkDetail', { sparkId: editingSparkId });
           return;
         }
         const firstMedia = (spark.media || [])[0];

@@ -22,6 +22,7 @@ import { fontFamilies } from '../theme/typography';
 import { RootStackParamList } from '../types/navigation';
 import { formatSavedDate } from '../utils/date';
 import { getCategoryForSpark } from '../utils/category';
+import { canEditSpark } from '../utils/ownership';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SparkDetail'>;
 
@@ -39,7 +40,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
   const tags = spark.tags || [];
   const sparkId = spark.id;
   const category = getCategoryForSpark(spark);
-  const isOwnSpark = spark.createdBy === 'profile-ray';
+  const isOwnSpark = canEditSpark(spark);
   const creatorName = getCreatorName(spark.createdBy, spark.recommendedBy);
   const contextTags = [...new Set([...(spark.moodTags || []), ...(spark.contextTags || [])])].slice(0, 8);
   const audienceLabel = spark.audience === 'friends' || spark.visibility === 'friends'
@@ -57,7 +58,11 @@ export function SparkDetailScreen({ route, navigation }: Props) {
     <ScrollView style={styles.root} contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 24 }]}>
       <View style={styles.topBar}>
         <BackButton onPress={() => navigation.goBack()} />
-        {isOwnSpark ? <Button label="Edit Spark" onPress={() => navigation.navigate('CreateSpark', { sparkId: spark.id })} variant="secondary" /> : null}
+        {isOwnSpark ? (
+          <Pressable accessibilityRole="button" accessibilityLabel="Edit spark" hitSlop={8} onPress={() => navigation.navigate('CreateSpark', { sparkId: spark.id })} style={({ pressed }) => [styles.editButton, pressed ? styles.editButtonPressed : null]}>
+            <Text style={styles.editButtonText}>Edit Spark</Text>
+          </Pressable>
+        ) : null}
       </View>
       <SparkMediaGallery spark={spark} horizontalPadding={0} />
       <View style={styles.header}>
@@ -117,6 +122,9 @@ const styles = StyleSheet.create({
   content: { padding: 14, paddingBottom: 32, gap: spacing.sm },
   center: { flex: 1, justifyContent: 'center', padding: 16, backgroundColor: colors.background },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  editButton: { minHeight: 44, minWidth: 44, alignSelf: 'flex-start', justifyContent: 'center', paddingHorizontal: spacing.xs },
+  editButtonPressed: { opacity: 0.62 },
+  editButtonText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 14, lineHeight: 18 },
   header: { flexDirection: 'row', gap: spacing.sm, alignItems: 'flex-start' },
   titleWrap: { flex: 1, gap: 5 },
   title: { color: colors.text, fontFamily: fontFamilies.primaryBold, fontSize: 22, lineHeight: 28 },
