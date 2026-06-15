@@ -36,9 +36,9 @@ export function ListsScreen({ navigation }: Props) {
           <Text style={styles.createText}>Create new list</Text>
           <SparkbookIcon name="add" color={colors.main} size={14} />
         </Pressable>
-        <ListSection title="Recently Created Lists" lists={createdLists} sparks={sparks} onOpen={(listId) => navigation.navigate('GuideRoute', { listId })} />
-        <ListSection title="Private Lists" lists={privateLists} sparks={sparks} emptyMessage="Private routes you create will stay here." onOpen={(listId) => navigation.navigate('GuideRoute', { listId })} />
-        <ListSection title="Saved Lists" lists={savedLists} sparks={sparks} emptyMessage="Save a public or friends list to keep it here." onOpen={(listId) => navigation.navigate('GuideRoute', { listId })} />
+        <ListSection title="Recently Created Lists" lists={createdLists} sparks={sparks} onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        <ListSection title="Private Lists" lists={privateLists} sparks={sparks} emptyMessage="Private routes you create will stay here." onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
+        <ListSection title="Saved Lists" lists={savedLists} sparks={sparks} emptyMessage="Save a public or friends list to keep it here." onOpen={(listId) => navigation.navigate('SparkListPreview', { listId })} />
         {!active.length ? <EmptyState title="No lists yet" message="Create or save lists to guide future exploration." /> : null}
       </ScrollView>
       <BottomNav active="lists" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => navigation.navigate('Bookmarks')} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => undefined} onProfile={() => navigation.navigate('Profile')} />

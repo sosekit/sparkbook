@@ -20,9 +20,10 @@ type MapPreviewProps = {
   liveLocation?: { latitude: number; longitude: number } | null;
   routeSegments?: GuideRouteSegment[];
   onMarkerPress?: (sparkId: string) => void;
+  staticImageOnly?: boolean;
 };
 
-export function MapPreview({ locations, selectedId, height = 260, fullBleed = false, forceOpenMap = false, showMarkers = true, completedIds = [], liveLocation, routeSegments = [], onMarkerPress }: MapPreviewProps) {
+export function MapPreview({ locations, selectedId, height = 260, fullBleed = false, forceOpenMap = false, showMarkers = true, completedIds = [], liveLocation, routeSegments = [], onMarkerPress, staticImageOnly = false }: MapPreviewProps) {
   const [loaded, setLoaded] = useState(false);
   const [mapFailed, setMapFailed] = useState(false);
   const loadedRef = useRef(false);
@@ -31,6 +32,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
     [locations]
   );
   const selected = safeLocations.find((item) => item.id === selectedId) || safeLocations[0];
+
   const center = liveLocation || selected || { latitude: 43.6532, longitude: -79.3832 };
   const initialZoom = safeLocations.length <= 1 ? 16 : 13;
   const fitBoundsMaxZoom = safeLocations.length <= 2 ? 16 : 15;
@@ -219,7 +221,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
     loadedRef.current = false;
     setLoaded(false);
     setMapFailed(false);
-    if (forceOpenMap) return;
+    if (forceOpenMap || staticImageOnly) return;
     const timer = setTimeout(() => {
       if (!loadedRef.current) {
         setMapFailed(true);
@@ -227,7 +229,22 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
       }
     }, DEMO_MODE ? 5000 : 7000);
     return () => clearTimeout(timer);
-  }, [forceOpenMap, html]);
+  }, [forceOpenMap, html, staticImageOnly]);
+
+  if (staticImageOnly) {
+    return (
+      <View style={[styles.wrap, fullBleed ? styles.fullBleed : null, { height }]}>
+        <MapFallback
+          locations={safeLocations}
+          selectedId={selected?.id}
+          completedIds={completedIds}
+          liveLocation={liveLocation}
+          routeSegments={routeSegments}
+          onMarkerPress={onMarkerPress}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.wrap, fullBleed ? styles.fullBleed : null, { height }]}>

@@ -24,7 +24,7 @@ export const listService = {
       const { data, error } = await dataClient.supabase.from('spark_lists').select('*, spark_list_items(*)').order('created_at', { ascending: false });
       if (!error && data) return data.map(fromSupabaseList).map(normalizeList);
     }
-    const local = await localStore.loadLists(sampleLists);
+    const local = removeDemoScratchLists(await localStore.loadLists(sampleLists));
     if (DEMO_MODE) return local.map(normalizeList).filter((list) => list.status === 'active');
     return mergeGeneratedLists(local.map(normalizeList), await localStore.loadSparks([]));
   },
@@ -33,7 +33,7 @@ export const listService = {
     return lists.find((list) => list.id === id) || null;
   },
   async createList(input: Pick<SparkList, 'title' | 'description' | 'visibility'>) {
-    const lists = await localStore.loadLists(sampleLists);
+    const lists = removeDemoScratchLists(await localStore.loadLists(sampleLists));
     const now = new Date().toISOString();
     const list: SparkList = {
       id: `list-${Date.now()}`,
@@ -55,7 +55,7 @@ export const listService = {
   },
   async addSparkToList(listId: string, sparkId: string) {
     if (!sparkId) throw new ListServiceError('missing-spark', 'Spark ID missing.');
-    const lists = (await localStore.loadLists(sampleLists)).map(normalizeList);
+    const lists = removeDemoScratchLists(await localStore.loadLists(sampleLists)).map(normalizeList);
     const listIndex = lists.findIndex((list) => list.id === listId && list.status === 'active');
     if (listIndex < 0) throw new ListServiceError('list-not-found', 'Selected list not found.');
     const sparks = await localStore.loadSparks(sampleSparks);
@@ -101,7 +101,7 @@ export const listService = {
     return updatedList;
   },
   async removeSparkFromList(listId: string, sparkId: string) {
-    const lists = await localStore.loadLists(sampleLists);
+    const lists = removeDemoScratchLists(await localStore.loadLists(sampleLists));
     const now = new Date().toISOString();
     const next = lists.map((list) => (list.id === listId ? { ...list, sparkIds: list.sparkIds.filter((id) => id !== sparkId), items: (list.items || []).filter((item) => item.sparkId !== sparkId), updatedAt: now } : list));
     await localStore.saveLists(next);
@@ -110,7 +110,7 @@ export const listService = {
     }
   },
   async softDeleteList(listId: string) {
-    const lists = await localStore.loadLists(sampleLists);
+    const lists = removeDemoScratchLists(await localStore.loadLists(sampleLists));
     const deletedAt = new Date().toISOString();
     const next = lists.map((list) => (list.id === listId ? { ...list, status: 'deleted' as const, deletedAt, updatedAt: deletedAt } : list));
     await localStore.saveLists(next);
@@ -120,7 +120,7 @@ export const listService = {
     }
   },
   async reorderListSparks(listId: string, sparkIds: string[]) {
-    const lists = await localStore.loadLists(sampleLists);
+    const lists = removeDemoScratchLists(await localStore.loadLists(sampleLists));
     const now = new Date().toISOString();
     const next = lists.map((list) => {
       if (list.id !== listId) return list;
@@ -146,6 +146,16 @@ export const listService = {
     return buildGeneratedLists(sparks);
   }
 };
+
+const DEMO_SCRATCH_TITLES = new Set(['dsdsdsds', 'insect showcase', 'dead', 'marshmellow date', 'aaa', 'h']);
+
+function removeDemoScratchLists(lists: SparkList[]) {
+  return lists.filter((list) => !DEMO_SCRATCH_TITLES.has(normalizeDemoTitle(list.title)));
+}
+
+function normalizeDemoTitle(title?: string) {
+  return (title || '').trim().toLowerCase();
+}
 
 function mergeGeneratedLists(lists: SparkList[], sparks: Spark[]) {
   const generated = buildGeneratedLists(sparks);

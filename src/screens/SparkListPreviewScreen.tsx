@@ -65,7 +65,8 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
     setSelectedId(spark.id);
   }
 
-  function startExploring() {
+  function startGuide() {
+    if (!selectedSpark) return;
     navigation.navigate('GuideRoute', { listId: activeList.id, startSparkId: selectedSpark?.id });
   }
 
@@ -77,12 +78,17 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
-          <Text style={styles.headerTitle}>Spark Lists</Text>
+          <Text style={styles.headerTitle} numberOfLines={1}>{activeList.title}</Text>
         </View>
         {selectedSpark ? <BookmarkToggle saved={bookmarks.includes(selectedSpark.id)} onPress={() => toggleBookmark(selectedSpark.id)} size={30} /> : null}
       </View>
       <View style={styles.sheet}>
         <View style={styles.handle} />
+        <View style={styles.listSummary}>
+          <Text style={styles.listTitle} numberOfLines={2}>{activeList.title}</Text>
+          {activeList.description ? <Text style={styles.listDescription} numberOfLines={2}>{activeList.description}</Text> : null}
+          <Text style={styles.listMeta}>{listSparks.length} {listSparks.length === 1 ? 'spark' : 'sparks'} · {visibilityLabel(activeList.visibility)}</Text>
+        </View>
         {listSparks.length ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
             {listSparks.map((spark) => (
@@ -115,7 +121,7 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
                 <SparkbookIcon name="location" color={colors.text} size={16} />
                 <Text style={styles.location} numberOfLines={1}>{selectedSpark.addressLabel}</Text>
               </View>
-              <CTAButton label="Start Exploring" onPress={startExploring} />
+              <CTAButton label="Start Guide" onPress={startGuide} />
             </>
           ) : (
             <View style={styles.emptyWrap}>
@@ -134,9 +140,13 @@ const styles = StyleSheet.create({
   headerGroup: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   back: { width: 44, height: 44, justifyContent: 'center' },
   backPressed: { opacity: 0.62 },
-  headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
+  headerTitle: { flex: 1, color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
   sheet: { position: 'absolute', left: 0, right: 0, top: 263, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, paddingHorizontal: 16, paddingTop: 16 },
   handle: { alignSelf: 'center', width: 107, height: 6, borderRadius: 5, backgroundColor: colors.main },
+  listSummary: { paddingTop: 8, gap: 4 },
+  listTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 30 },
+  listDescription: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 13, lineHeight: 18 },
+  listMeta: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   carousel: { paddingTop: 8, gap: 6 },
   detailsScroll: { flex: 1 },
   details: { paddingTop: 8, paddingBottom: 24, gap: spacing.sm },
@@ -150,3 +160,9 @@ const styles = StyleSheet.create({
   location: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   emptyWrap: { paddingTop: spacing.lg }
 });
+
+function visibilityLabel(visibility: string) {
+  if (visibility === 'friends') return 'Friends';
+  if (visibility === 'private') return 'Private';
+  return 'Public';
+}

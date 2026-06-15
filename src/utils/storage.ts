@@ -4,9 +4,9 @@ import { GuideRouteProgress, GuideSession, SparkList } from '../types/list';
 import { Profile } from '../types/profile';
 import { RevisitEvent, Spark, SparkDraft } from '../types/spark';
 
-const SPARKS_KEY = 'sparkbook.sparks.v3';
+const SPARKS_KEY = 'sparkbook.sparks.v4';
 const BOOKMARKS_KEY = 'sparkbook.bookmarks.v4';
-const LISTS_KEY = 'sparkbook.lists.v3';
+const LISTS_KEY = 'sparkbook.lists.v4';
 const PROFILE_KEY = 'sparkbook.profile.v2';
 const GUIDE_PROGRESS_KEY = 'sparkbook.guide_progress.v1';
 const GUIDE_SESSIONS_KEY = 'sparkbook.guide_sessions.v1';

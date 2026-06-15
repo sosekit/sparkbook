@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRightWidth: 1,
-    borderRightColor: cardStyles.dividerColor
+    borderRightColor: cardStyles.dividerColor,
+    overflow: 'hidden'
   },
   image: {
     width: '100%',

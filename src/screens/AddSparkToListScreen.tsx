@@ -46,11 +46,11 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
     try {
       const updatedList = await addSparkToList(selectedListId, route.params.sparkId);
       setSaving(false);
-      navigation.replace('ListDetail', { listId: updatedList.id, addedSparkId: route.params.sparkId });
+      navigation.replace('SparkListPreview', { listId: updatedList.id, addedSparkId: route.params.sparkId });
     } catch (err) {
       if (err instanceof ListServiceError && err.code === 'already-in-list') {
         setSaving(false);
-        navigation.replace('ListDetail', { listId: selectedListId, addedSparkId: route.params.sparkId });
+        navigation.replace('SparkListPreview', { listId: selectedListId, addedSparkId: route.params.sparkId });
         return;
       }
       setError(addToListErrorMessage(err));

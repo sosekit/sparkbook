@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: cardStyles.previewBackground,
     borderRightWidth: 1,
-    borderRightColor: cardStyles.dividerColor
+    borderRightColor: cardStyles.dividerColor,
+    overflow: 'hidden'
   },
   thumbnail: {
     ...StyleSheet.absoluteFillObject,

@@ -59,7 +59,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
       for (const sparkId of selectedSparkIds) {
         await addSparkToList(list.id, sparkId);
       }
-      navigation.replace('ListDetail', { listId: list.id });
+      navigation.replace('SparkListPreview', { listId: list.id });
     } finally {
       setSaving(false);
     }

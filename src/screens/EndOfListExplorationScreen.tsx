@@ -47,7 +47,7 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
         <Text style={styles.title}>Guide complete</Text>
         {list ? (
-          <ListCard list={list} sparks={listSparks} onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} />
+          <ListCard list={list} sparks={listSparks} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
         ) : null}
         <Text style={styles.copy}>Add a comment or save this list for later.</Text>
         <View style={styles.metrics}>
@@ -68,7 +68,7 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
         {list ? <CommentsSection targetType="list" targetId={list.id} inputPlaceholder="Add a comment" /> : null}
         <Text style={styles.section}>Explore other Spark Lists</Text>
         {activeLists.filter((item) => item.id !== route.params.listId).slice(0, 2).map((item) => (
-          <ListCard key={item.id} list={item} sparks={sparks.filter((spark) => item.sparkIds.includes(spark.id))} onPress={() => navigation.replace('GuideRoute', { listId: item.id })} />
+          <ListCard key={item.id} list={item} sparks={sparks.filter((spark) => item.sparkIds.includes(spark.id))} onPress={() => navigation.replace('SparkListPreview', { listId: item.id })} />
         ))}
         <View style={styles.actions}>
           <Button label="Back to list" onPress={() => navigation.navigate('SparkListPreview', { listId: route.params.listId })} />

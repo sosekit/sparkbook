@@ -1,2 +1,2 @@
 export const DEMO_MODE = true;
-export const DEMO_DATA_VERSION = 'interview-demo-2026-06-14-no-repeat-photos';
+export const DEMO_DATA_VERSION = 'interview-demo-2026-06-15-clean-map-demo';

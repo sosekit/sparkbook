@@ -79,6 +79,7 @@ export function GuideRouteScreen({ route, navigation }: Props) {
           if (index >= 0) guide.selectStop(index);
         }}
         fullBleed
+        staticImageOnly
         height={820}
       />
       <View style={[styles.header, { top: insets.top + 8 }]}>

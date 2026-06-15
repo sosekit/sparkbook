@@ -32,11 +32,11 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
       <View style={styles.image}>
         {thumbnail ? (
           demoThumbnail?.source ? (
-            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="cover" />
+            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="contain" />
           ) : isDemoMediaUri(thumbnail) ? (
             <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.thumbnail} />
           ) : (
-            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="contain" />
           )
         ) : null}
         {thumbnail ? <ThumbnailOverlay /> : null}
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.78 },
   image: {
     height: 152,
-    backgroundColor: cardStyles.previewBackground,
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     borderTopLeftRadius: 4,
@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   thumbnail: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%'
   },
   copy: {
     height: 48,

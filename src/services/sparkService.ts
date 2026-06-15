@@ -8,19 +8,19 @@ export const sparkService = {
   async fetchFeedSparks() {
     if (dataClient.isSupabase && dataClient.supabase) {
       const { data, error } = await dataClient.supabase.from('sparks').select('*').is('deleted_at', null).order('created_at', { ascending: false });
-      if (!error && data) return data.map(fromSupabaseSpark);
+      if (!error && data) return removeDemoScratchSparks(data.map(fromSupabaseSpark));
     }
-    return localStore.loadSparks(sampleSparks);
+    return removeDemoScratchSparks(await localStore.loadSparks(sampleSparks));
   },
   async fetchSparkDetail(id: string) {
-    const sparks = await localStore.loadSparks(sampleSparks);
+    const sparks = removeDemoScratchSparks(await localStore.loadSparks(sampleSparks));
     return sparks.find((spark) => spark.id === id) || null;
   },
   async fetchSparkById(id: string) {
     return this.fetchSparkDetail(id);
   },
   async createSpark(input: Omit<Spark, 'id' | 'createdAt' | 'updatedAt'>) {
-    const sparks = await localStore.loadSparks(sampleSparks);
+    const sparks = removeDemoScratchSparks(await localStore.loadSparks(sampleSparks));
     const now = new Date().toISOString();
     const spark: Spark = { ...input, id: `spark-${Date.now()}`, createdAt: now, updatedAt: now };
     if (dataClient.isSupabase && dataClient.supabase) {
@@ -42,7 +42,7 @@ export const sparkService = {
     return spark;
   },
   async updateSpark(id: string, input: Partial<Spark>) {
-    const sparks = await localStore.loadSparks(sampleSparks);
+    const sparks = removeDemoScratchSparks(await localStore.loadSparks(sampleSparks));
     const now = new Date().toISOString();
     const next = sparks.map((spark) => (spark.id === id ? { ...spark, ...input, id, updatedAt: now } : spark));
     const updated = next.find((spark) => spark.id === id) || null;
@@ -64,7 +64,7 @@ export const sparkService = {
     await localStore.saveSparkDraft(null);
   },
   async softDeleteSpark(id: string) {
-    const sparks = await localStore.loadSparks(sampleSparks);
+    const sparks = removeDemoScratchSparks(await localStore.loadSparks(sampleSparks));
     const deletedAt = new Date().toISOString();
     const next = sparks.map((spark) => (spark.id === id ? { ...spark, status: 'deleted' as const, deletedAt } : spark));
     await localStore.saveSparks(next);
@@ -74,13 +74,23 @@ export const sparkService = {
     }
   },
   async fetchNearbySparks(latitude: number, longitude: number) {
-    const sparks = await localStore.loadSparks(sampleSparks);
+    const sparks = removeDemoScratchSparks(await localStore.loadSparks(sampleSparks));
     return sparks
       .filter((spark) => spark.status === 'active')
       .sort((a, b) => distanceKm({ latitude, longitude }, a) - distanceKm({ latitude, longitude }, b))
       .slice(0, 20);
   }
 };
+
+const DEMO_SCRATCH_TITLES = new Set(['dsdsdsds', 'insect showcase', 'dead', 'marshmellow date', 'aaa', 'h']);
+
+function removeDemoScratchSparks(sparks: Spark[]) {
+  return sparks.filter((spark) => !DEMO_SCRATCH_TITLES.has(normalizeDemoTitle(spark.title)));
+}
+
+function normalizeDemoTitle(title?: string) {
+  return (title || '').trim().toLowerCase();
+}
 
 function fromSupabaseSpark(row: any): Spark {
   return {
