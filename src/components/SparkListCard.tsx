@@ -22,9 +22,11 @@ export type SparkListCardProps = {
 };
 
 export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, onBookmark, selected = false, style }: SparkListCardProps) {
-  const coverSpark = sparks.find((spark) => spark.id === list.coverSparkId) || sparks[0];
+  const coverSpark = sparks.find((spark) => spark.id === list.coverSparkId) || sparks.find(hasPhotoMedia) || sparks[0];
+  const mediaSpark = coverSpark && hasPhotoMedia(coverSpark) ? coverSpark : sparks.find(hasPhotoMedia);
   const thumbnail = list.thumbnailUri || coverSpark?.media?.find((media) => media.mediaType === 'photo')?.url;
-  const demoThumbnail = getDemoMediaAsset(thumbnail);
+  const resolvedThumbnail = thumbnail || mediaSpark?.media?.find((media) => media.mediaType === 'photo')?.url;
+  const demoThumbnail = getDemoMediaAsset(resolvedThumbnail);
   const locationLabel = getListLocationLabel(sparks);
   const creatorName = list.createdBy === 'profile-ray' ? 'Raymond Zhang' : list.createdBy.replace(/^profile-/, '').replace(/-/g, ' ');
 
@@ -36,17 +38,17 @@ export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, 
       style={({ pressed }) => [styles.card, selected ? styles.selected : null, pressed ? styles.pressed : null, style]}
     >
       <View style={styles.preview}>
-        {thumbnail ? (
+        {resolvedThumbnail ? (
           demoThumbnail?.source ? (
             <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="cover" />
-          ) : isDemoMediaUri(thumbnail) ? (
+          ) : isDemoMediaUri(resolvedThumbnail) ? (
             <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} label={demoThumbnail?.title} style={styles.thumbnail} />
           ) : (
-            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+            <Image source={{ uri: resolvedThumbnail }} style={styles.thumbnail} resizeMode="cover" />
           )
         ) : null}
-        {thumbnail ? <ThumbnailOverlay /> : null}
-        {!thumbnail ? (
+        {resolvedThumbnail ? <ThumbnailOverlay /> : null}
+        {!resolvedThumbnail ? (
           <View style={styles.emptyPreview}>
             <CategoryIcon categoryId={list.thumbnailIconKey || coverSpark?.categoryId || 'custom'} size={36} selected />
           </View>
@@ -93,6 +95,10 @@ function getListLocationLabel(sparks: Spark[]) {
   const parts = label.split(',').map((part) => part.trim()).filter(Boolean);
   if (parts.length >= 1) return `${parts[0]}, CA`;
   return parts[0] || `${sparks.length} sparks`;
+}
+
+function hasPhotoMedia(spark?: Spark) {
+  return Boolean(spark?.media?.some((media) => media.mediaType === 'photo' && media.url));
 }
 
 const styles = StyleSheet.create({

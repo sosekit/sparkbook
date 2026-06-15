@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
@@ -7,6 +8,8 @@ import { getCategoryForSpark } from '../utils/category';
 import { BookmarkToggle } from './BookmarkToggle';
 import { cardStyles } from './Card';
 import { CategoryIcon } from './CategoryIcon';
+import { DemoMediaArtwork } from './DemoMediaArtwork';
+import { ThumbnailOverlay } from './ThumbnailOverlay';
 
 type SparkCardProps = {
   spark?: Spark | null;
@@ -20,10 +23,23 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPr
   if (!spark?.id) return null;
   const category = getCategoryForSpark(spark);
   const showBookmark = typeof bookmarked === 'boolean' && onBookmark;
+  const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
+  const demoThumbnail = getDemoMediaAsset(thumbnail);
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.card, pressed ? styles.pressed : null]}>
       <View style={styles.preview}>
-        <CategoryIcon categoryId={category.id} size={28} />
+        {thumbnail ? (
+          demoThumbnail?.source ? (
+            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="cover" />
+          ) : isDemoMediaUri(thumbnail) ? (
+            <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.thumbnail} />
+          ) : (
+            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+          )
+        ) : (
+          <CategoryIcon categoryId={category.id} size={28} />
+        )}
+        {thumbnail ? <ThumbnailOverlay /> : null}
       </View>
       <View style={styles.copy}>
         <Text style={styles.title} numberOfLines={1}>{spark.title}</Text>
@@ -72,6 +88,11 @@ const styles = StyleSheet.create({
     backgroundColor: cardStyles.previewBackground,
     borderRightWidth: 1,
     borderRightColor: cardStyles.dividerColor
+  },
+  thumbnail: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%'
   },
   copy: { flex: 1, gap: 4, justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs },
   title: { color: colors.text, fontFamily: fontFamilies.primarySemiBold, fontSize: 15, lineHeight: 20 },
