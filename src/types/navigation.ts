@@ -24,7 +24,7 @@ export type RootStackParamList = {
   ListDetail: { listId: string; addedSparkId?: string };
   SparkListPreview: { listId: string; selectedSparkId?: string; addedSparkId?: string };
   SavedListError: { listId?: string };
-  GuideRoute: { listId: string };
+  GuideRoute: { listId: string; startSparkId?: string };
   EndOfListExploration: { listId: string };
   Bookmarks: undefined;
   Profile: undefined;

@@ -36,7 +36,7 @@ export function GuideRouteScreen({ route, navigation }: Props) {
     [orderedIds, sparks]
   );
   const { location, permissionDenied } = useLiveLocation(true);
-  const guide = useGuideRoute({ list, sparks, currentLocation: location });
+  const guide = useGuideRoute({ list, sparks, currentLocation: location, initialSparkId: route.params.startSparkId });
   const guideRoute = guide.route;
   const activeSpark = guideRoute?.stops[guideRoute.currentStopIndex || 0]?.sparkId
     ? ordered.find((spark) => spark.id === guideRoute.stops[guideRoute.currentStopIndex || 0]?.sparkId)

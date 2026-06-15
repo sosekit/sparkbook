@@ -9,16 +9,21 @@ type UseGuideRouteParams = {
   list?: SparkList | null;
   sparks: Spark[];
   currentLocation?: LiveLocation | null;
+  initialSparkId?: string;
 };
 
-export function useGuideRoute({ list, sparks, currentLocation }: UseGuideRouteParams) {
+export function useGuideRoute({ list, sparks, currentLocation, initialSparkId }: UseGuideRouteParams) {
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [status, setStatus] = useState<GuideRoute['status']>('active');
 
   useEffect(() => {
-    setCurrentStopIndex(0);
+    const orderedIds = list?.items?.length
+      ? [...list.items].sort((a, b) => a.sortOrder - b.sortOrder).map((item) => item.sparkId)
+      : list?.sparkIds || [];
+    const initialIndex = initialSparkId ? orderedIds.indexOf(initialSparkId) : -1;
+    setCurrentStopIndex(initialIndex >= 0 ? initialIndex : 0);
     setStatus('active');
-  }, [list?.id]);
+  }, [initialSparkId, list?.id, list?.items, list?.sparkIds]);
 
   const route = useMemo(() => {
     if (!list) return null;

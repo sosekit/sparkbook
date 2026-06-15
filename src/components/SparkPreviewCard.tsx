@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
     borderColor: cardStyles.borderColor
   },
   mediaCard: {
-    width: 198,
-    height: 348,
+    width: 149,
+    height: 261,
     borderRadius: cardStyles.radius,
     overflow: 'hidden',
     backgroundColor: cardStyles.previewBackground,

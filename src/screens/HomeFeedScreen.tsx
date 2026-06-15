@@ -80,7 +80,7 @@ export function HomeFeedScreen({ navigation }: Props) {
       return;
     }
     if (result.type === 'list') {
-      navigation.navigate('GuideRoute', { listId: result.list.id });
+      navigation.navigate('SparkListPreview', { listId: result.list.id });
       return;
     }
     setFocusedSparkId(undefined);
@@ -150,7 +150,7 @@ export function HomeFeedScreen({ navigation }: Props) {
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.listRow}>
             {filteredLists.map((list) => (
               <View key={list.id} style={styles.listPreview}>
-                <ListCard list={list} sparks={active.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} />
+                <ListCard list={list} sparks={active.filter((spark) => list.sparkIds.includes(spark.id))} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id })} />
               </View>
             ))}
           </ScrollView>

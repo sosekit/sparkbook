@@ -6,6 +6,7 @@ import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { BookmarkToggle } from '../components/BookmarkToggle';
 import { CategoryIcon } from '../components/CategoryIcon';
 import { CTAButton } from '../components/CTAButton';
+import { EmptyState } from '../components/EmptyState';
 import { ListMapPreview } from '../components/ListMapPreview';
 import { SparkPreviewCard } from '../components/SparkPreviewCard';
 import { useBookmarks } from '../hooks/useBookmarks';
@@ -64,6 +65,10 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
     setSelectedId(spark.id);
   }
 
+  function startExploring() {
+    navigation.navigate('GuideRoute', { listId: activeList.id, startSparkId: selectedSpark?.id });
+  }
+
   return (
     <View style={styles.root}>
       <ListMapPreview sparks={listSparks} selectedId={selectedSpark?.id} onSelect={setSelectedId} />
@@ -72,41 +77,51 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
             <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
-          <Text style={styles.headerTitle}>Spark List</Text>
+          <Text style={styles.headerTitle}>Spark Lists</Text>
         </View>
         {selectedSpark ? <BookmarkToggle saved={bookmarks.includes(selectedSpark.id)} onPress={() => toggleBookmark(selectedSpark.id)} size={30} /> : null}
       </View>
       <View style={styles.sheet}>
         <View style={styles.handle} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
-          {listSparks.map((spark) => (
-            <SparkPreviewCard
-              key={spark.id}
-              spark={spark}
-              variant="media"
-              selected={spark.id === selectedSpark?.id}
-              onPress={() => handlePreviewPress(spark)}
-            />
-          ))}
-        </ScrollView>
+        {listSparks.length ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
+            {listSparks.map((spark) => (
+              <SparkPreviewCard
+                key={spark.id}
+                spark={spark}
+                variant="media"
+                selected={spark.id === selectedSpark?.id}
+                onPress={() => handlePreviewPress(spark)}
+              />
+            ))}
+          </ScrollView>
+        ) : null}
         <ScrollView style={styles.detailsScroll} contentContainerStyle={styles.details}>
-          <View style={styles.titleField}>
-            <Text style={styles.title} numberOfLines={2}>{selectedSpark?.title || list.title}</Text>
-          </View>
-          {selectedCategory ? (
-            <View style={styles.categoryField}>
-              <CategoryIcon categoryId={selectedCategory.id} selected size={30} />
-              <Text style={styles.categoryText}>{selectedCategory.name}</Text>
+          {selectedSpark ? (
+            <>
+              <View style={styles.titleField}>
+                <Text style={styles.title} numberOfLines={2}>{selectedSpark.title}</Text>
+              </View>
+              {selectedCategory ? (
+                <View style={styles.categoryField}>
+                  <CategoryIcon categoryId={selectedCategory.id} selected size={30} />
+                  <Text style={styles.categoryText}>{selectedCategory.name}</Text>
+                </View>
+              ) : null}
+              <View style={styles.captionField}>
+                <Text style={styles.caption}>{selectedSpark.description || selectedSpark.caption || list.description || 'A saved Sparkbook list.'}</Text>
+              </View>
+              <View style={styles.locationField}>
+                <SparkbookIcon name="location" color={colors.text} size={16} />
+                <Text style={styles.location} numberOfLines={1}>{selectedSpark.addressLabel}</Text>
+              </View>
+              <CTAButton label="Start Exploring" onPress={startExploring} />
+            </>
+          ) : (
+            <View style={styles.emptyWrap}>
+              <EmptyState title="No sparks in this list yet." message="Add sparks to this list before starting a guide." />
             </View>
-          ) : null}
-          <View style={styles.captionField}>
-            <Text style={styles.caption}>{selectedSpark?.description || list.description || 'A saved Sparkbook list.'}</Text>
-          </View>
-          <View style={styles.locationField}>
-            <SparkbookIcon name="location" color={colors.text} size={16} />
-            <Text style={styles.location} numberOfLines={1}>{selectedSpark?.addressLabel || `${listSparks.length} saved sparks`}</Text>
-          </View>
-          <CTAButton label="Start guide" onPress={() => navigation.navigate('GuideRoute', { listId: list.id })} disabled={!listSparks.length} />
+          )}
         </ScrollView>
       </View>
     </View>
@@ -120,7 +135,7 @@ const styles = StyleSheet.create({
   back: { width: 44, height: 44, justifyContent: 'center' },
   backPressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
-  sheet: { position: 'absolute', left: 0, right: 0, top: 272, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, paddingHorizontal: 16, paddingTop: 16 },
+  sheet: { position: 'absolute', left: 0, right: 0, top: 263, bottom: 0, backgroundColor: colors.surface, borderTopLeftRadius: radius.lg, borderTopRightRadius: radius.lg, paddingHorizontal: 16, paddingTop: 16 },
   handle: { alignSelf: 'center', width: 107, height: 6, borderRadius: 5, backgroundColor: colors.main },
   carousel: { paddingTop: 8, gap: 6 },
   detailsScroll: { flex: 1 },
@@ -132,5 +147,6 @@ const styles = StyleSheet.create({
   locationField: { minHeight: 24, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 4 },
   title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 16, lineHeight: 24 },
   caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 16 },
-  location: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 }
+  location: { flex: 1, color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
+  emptyWrap: { paddingTop: spacing.lg }
 });
