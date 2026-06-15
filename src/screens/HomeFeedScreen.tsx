@@ -158,7 +158,7 @@ export function HomeFeedScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>Trending in Toronto</Text>
           <View style={styles.verticalList}>
             {trendingSparks.map((spark) => (
-              <SparkCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />
+              <SparkCard key={spark.id} spark={spark} bookmarked={bookmarks.includes(spark.id)} onBookmark={() => toggleBookmark(spark.id)} onCategoryPress={() => setCategoryFilter(spark.categoryId)} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} tagMode="icon" />
             ))}
           </View>
         </ScrollView>

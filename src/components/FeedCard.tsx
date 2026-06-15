@@ -40,7 +40,36 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
           )
         ) : null}
         {thumbnail ? <ThumbnailOverlay /> : null}
-        {!thumbnail ? <CategoryIcon categoryId={category.id} selected size={30} /> : null}
+        {!thumbnail ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Filter by ${category.name}`}
+            disabled={!onCategoryPress}
+            hitSlop={8}
+            onPress={(event) => {
+              event.stopPropagation?.();
+              onCategoryPress?.();
+            }}
+            style={({ pressed }) => [styles.centerCategoryTag, pressed ? styles.categoryPressed : null]}
+          >
+            <CategoryIcon categoryId={category.id} selected size={30} />
+          </Pressable>
+        ) : null}
+        {thumbnail ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Filter by ${category.name}`}
+            disabled={!onCategoryPress}
+            hitSlop={8}
+            onPress={(event) => {
+              event.stopPropagation?.();
+              onCategoryPress?.();
+            }}
+            style={({ pressed }) => [styles.categoryOverlay, pressed ? styles.categoryPressed : null]}
+          >
+            <CategoryIcon categoryId={category.id} selected size={28} />
+          </Pressable>
+        ) : null}
         <View style={styles.bookmarkOverlay}>
           <BookmarkToggle saved={bookmarked} onPress={onBookmark} size={36} variant="circle" />
         </View>
@@ -114,6 +143,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 8,
     top: 8
+  },
+  categoryOverlay: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  centerCategoryTag: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  categoryPressed: {
+    opacity: 0.72
   }
 });
 

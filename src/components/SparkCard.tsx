@@ -17,9 +17,10 @@ type SparkCardProps = {
   bookmarked?: boolean;
   onBookmark?: () => void;
   onCategoryPress?: () => void;
+  tagMode?: 'label' | 'icon';
 };
 
-export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPress }: SparkCardProps) {
+export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPress, tagMode = 'label' }: SparkCardProps) {
   if (!spark?.id) return null;
   const category = getCategoryForSpark(spark);
   const showBookmark = typeof bookmarked === 'boolean' && onBookmark;
@@ -45,9 +46,23 @@ export function SparkCard({ spark, onPress, bookmarked, onBookmark, onCategoryPr
         <Text style={styles.title} numberOfLines={1}>{spark.title}</Text>
         <Text style={styles.meta} numberOfLines={1}>{formatCardLocation(spark.addressLabel)}</Text>
         <View style={styles.bottomRow}>
-          {onCategoryPress ? (
+          {tagMode === 'icon' && onCategoryPress ? (
             <Pressable
               accessibilityRole="button"
+              accessibilityLabel={`Filter by ${category.name}`}
+              hitSlop={8}
+              onPress={(event) => {
+                event.stopPropagation?.();
+                onCategoryPress();
+              }}
+              style={({ pressed }) => [styles.iconTag, pressed ? styles.tagPressed : null]}
+            >
+              <CategoryIcon categoryId={category.id} selected size={30} />
+            </Pressable>
+          ) : onCategoryPress ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Filter by ${category.name}`}
               hitSlop={8}
               onPress={(event) => {
                 event.stopPropagation?.();
@@ -109,7 +124,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface
   },
   tagPressed: { backgroundColor: colors.neutral },
-  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 11, lineHeight: 14 }
+  tagText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 11, lineHeight: 14 },
+  iconTag: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });
 
 function formatCardLocation(address: string) {
