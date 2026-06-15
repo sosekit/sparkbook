@@ -39,7 +39,9 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
     if (!normalized) return activeSparks;
     return activeSparks.filter((spark) => `${spark.title} ${spark.placeName || ''} ${spark.addressLabel} ${(spark.contextTags || []).join(' ')}`.toLowerCase().includes(normalized));
   }, [activeSparks, query]);
-  const listProgress = selectedSparkIds.length ? 1 : title.trim() || description.trim() ? 0.44 : 0.18;
+  const totalListSteps = 3;
+  const currentListStep = selectedSparkIds.length ? 3 : title.trim() || description.trim() ? 2 : 1;
+  const listProgress = currentListStep / totalListSteps;
 
   async function save() {
     if (saving) return;
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
   close: { width: 44, height: 44, justifyContent: 'center' },
   closePressed: { opacity: 0.62 },
   headerTitle: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 24, lineHeight: 30 },
-  progressRail: { marginLeft: 22 },
+  progressRail: { paddingHorizontal: 16 },
   content: { paddingHorizontal: 16, paddingTop: 18, paddingBottom: 110, gap: 6 },
   titleGroup: { minHeight: 64 },
   divider: { height: 1, backgroundColor: colors.main, marginVertical: 4 },

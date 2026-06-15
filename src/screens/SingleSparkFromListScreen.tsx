@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { BookmarkToggle } from '../components/BookmarkToggle';
 import { BottomNav } from '../components/BottomNav';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { CTAButton } from '../components/CTAButton';
 import { SparkMediaGallery } from '../components/SparkMediaGallery';
 import { useBookmarks } from '../hooks/useBookmarks';
@@ -13,6 +14,7 @@ import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { RootStackParamList } from '../types/navigation';
 import { Spark } from '../types/spark';
+import { getCategoryForSpark } from '../utils/category';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SingleSparkFromList'>;
 
@@ -30,6 +32,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
   const currentIndex = spark ? listSparks.findIndex((item) => item.id === spark.id) : -1;
   const previousSpark = currentIndex > 0 ? listSparks[currentIndex - 1] : null;
   const nextSpark = currentIndex >= 0 && currentIndex < listSparks.length - 1 ? listSparks[currentIndex + 1] : null;
+  const category = spark ? getCategoryForSpark(spark) : null;
 
   if (!spark || !list) {
     return (
@@ -56,7 +59,13 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 88 }]}>
         <View style={styles.details}>
           <Text style={styles.title}>{spark.title}</Text>
-          <Text style={styles.caption}>{spark.reflectionNote || spark.description || spark.caption || 'Saved in this Spark List.'}</Text>
+          {category ? (
+            <View style={styles.categoryRow}>
+              <CategoryIcon categoryId={category.id} selected size={30} />
+              <Text style={styles.categoryText}>{category.name}</Text>
+            </View>
+          ) : null}
+          <Text style={styles.caption}>{spark.description || spark.caption || spark.reflectionNote || 'Saved in this Spark List.'}</Text>
           <View style={styles.locationRow}>
             <SparkbookIcon name="location" color={colors.text} size={16} />
             <Text style={styles.location} numberOfLines={1}>{spark.addressLabel}</Text>
@@ -97,6 +106,8 @@ const styles = StyleSheet.create({
   content: { gap: 8 },
   details: { paddingHorizontal: 16, paddingTop: 8, gap: 12 },
   title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 22, lineHeight: 32 },
+  categoryRow: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  categoryText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   caption: { color: colors.text, fontFamily: fontFamilies.secondary, fontSize: 14, lineHeight: 20, borderTopWidth: 1, borderTopColor: colors.dividerMuted, paddingTop: 8 },
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 4 },
   location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },

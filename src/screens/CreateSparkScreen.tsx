@@ -44,7 +44,6 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   const [step, setStep] = useState<Step>(editingSparkId ? 'content' : 'media');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [reflectionNote, setReflectionNote] = useState('');
   const [locationQuery, setLocationQuery] = useState('');
   const [locationResults, setLocationResults] = useState<LocationSearchResult[]>(locationSearchService.fallbackResults);
   const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | null>(null);
@@ -86,8 +85,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           setSelectedMedia(restored);
         }
         setTitle(spark.title || '');
-        setDescription(spark.caption || spark.description || '');
-        setReflectionNote(spark.reflectionNote || '');
+        setDescription(spark.description || spark.caption || spark.reflectionNote || '');
         setSelectedLocation({
           id: spark.id,
           displayName: spark.placeName || spark.location || spark.addressLabel,
@@ -122,8 +120,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         };
       }));
       setTitle(draft.title || '');
-      setDescription(draft.caption || '');
-      setReflectionNote(draft.reflectionNote || '');
+      setDescription(draft.caption || draft.reflectionNote || '');
       if (draft.selectedLocation) {
         setSelectedLocation(draft.selectedLocation);
         setLocationQuery(draft.selectedLocation.displayName);
@@ -144,7 +141,6 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         selectedMediaItems: selectedMedia.map((item) => ({ id: item.id, uri: item.uri, mediaType: item.mediaType })),
         title,
         caption: description,
-        reflectionNote,
         selectedLocation: selectedLocation || undefined,
         categoryId: categoryId || undefined,
         moodTags: selectedContextTags,
@@ -153,7 +149,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
       });
     }, 350);
     return () => clearTimeout(timer);
-  }, [audience, categoryId, description, draftRestored, editingSparkId, reflectionNote, selectedContextTags, selectedLocation, selectedMedia, title]);
+  }, [audience, categoryId, description, draftRestored, editingSparkId, selectedContextTags, selectedLocation, selectedMedia, title]);
 
   useEffect(() => {
     if (step !== 'location') return;
@@ -252,7 +248,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           placeName: location.displayName,
           description: description.trim() || undefined,
           caption: description.trim() || undefined,
-          reflectionNote: reflectionNote.trim() || undefined,
+          reflectionNote: undefined,
           addressLabel: location.addressLabel,
           location: location.displayName,
           latitude: coords.latitude,
@@ -278,7 +274,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         title: safeTitle,
         description: description.trim() || undefined,
         caption: description.trim() || undefined,
-        reflectionNote: reflectionNote.trim() || undefined,
+        reflectionNote: undefined,
         addressLabel: location.addressLabel,
         location: location.displayName,
         latitude: coords.latitude,
@@ -350,9 +346,8 @@ export function CreateSparkScreen({ route, navigation }: Props) {
             </View>
           ) : null}
           <TextField label="" placeholder="Add a title for your spark" value={title} onChangeText={(value) => { setTitle(value); setErrors((current) => ({ ...current, title: undefined, action: undefined })); }} error={errors.title} variant="creationTitle" />
-          <TextField label="" placeholder="Add a note" value={description} onChangeText={setDescription} multiline variant="creationCaption" />
+          <TextField label="" placeholder="Description" value={description} onChangeText={setDescription} multiline variant="creationCaption" />
           <InlineError message={errors.caption} />
-          <TextField label="" placeholder="Add details for later" value={reflectionNote} onChangeText={setReflectionNote} multiline variant="creationCaption" />
           {showLocationSummary ? (
             <Pressable onPress={() => setStep('location')} style={styles.locationRow}>
               <SparkbookIcon name="location" color={colors.text} size={18} />

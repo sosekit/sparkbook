@@ -7,6 +7,7 @@ import { Avatar } from '../components/Avatar';
 import { BackButton } from '../components/BackButton';
 import { BookmarkToggle } from '../components/BookmarkToggle';
 import { Button } from '../components/Button';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { CTAButton } from '../components/CTAButton';
 import { CommentsSection } from '../components/CommentsSection';
 import { MapPreview } from '../components/MapPreview';
@@ -78,7 +79,10 @@ export function SparkDetailScreen({ route, navigation }: Props) {
         <BookmarkToggle saved={bookmarks.includes(spark.id)} onPress={() => toggleBookmark(spark.id)} size={30} />
       </View>
       <View style={styles.metaRow}>
-        <SmallButton label={category.name} selected />
+        <View style={styles.categoryMeta}>
+          <CategoryIcon categoryId={category.id} selected size={30} />
+          <SmallButton label={category.name} selected />
+        </View>
         <SmallButton label={audienceLabel} icon={isFriendsSpark ? 'friends' : undefined} />
       </View>
       {!isOwnSpark ? (
@@ -94,7 +98,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
         </View>
       ) : null}
       <View style={styles.panel}>
-        <Text style={styles.body}>{spark.reflectionNote || spark.description || spark.caption || 'No note yet.'}</Text>
+        <Text style={styles.body}>{spark.description || spark.caption || spark.reflectionNote || 'No description yet.'}</Text>
         {spark.recommendedBy ? <Text style={styles.source}>Recommended by {spark.recommendedBy}</Text> : null}
         <View style={styles.chips}>
           {contextTags.length ? contextTags.map((tag) => <SmallButton key={tag} label={tag} />) : <SmallButton label="No context yet" />}
@@ -131,6 +135,7 @@ const styles = StyleSheet.create({
   locationRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 11, lineHeight: 14 },
   metaRow: { flexDirection: 'row', gap: spacing.xs, flexWrap: 'wrap' },
+  categoryMeta: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   creatorPanel: { minHeight: 56, borderRadius: radius.md, borderWidth: 1, borderColor: colors.borderSoft, backgroundColor: colors.surface, padding: spacing.sm, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   creatorInfo: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   creatorLabel: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11 },

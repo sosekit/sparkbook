@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { BookmarkToggle } from '../components/BookmarkToggle';
+import { CategoryIcon } from '../components/CategoryIcon';
 import { CTAButton } from '../components/CTAButton';
 import { ListMapPreview } from '../components/ListMapPreview';
 import { SparkPreviewCard } from '../components/SparkPreviewCard';
@@ -16,6 +17,7 @@ import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
 import { RootStackParamList } from '../types/navigation';
 import { Spark } from '../types/spark';
+import { getCategoryForSpark } from '../utils/category';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SparkListPreview'>;
 
@@ -36,6 +38,7 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
   const routeSelectedSparkId = route.params.selectedSparkId || route.params.addedSparkId;
   const [selectedId, setSelectedId] = useState<string | undefined>(routeSelectedSparkId || listSparks[0]?.id);
   const selectedSpark = listSparks.find((spark) => spark.id === selectedId) || listSparks[0];
+  const selectedCategory = selectedSpark ? getCategoryForSpark(selectedSpark) : null;
 
   useEffect(() => {
     if (routeSelectedSparkId && selectedId !== routeSelectedSparkId && listSparks.some((spark) => spark.id === routeSelectedSparkId)) {
@@ -90,6 +93,12 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
           <View style={styles.titleField}>
             <Text style={styles.title} numberOfLines={2}>{selectedSpark?.title || list.title}</Text>
           </View>
+          {selectedCategory ? (
+            <View style={styles.categoryField}>
+              <CategoryIcon categoryId={selectedCategory.id} selected size={30} />
+              <Text style={styles.categoryText}>{selectedCategory.name}</Text>
+            </View>
+          ) : null}
           <View style={styles.captionField}>
             <Text style={styles.caption}>{selectedSpark?.description || list.description || 'A saved Sparkbook list.'}</Text>
           </View>
@@ -117,6 +126,8 @@ const styles = StyleSheet.create({
   detailsScroll: { flex: 1 },
   details: { paddingTop: 8, paddingBottom: 24, gap: spacing.sm },
   titleField: { padding: 8 },
+  categoryField: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 8 },
+  categoryText: { color: colors.main, fontFamily: fontFamilies.secondaryBold, fontSize: 12, lineHeight: 16 },
   captionField: { padding: 8, borderTopWidth: 1, borderTopColor: colors.dividerMuted, borderRadius: 4 },
   locationField: { minHeight: 24, flexDirection: 'row', alignItems: 'center', gap: 8, padding: 4 },
   title: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 16, lineHeight: 24 },
