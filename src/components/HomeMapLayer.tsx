@@ -17,7 +17,7 @@ export function HomeMapLayer({ sparks, height, selectedId, onSparkPress }: HomeM
 
   return (
     <View style={styles.mapLayer}>
-      <MapPreview locations={sparks} selectedId={selectedId} height={height} fullBleed onMarkerPress={onSparkPress} />
+      <MapPreview locations={sparks} selectedId={selectedId} height={height} fullBleed forceOpenMap onMarkerPress={onSparkPress} />
       <Logo style={[styles.logo, { top: insets.top + 12 }]} pointerEvents="none" />
     </View>
   );

@@ -14,6 +14,7 @@ type MapPreviewProps = {
   selectedId?: string;
   height?: number;
   fullBleed?: boolean;
+  forceOpenMap?: boolean;
   showMarkers?: boolean;
   completedIds?: string[];
   liveLocation?: { latitude: number; longitude: number } | null;
@@ -21,7 +22,7 @@ type MapPreviewProps = {
   onMarkerPress?: (sparkId: string) => void;
 };
 
-export function MapPreview({ locations, selectedId, height = 260, fullBleed = false, showMarkers = true, completedIds = [], liveLocation, routeSegments = [], onMarkerPress }: MapPreviewProps) {
+export function MapPreview({ locations, selectedId, height = 260, fullBleed = false, forceOpenMap = false, showMarkers = true, completedIds = [], liveLocation, routeSegments = [], onMarkerPress }: MapPreviewProps) {
   const [loaded, setLoaded] = useState(false);
   const [mapFailed, setMapFailed] = useState(false);
   const loadedRef = useRef(false);
@@ -218,6 +219,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
     loadedRef.current = false;
     setLoaded(false);
     setMapFailed(false);
+    if (forceOpenMap) return;
     const timer = setTimeout(() => {
       if (!loadedRef.current) {
         setMapFailed(true);
@@ -225,7 +227,7 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
       }
     }, DEMO_MODE ? 5000 : 7000);
     return () => clearTimeout(timer);
-  }, [html]);
+  }, [forceOpenMap, html]);
 
   return (
     <View style={[styles.wrap, fullBleed ? styles.fullBleed : null, { height }]}>
@@ -247,10 +249,18 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
           nestedScrollEnabled={false}
           javaScriptEnabled
           onError={() => {
+            if (forceOpenMap) {
+              setLoaded(true);
+              return;
+            }
             setMapFailed(true);
             setLoaded(true);
           }}
           onHttpError={() => {
+            if (forceOpenMap) {
+              setLoaded(true);
+              return;
+            }
             setMapFailed(true);
             setLoaded(true);
           }}
@@ -262,6 +272,10 @@ export function MapPreview({ locations, selectedId, height = 260, fullBleed = fa
                 return;
               }
               if (message.type === 'mapError') {
+                if (forceOpenMap) {
+                  setLoaded(true);
+                  return;
+                }
                 setMapFailed(true);
                 setLoaded(true);
                 return;

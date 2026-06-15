@@ -23,7 +23,7 @@ export function HomeMapScreen({ navigation }: Props) {
 
   return (
     <View style={styles.root}>
-      <MapPreview locations={active} height={800} fullBleed onMarkerPress={(sparkId) => navigation.navigate('SparkDetail', { sparkId })} />
+      <MapPreview locations={active} height={800} fullBleed forceOpenMap onMarkerPress={(sparkId) => navigation.navigate('SparkDetail', { sparkId })} />
       <Logo style={[styles.logo, { top: insets.top + 16 }]} />
       <View style={[styles.panel, { bottom: insets.bottom + 84 }]}>
         <Text style={styles.title}>Nearby sparks</Text>
