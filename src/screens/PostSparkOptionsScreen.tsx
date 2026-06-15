@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BottomNav } from '../components/BottomNav';
 import { CTAButton } from '../components/CTAButton';
 import { ProgressBar } from '../components/ProgressBar';
 import { SparkPreviewCard } from '../components/SparkPreviewCard';
@@ -23,7 +24,7 @@ export function PostSparkOptionsScreen({ route, navigation }: Props) {
         <Text style={styles.headerText}>Your spark is saved.</Text>
         <ProgressBar progress={1} />
       </View>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 112 }]}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.carousel}>
           {spark ? <SparkPreviewCard spark={spark} onPress={() => navigation.replace('SparkDetail', { sparkId: route.params.sparkId })} /> : null}
         </ScrollView>
@@ -34,11 +35,17 @@ export function PostSparkOptionsScreen({ route, navigation }: Props) {
         </View>
         <View style={styles.cta}>
           <CTAButton label="Add this spark to a list" onPress={() => navigation.navigate('AddSparkToList', { sparkId: route.params.sparkId })} />
-          <Pressable onPress={() => navigation.replace('SparkDetail', { sparkId: route.params.sparkId })}>
-            <Text style={styles.leave}>Leave as individual spark</Text>
-          </Pressable>
+          <CTAButton label="View Spark Post" onPress={() => navigation.replace('SparkDetail', { sparkId: route.params.sparkId })} />
         </View>
       </ScrollView>
+      <BottomNav
+        active="create"
+        onHome={() => navigation.navigate('HomeFeed')}
+        onBookmarks={() => navigation.navigate('Bookmarks')}
+        onCreate={() => navigation.navigate('CreateSpark')}
+        onLists={() => navigation.navigate('Lists')}
+        onProfile={() => navigation.navigate('Profile')}
+      />
     </View>
   );
 }
@@ -47,12 +54,11 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.surface },
   header: { justifyContent: 'center', gap: 6 },
   headerText: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 18, lineHeight: 23, textAlign: 'center' },
-  content: { paddingTop: 6, paddingBottom: 32, gap: spacing.sm },
+  content: { paddingTop: 6, gap: spacing.sm },
   carousel: { paddingHorizontal: 14, gap: 5 },
   details: { paddingHorizontal: 14, gap: 5 },
   title: { color: colors.text, fontFamily: fontFamilies.primaryRegular, fontSize: 20, lineHeight: 26 },
   caption: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 },
   location: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 12 },
-  cta: { paddingHorizontal: 14, paddingTop: 4, gap: spacing.sm },
-  leave: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13, lineHeight: 16, textAlign: 'center' }
+  cta: { paddingHorizontal: 14, paddingTop: 4, gap: spacing.sm }
 });

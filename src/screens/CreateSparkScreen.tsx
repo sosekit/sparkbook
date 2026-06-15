@@ -31,6 +31,8 @@ type Props = NativeStackScreenProps<RootStackParamList, 'CreateSpark'>;
 type Step = 'media' | 'content' | 'location';
 const stepProgress: Record<Step, number> = { media: 0.33, content: 0.66, location: 1 };
 const contextTags = ['Quiet', 'Study', 'Date spot', 'Comfort food', 'Good for friends', 'Hidden gem'];
+const allowedCategoryIds = ['food', 'coffee', 'study', 'outdoors', 'art', 'nightlife'];
+const categoryLabels: Record<string, string> = { art: 'Arts' };
 
 type SelectedMedia = DemoMediaAsset;
 
@@ -48,11 +50,11 @@ export function CreateSparkScreen({ route, navigation }: Props) {
   const [selectedLocation, setSelectedLocation] = useState<LocationSearchResult | null>(null);
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [categoryId, setCategoryId] = useState('coffee');
+  const [categoryId, setCategoryId] = useState(editingSparkId ? 'coffee' : '');
   const [selectedMedia, setSelectedMedia] = useState<SelectedMedia[]>([]);
   const [audience, setAudience] = useState<Visibility>('public');
   const [selectedContextTags, setSelectedContextTags] = useState<string[]>([]);
-  const [errors, setErrors] = useState<{ media?: string; title?: string; caption?: string; location?: string; action?: string }>({});
+  const [errors, setErrors] = useState<{ media?: string; title?: string; caption?: string; location?: string; tag?: string; action?: string }>({});
   const [draftRestored, setDraftRestored] = useState(false);
 
   useEffect(() => {
@@ -126,7 +128,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         setSelectedLocation(draft.selectedLocation);
         setLocationQuery(draft.selectedLocation.displayName);
       }
-      setCategoryId(draft.categoryId || 'coffee');
+      setCategoryId(draft.categoryId || '');
       setSelectedContextTags(draft.contextTags || draft.moodTags || []);
       setAudience(draft.audience || 'public');
       if (prefillLocation) applyPrefillLocation(prefillLocation);
@@ -144,7 +146,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         caption: description,
         reflectionNote,
         selectedLocation: selectedLocation || undefined,
-        categoryId,
+        categoryId: categoryId || undefined,
         moodTags: selectedContextTags,
         contextTags: selectedContextTags,
         audience
@@ -223,10 +225,16 @@ export function CreateSparkScreen({ route, navigation }: Props) {
       setStep('location');
       return;
     }
+    if (!categoryId) {
+      setErrors((current) => ({ ...current, tag: 'Choose a tag.' }));
+      setStep('location');
+      return;
+    }
     const location = selectedLocation;
     if (!location) return;
     const coords = location;
     const safeTitle = title.trim() || location.displayName;
+    const tagName = categoryLabel(categoryId);
     const media = selectedMedia.map((item, index) => ({
       id: item.id || `media-${Date.now()}-${index}`,
       sparkId: editingSparkId || 'pending',
@@ -255,7 +263,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           contextTags: selectedContextTags,
           visibility: audience,
           audience,
-          tags: [getCategoryById(categoryId).name, ...selectedContextTags],
+          tags: [tagName, ...selectedContextTags],
           media
         });
         navigation.replace('SparkDetail', { sparkId: updated?.id || editingSparkId });
@@ -282,7 +290,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
         visibility: audience,
         audience,
         status: 'active',
-        tags: [getCategoryById(categoryId).name, ...selectedContextTags],
+        tags: [tagName, ...selectedContextTags],
         media
       });
       await sparkService.clearDraft();
@@ -376,7 +384,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
       ) : null}
 
       {step === 'location' ? (
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView contentContainerStyle={[styles.content, styles.locationContent]}>
           <SearchBar value={locationQuery} placeholder="Search Locations" onChangeText={(value) => { setLocationQuery(value); setSelectedLocation(null); setErrors((current) => ({ ...current, location: undefined })); }} />
           <InlineError message={errors.location} />
           {searching ? <Text style={styles.helper}>Searching locations...</Text> : null}
@@ -393,7 +401,6 @@ export function CreateSparkScreen({ route, navigation }: Props) {
                     longitude: -79.3832
                   };
                   applyPrefillLocation(fallbackLocation);
-                  setStep('content');
                 }}
                 style={styles.hiddenGemCard}
               >
@@ -411,7 +418,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
                 setSelectedLocation(result);
                 setLocationQuery(result.displayName);
                 if (!title.trim()) setTitle(result.displayName);
-                setStep('content');
+                setErrors((current) => ({ ...current, location: undefined }));
               }}
               style={styles.locationResult}
             >
@@ -419,15 +426,35 @@ export function CreateSparkScreen({ route, navigation }: Props) {
               <Text style={styles.resultAddress}>{result.addressLabel}</Text>
             </Pressable>
           ))}
+          {selectedLocation ? (
+            <View style={styles.selectedLocation}>
+              <SparkbookIcon name="location" color={colors.main} size={18} />
+              <View style={styles.selectedLocationCopy}>
+                <Text style={styles.selectedLocationTitle} numberOfLines={1}>{selectedLocation.displayName}</Text>
+                <Text style={styles.selectedLocationAddress} numberOfLines={1}>{selectedLocation.addressLabel}</Text>
+              </View>
+            </View>
+          ) : null}
           <Text style={styles.label}>Tag this spark</Text>
           <View style={styles.tagGrid}>
-            {categories.map((category) => (
-              <Pressable key={category.id} onPress={() => setCategoryId(category.id)} style={[styles.tag, categoryId === category.id ? styles.tagSelected : null]}>
+            {allowedCategoryOptions().map((category) => (
+              <Pressable
+                key={category.id}
+                accessibilityRole="button"
+                accessibilityState={{ selected: categoryId === category.id }}
+                hitSlop={8}
+                onPress={() => {
+                  setCategoryId(category.id);
+                  setErrors((current) => ({ ...current, tag: undefined }));
+                }}
+                style={[styles.tag, categoryId === category.id ? styles.tagSelected : null]}
+              >
                 <CategoryIcon categoryId={category.id} selected={categoryId === category.id} size={26} />
-                <Text style={[styles.tagText, categoryId === category.id ? styles.tagTextSelected : null]}>{category.name}</Text>
+                <Text style={[styles.tagText, categoryId === category.id ? styles.tagTextSelected : null]}>{categoryLabels[category.id] || category.name}</Text>
               </Pressable>
             ))}
           </View>
+          <InlineError message={errors.tag} />
           {permissionDenied ? <Text style={styles.warning}>Location permission is off. Sparkbook will use a safe fallback coordinate.</Text> : null}
         </ScrollView>
       ) : null}
@@ -446,6 +473,14 @@ export function CreateSparkScreen({ route, navigation }: Props) {
 function mediaNextLabel(count: number) {
   if (!count) return 'Next';
   return `Next (${count})`;
+}
+
+function allowedCategoryOptions() {
+  return categories.filter((category) => allowedCategoryIds.includes(category.id));
+}
+
+function categoryLabel(id: string) {
+  return categoryLabels[id] || getCategoryById(id).name;
 }
 
 function AddMediaTile({ onPress, style }: { onPress: () => void; style: object }) {
@@ -496,7 +531,7 @@ function SelectedMediaPreview({ item, categoryId, onRemove, style }: { item: Sel
   }
   return (
     <Pressable onHoverIn={() => setShowRemove(true)} onHoverOut={() => setShowRemove(Platform.OS !== 'web')} style={style}>
-      <Image source={{ uri: item.uri }} style={styles.mediaImage} />
+      <Image source={{ uri: item.uri }} style={styles.mediaImage} resizeMode="cover" />
       {removeButton}
     </Pressable>
   );
@@ -511,6 +546,7 @@ const styles = StyleSheet.create({
   mediaStep: { flex: 1, paddingHorizontal: 0 },
   mediaImage: { width: '100%', height: '100%' },
   content: { paddingHorizontal: 16, paddingBottom: 112, gap: 12 },
+  locationContent: { paddingTop: spacing.sm },
   singlePreviewRow: { width: '100%', alignItems: 'center', paddingTop: 6 },
   previewStrip: { gap: 6, paddingTop: 6, paddingRight: 16 },
   largePreview: { width: 168, height: 260, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.neutral },
@@ -538,6 +574,10 @@ const styles = StyleSheet.create({
   locationResult: { minHeight: 44, gap: 3, justifyContent: 'center', paddingVertical: 4 },
   resultTitle: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13 },
   resultAddress: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
+  selectedLocation: { minHeight: 48, borderRadius: radius.sm, borderWidth: 1, borderColor: colors.borderSoft, backgroundColor: colors.neutral, flexDirection: 'row', alignItems: 'center', gap: spacing.xs, padding: spacing.sm },
+  selectedLocationCopy: { flex: 1 },
+  selectedLocationTitle: { color: colors.text, fontFamily: fontFamilies.secondaryBold, fontSize: 13, lineHeight: 17 },
+  selectedLocationAddress: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 11, lineHeight: 14 },
   tagGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   tag: { minHeight: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.highlight, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 10, backgroundColor: colors.surface },
   tagSelected: { backgroundColor: colors.main, borderColor: colors.main },

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
+import { fontFamilies } from '../theme/typography';
 import { Avatar } from './Avatar';
-import { CTAButton } from './CTAButton';
 import { InlineError } from './InlineError';
 import { TextField } from './TextField';
 
@@ -48,7 +48,15 @@ export function CommentInput({ placeholder = 'Add a comment', onSubmit, compact 
           />
           <InlineError message={error} />
           <View style={styles.action}>
-            <CTAButton label={saving ? 'Posting' : 'Post'} onPress={submit} disabled={saving} />
+            <Pressable
+              accessibilityRole="button"
+              disabled={saving}
+              hitSlop={8}
+              onPress={submit}
+              style={({ pressed }) => [styles.postButton, pressed && !saving ? styles.postButtonPressed : null, saving ? styles.postButtonDisabled : null]}
+            >
+              <Text style={styles.postText}>{saving ? 'Posting' : 'Post'}</Text>
+            </Pressable>
           </View>
         </View>
       </View>
@@ -75,5 +83,29 @@ const styles = StyleSheet.create({
   },
   action: {
     alignSelf: 'flex-start'
+  },
+  postButton: {
+    minHeight: 34,
+    minWidth: 58,
+    borderRadius: 17,
+    borderWidth: 1,
+    borderColor: colors.borderSoft,
+    backgroundColor: colors.neutral,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.sm
+  },
+  postButtonPressed: {
+    borderColor: colors.highlight,
+    backgroundColor: colors.surfaceMuted
+  },
+  postButtonDisabled: {
+    opacity: 0.56
+  },
+  postText: {
+    color: colors.main,
+    fontFamily: fontFamilies.secondaryBold,
+    fontSize: 12,
+    lineHeight: 16
   }
 });
