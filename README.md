@@ -1,58 +1,57 @@
 # Sparkbook!
 
-Sparkbook is a mobile app for saving places as sparks, organizing them into lists, bookmarking places to revisit, and exploring Toronto routes.
+Sparkbook is a mobile location-journal app for saving meaningful places as sparks, organizing them into lists, bookmarking places to revisit, and exploring routes.
 
-## How to run app locally
-
-In the project folder, run:
+## How to run locally
 
 ```sh
 npm i
-npx expo start
-```
-
-To open on the iOS simulator, press `i` in the Expo terminal.
-
-To open on your phone, scan the QR code with Expo Go. If your phone cannot connect, run:
-
-```sh
-npx expo start --tunnel
-```
-
-For a clean restart, run:
-
-```sh
 npx expo start --clear
 ```
 
-The app currently runs with local demo data, so no backend setup is needed for the prototype.
+Local mode works without a backend:
 
-Please keep this file up to date.
+```sh
+EXPO_PUBLIC_DATA_MODE=local
+```
 
-## How to deploy to TestFlight
+To preview on iOS Simulator, press `i` in the Expo terminal.
 
-If `eas-cli` is not installed, run:
+## Backend mode
+
+Sparkbook uses Supabase for auth, profiles, sparks, media, lists, bookmarks, comments, guide sessions, and PostGIS nearby search.
+
+```sh
+npx supabase start
+npx supabase db reset
+```
+
+Then set:
+
+```sh
+EXPO_PUBLIC_DATA_MODE=supabase
+EXPO_PUBLIC_SUPABASE_URL=...
+EXPO_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+If Supabase env vars are missing, the app falls back to local mode.
+
+## iOS dev build
 
 ```sh
 npm install -g eas-cli
-```
-
-Login:
-
-```sh
 eas login
+eas build --profile development --platform ios
+npx expo start --dev-client
 ```
 
-In the project folder, run:
+## TestFlight
 
 ```sh
-eas build --profile production -p ios
-```
-
-After the build is done, submit it:
-
-```sh
+eas build --profile production --platform ios
 eas submit -p ios
 ```
 
-On App Store Connect, go to Apps > Sparkbook > TestFlight, then add internal or external testers to the new build.
+More setup notes are in `docs/DEPLOYMENT.md`.
+
+Please keep this file up to date.

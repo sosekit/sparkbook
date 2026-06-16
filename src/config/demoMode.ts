@@ -1,2 +1,2 @@
-export const DEMO_MODE = true;
-export const DEMO_DATA_VERSION = 'interview-demo-2026-06-15-explore-direct';
+export const DEMO_MODE = process.env.EXPO_PUBLIC_DATA_MODE !== 'supabase';
+export const DEMO_DATA_VERSION = 'deployable-mvp-2026-06-15';
