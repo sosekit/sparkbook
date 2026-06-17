@@ -1,4 +1,4 @@
-# Sparkbook!
+# Sparkbook
 
 Sparkbook is a mobile app for saving places as sparks, organizing them into lists, bookmarking places to revisit, and exploring Toronto routes.
 
