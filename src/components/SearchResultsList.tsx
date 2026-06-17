@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { SearchResult } from '../services/searchService';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
@@ -27,7 +27,7 @@ export function SearchResultsList({ results, query, searching = false, onSelect,
       {results.map((result) => (
         <Pressable key={result.id} accessibilityRole="button" onPress={() => onSelect(result)} style={({ pressed }) => [styles.row, pressed ? styles.rowPressed : null]}>
           <View style={styles.icon}>
-            <SparkbookIcon name={result.type === 'list' ? 'listInactive' : result.type === 'place' ? 'location' : 'spark'} color={colors.main} size={16} />
+            <SparksIcon name={result.type === 'list' ? 'listInactive' : result.type === 'place' ? 'location' : 'spark'} color={colors.main} size={16} />
           </View>
           <View style={styles.copy}>
             <Text style={styles.title} numberOfLines={1}>{result.title}</Text>

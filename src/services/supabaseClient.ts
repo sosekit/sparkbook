@@ -12,7 +12,7 @@ export const dataMode = !DEMO_MODE && requestedDataMode === 'supabase' && hasSup
   : 'local';
 
 if (!DEMO_MODE && requestedDataMode === 'supabase' && !hasSupabaseCredentials) {
-  console.warn('Sparkbook: EXPO_PUBLIC_DATA_MODE=supabase was requested, but Supabase credentials are missing. Falling back to local preview mode.');
+  console.warn('sparks: EXPO_PUBLIC_DATA_MODE=supabase was requested, but Supabase credentials are missing. Falling back to local preview mode.');
 }
 
 export const supabase = !DEMO_MODE && hasSupabaseCredentials

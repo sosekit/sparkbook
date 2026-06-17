@@ -20,10 +20,11 @@ export function useGuideRoute({ list, sparks, currentLocation, initialSparkId }:
     const orderedIds = list?.items?.length
       ? [...list.items].sort((a, b) => a.sortOrder - b.sortOrder).map((item) => item.sparkId)
       : list?.sparkIds || [];
-    const initialIndex = initialSparkId ? orderedIds.indexOf(initialSparkId) : -1;
+    const activeOrderedIds = orderedIds.filter((id) => sparks.some((spark) => spark.id === id && spark.status === 'active'));
+    const initialIndex = initialSparkId ? activeOrderedIds.indexOf(initialSparkId) : -1;
     setCurrentStopIndex(initialIndex >= 0 ? initialIndex : 0);
     setStatus('active');
-  }, [initialSparkId, list?.id, list?.items, list?.sparkIds]);
+  }, [initialSparkId, list?.id, list?.items, list?.sparkIds, sparks]);
 
   const route = useMemo(() => {
     if (!list) return null;

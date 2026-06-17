@@ -40,7 +40,7 @@ export function EditProfileScreen({ navigation }: Props) {
         <BackButton label="Cancel" onPress={() => navigation.goBack()} />
         <Text style={styles.title}>Edit profile</Text>
         <View style={styles.profilePreview}>
-          <Avatar name={displayName || 'Sparkbook'} size={76} />
+          <Avatar name={displayName || 'sparks'} size={76} />
           <Text style={styles.previewName} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.82}>
             {displayName || 'Display name'}
           </Text>

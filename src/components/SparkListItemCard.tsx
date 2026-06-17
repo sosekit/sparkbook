@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
@@ -52,7 +52,7 @@ export function SparkListItemCard({ spark, order, dragging = false, onPress, onL
         <Text style={styles.meta} numberOfLines={1}>{category.name} · {spark.addressLabel}</Text>
       </View>
       <View style={styles.grip}>
-        <SparkbookIcon name="listInactive" color={colors.altText} size={16} />
+        <SparksIcon name="listInactive" color={colors.altText} size={16} />
       </View>
     </Pressable>
   );

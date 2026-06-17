@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { Avatar } from '../components/Avatar';
 import { Button } from '../components/Button';
 import { CommentsSection } from '../components/CommentsSection';
@@ -41,7 +41,7 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
     <View style={styles.root}>
       <View style={[styles.closeWrap, { paddingTop: insets.top + 8 }]}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.navigate('SparkListPreview', { listId: route.params.listId })} style={({ pressed }) => [styles.close, pressed ? styles.closePressed : null]}>
-          <SparkbookIcon name="close" color={colors.text} size={24} />
+          <SparksIcon name="close" color={colors.text} size={24} />
         </Pressable>
       </View>
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
@@ -57,9 +57,9 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
         </View>
         <View style={styles.creatorCard}>
           <View style={styles.creatorInfo}>
-            <Avatar name={creator?.displayName || 'Sparkbook'} size={44} />
+            <Avatar name={creator?.displayName || 'sparks'} size={44} />
             <View>
-              <Text style={styles.creatorName}>{creator?.displayName || 'Sparkbook'}</Text>
+              <Text style={styles.creatorName}>{creator?.displayName || 'sparks'}</Text>
               <Text style={styles.creatorMeta}>{listSparks.length} sparks · Creator</Text>
             </View>
           </View>
@@ -83,7 +83,7 @@ export function EndOfListExplorationScreen({ route, navigation }: Props) {
 function Metric({ icon, label }: { icon: 'friends' | 'bookmark' | 'arrowForward'; label: string }) {
   return (
     <View style={styles.metric}>
-      <SparkbookIcon name={icon} color={colors.text} size={16} />
+      <SparksIcon name={icon} color={colors.text} size={16} />
       <Text style={styles.metricText}>{label}</Text>
     </View>
   );

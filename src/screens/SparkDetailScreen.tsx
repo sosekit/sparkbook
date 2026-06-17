@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { DEMO_MODE } from '../config/demoMode';
 import { Avatar } from '../components/Avatar';
 import { BackButton } from '../components/BackButton';
@@ -71,7 +71,7 @@ export function SparkDetailScreen({ route, navigation }: Props) {
         <View style={styles.titleWrap}>
           <Text style={styles.title}>{spark.title}</Text>
           <View style={styles.locationRow}>
-            <SparkbookIcon name="location" color={colors.text} size={16} />
+            <SparksIcon name="location" color={colors.text} size={16} />
             <Text style={styles.location} numberOfLines={1}>{spark.addressLabel}</Text>
           </View>
           <Text style={styles.meta}>{formatSavedDate(spark.createdAt)}</Text>
@@ -158,5 +158,5 @@ function getCreatorName(createdBy: string, recommendedBy?: string) {
     'profile-maya': 'Maya C.',
     'profile-evan': 'Evan L.'
   };
-  return names[createdBy] || 'Sparkbook user';
+  return names[createdBy] || 'sparks user';
 }

@@ -2,6 +2,11 @@ import { Spark } from './spark';
 
 export type RootStackParamList = {
   Entry: undefined;
+  Welcome: undefined;
+  SignIn: undefined;
+  CreateProfileOnboarding: undefined;
+  ChooseInterests: undefined;
+  FollowCreators: undefined;
   HomeFeed: undefined;
   HomeMap: undefined;
   CreateSpark: {

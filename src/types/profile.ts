@@ -10,6 +10,8 @@ export type Profile = {
   avatarInitials: string;
   avatarColor: string;
   profilePhotoUrl?: string;
+  interests?: string[];
+  onboardingCompleted?: boolean;
   createdAt: string;
   updatedAt: string;
 };

@@ -1,6 +1,6 @@
-# Sparkbook!
+# sparks!
 
-Sparkbook is a mobile location-journal app for saving meaningful places as sparks, organizing them into lists, bookmarking places to revisit, and exploring routes.
+sparks is a mobile location-journal app for saving meaningful places as sparks, organizing them into lists, bookmarking places to revisit, and exploring routes.
 
 ## How to run locally
 
@@ -19,7 +19,7 @@ To preview on iOS Simulator, press `i` in the Expo terminal.
 
 ## Backend mode
 
-Sparkbook uses Supabase for auth, profiles, sparks, media, lists, bookmarks, comments, guide sessions, and PostGIS nearby search.
+sparks uses Supabase for auth, profiles, sparks, media, lists, bookmarks, comments, guide sessions, and PostGIS nearby search.
 
 ```sh
 npx supabase start
@@ -35,6 +35,20 @@ EXPO_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
 If Supabase env vars are missing, the app falls back to local mode.
+
+## Onboarding and auth
+
+New users see the sparks welcome flow, sign in options, profile setup, interest picks, and suggested creators before Home.
+
+Local mode uses Ray as the demo user and stores onboarding locally. Apple/Google sign-in needs Supabase provider setup and platform credentials; if those are missing, sparks falls back to the local demo profile.
+
+Ray owns the seeded Toronto sparks and lists, including “Ossington’s Best.”
+
+To reset the demo/onboarding state, clear app data or run the local reset helper from development code:
+
+```sh
+resetDemoData()
+```
 
 ## iOS dev build
 

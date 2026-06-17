@@ -4,16 +4,16 @@ import { GuideRouteProgress, GuideSession, SparkList } from '../types/list';
 import { Profile } from '../types/profile';
 import { RevisitEvent, Spark, SparkDraft } from '../types/spark';
 
-const SPARKS_KEY = 'sparkbook.sparks.v4';
-const BOOKMARKS_KEY = 'sparkbook.bookmarks.v4';
-const LISTS_KEY = 'sparkbook.lists.v4';
-const PROFILE_KEY = 'sparkbook.profile.v2';
-const GUIDE_PROGRESS_KEY = 'sparkbook.guide_progress.v1';
-const GUIDE_SESSIONS_KEY = 'sparkbook.guide_sessions.v1';
-const SPARK_DRAFT_KEY = 'sparkbook.spark_draft.v1';
-const REVISIT_EVENTS_KEY = 'sparkbook.revisit_events.v1';
-const COMMENTS_KEY = 'sparkbook.comments.v1';
-const FOLLOWS_KEY = 'sparkbook.follows.v1';
+const SPARKS_KEY = 'sparks.sparks.v4';
+const BOOKMARKS_KEY = 'sparks.bookmarks.v4';
+const LISTS_KEY = 'sparks.lists.v4';
+const PROFILE_KEY = 'sparks.profile.v2';
+const GUIDE_PROGRESS_KEY = 'sparks.guide_progress.v1';
+const GUIDE_SESSIONS_KEY = 'sparks.guide_sessions.v1';
+const SPARK_DRAFT_KEY = 'sparks.spark_draft.v1';
+const REVISIT_EVENTS_KEY = 'sparks.revisit_events.v1';
+const COMMENTS_KEY = 'sparks.comments.v1';
+const FOLLOWS_KEY = 'sparks.follows.v1';
 
 async function loadJson<T>(key: string, fallback: T): Promise<T> {
   const raw = await AsyncStorage.getItem(key);
@@ -53,9 +53,9 @@ export const localStore = {
 };
 
 export async function loadLocationLogs<T>(fallback: T) {
-  return loadJson('sparkbook.legacy.location_logs.v1', fallback);
+  return loadJson('sparks.legacy.location_logs.v1', fallback);
 }
 
 export async function saveLocationLogs<T>(logs: T) {
-  await saveJson('sparkbook.legacy.location_logs.v1', logs);
+  await saveJson('sparks.legacy.location_logs.v1', logs);
 }

@@ -2,6 +2,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { EntryScreen } from '../screens/EntryScreen';
+import { WelcomeScreen } from '../screens/onboarding/WelcomeScreen';
+import { SignInScreen } from '../screens/onboarding/SignInScreen';
+import { CreateProfileScreen } from '../screens/onboarding/CreateProfileScreen';
+import { ChooseInterestsScreen } from '../screens/onboarding/ChooseInterestsScreen';
+import { FollowCreatorsScreen } from '../screens/onboarding/FollowCreatorsScreen';
 import { HomeFeedScreen } from '../screens/HomeFeedScreen';
 import { HomeMapScreen } from '../screens/HomeMapScreen';
 import { CreateSparkScreen } from '../screens/CreateSparkScreen';
@@ -31,6 +36,11 @@ export function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Entry" screenOptions={{ headerShown: false, animation: 'none' }}>
         <Stack.Screen name="Entry" component={EntryScreen} />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="CreateProfileOnboarding" component={CreateProfileScreen} />
+        <Stack.Screen name="ChooseInterests" component={ChooseInterestsScreen} />
+        <Stack.Screen name="FollowCreators" component={FollowCreatorsScreen} />
         <Stack.Screen name="HomeFeed" component={HomeFeedScreen} />
         <Stack.Screen name="HomeMap" component={HomeMapScreen} />
         <Stack.Screen name="CreateSpark" component={CreateSparkScreen} />

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { Visibility } from '../types/spark';
@@ -32,7 +32,7 @@ export function AudienceSelector({ value, onChange, options = ['public', 'friend
               onPress={() => onChange(option)}
               style={({ pressed }) => [styles.pill, selected ? styles.selected : null, isAvatar ? styles.avatarPill : null, pressed ? styles.pressed : null]}
             >
-              <SparkbookIcon name={option === 'private' ? 'visibility' : 'friends'} color={selected ? colors.white : colors.main} size={16} />
+              <SparksIcon name={option === 'private' ? 'visibility' : 'friends'} color={selected ? colors.white : colors.main} size={16} />
               <Text style={[styles.pillText, selected ? styles.selectedText : null]}>{labels[option]}</Text>
             </Pressable>
           );

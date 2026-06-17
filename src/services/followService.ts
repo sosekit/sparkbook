@@ -7,7 +7,7 @@ export const followService = {
       const { data, error } = await dataClient.supabase.from('follows').select('following_id');
       if (!error && data) return data.map((item) => item.following_id as string);
     }
-    return localStore.loadFollows(['profile-natalie']);
+    return localStore.loadFollows([]);
   },
 
   async follow(profileId: string) {

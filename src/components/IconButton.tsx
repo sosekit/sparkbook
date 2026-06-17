@@ -1,12 +1,12 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { SearchIcon } from '../assets/icons/search';
-import { SparkbookIcon, SparkbookIconName } from '../assets/icons/SparkbookIcon';
+import { SparksIcon, SparksIconName } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
 
 type IconButtonProps = {
   accessibilityLabel: string;
-  icon: SparkbookIconName;
+  icon: SparksIconName;
   onPress: () => void;
   color?: string;
 };
@@ -20,7 +20,7 @@ export function IconButton({ accessibilityLabel, icon, onPress, color = colors.t
       onPress={onPress}
       style={({ pressed }) => [styles.button, pressed ? styles.pressed : null]}
     >
-      {icon === 'search' ? <SearchIcon color={color} size={16} /> : <SparkbookIcon name={icon} color={color} size={24} />}
+      {icon === 'search' ? <SearchIcon color={color} size={16} /> : <SparksIcon name={icon} color={color} size={24} />}
     </Pressable>
   );
 }

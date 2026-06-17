@@ -37,7 +37,7 @@ export const suggestionService = {
   deletedListState() {
     return {
       title: 'This list is no longer available.',
-      message: 'Here is another Sparkbook list you might like instead.'
+      message: 'Here is another sparks list you might like instead.'
     };
   },
   emptyLocationState(replacement: Spark | null) {

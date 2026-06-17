@@ -11,11 +11,12 @@ import { MediaGrid } from '../components/MediaGrid';
 import { ProgressBar } from '../components/ProgressBar';
 import { SearchBar } from '../components/SearchBar';
 import { TextField } from '../components/TextField';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { categories } from '../data/categories';
 import { DemoMediaAsset, demoMediaLibrary, getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { useCurrentLocation } from '../hooks/useCurrentLocation';
 import { LocationSearchResult, locationSearchService } from '../services/locationSearchService';
+import { mediaService } from '../services/mediaService';
 import { sparkService } from '../services/sparkService';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -178,6 +179,25 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     setErrors((current) => ({ ...current, media: undefined }));
   }
 
+  async function pickSystemMedia() {
+    const result = await mediaService.pickMedia();
+    if (result.error) {
+      setErrors((current) => ({ ...current, media: result.error || undefined }));
+      return;
+    }
+    if (!result.media?.uri) return;
+    const mediaType = result.media.type === 'video' ? 'video' : 'photo';
+    const picked: SelectedMedia = {
+      id: result.media.assetId || `picked-${Date.now()}`,
+      uri: result.media.uri,
+      mediaType,
+      title: result.media.fileName || 'Selected photo',
+      categoryId: categoryId || 'custom'
+    };
+    setSelectedMedia((current) => current.some((item) => item.uri === picked.uri) ? current : [...current, picked]);
+    setErrors((current) => ({ ...current, media: undefined }));
+  }
+
   function applyPrefillLocation(location: LocationSearchResult) {
     setSelectedLocation(location);
     setLocationQuery(location.displayName);
@@ -308,7 +328,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={back} style={({ pressed }) => [styles.headerIcon, pressed ? styles.headerIconPressed : null]}>
-          <SparkbookIcon name={step === 'media' ? 'close' : 'chevronLeft'} color={colors.text} size={24} />
+          <SparksIcon name={step === 'media' ? 'close' : 'chevronLeft'} color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.headerTitle}>{step === 'location' ? 'Add a location' : editingSparkId ? 'Edit spark' : 'New spark'}</Text>
       </View>
@@ -321,6 +341,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
             selectedIds={selectedMedia.map((item) => item.id)}
             error={errors.media}
             onToggle={toggleMedia}
+            onPickSystem={pickSystemMedia}
           />
         </View>
       ) : null}
@@ -350,9 +371,9 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           <InlineError message={errors.caption} />
           {showLocationSummary ? (
             <Pressable onPress={() => setStep('location')} style={styles.locationRow}>
-              <SparkbookIcon name="location" color={colors.text} size={18} />
+              <SparksIcon name="location" color={colors.text} size={18} />
               <Text style={styles.locationText}>{selectedLocation ? selectedLocation.displayName : 'Change location'}</Text>
-              <SparkbookIcon name="chevronRight" color={colors.text} size={20} />
+              <SparksIcon name="chevronRight" color={colors.text} size={20} />
             </Pressable>
           ) : null}
           <InlineError message={errors.action} />
@@ -399,7 +420,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
                 }}
                 style={styles.hiddenGemCard}
               >
-                <SparkbookIcon name="spark" color={colors.main} size={72} />
+                <SparksIcon name="spark" color={colors.main} size={72} />
                 <Text style={styles.hiddenTitle}>Found a new hidden gem?</Text>
                 <Text style={styles.hiddenLink}>Tap to add this place to your saved locations.</Text>
               </Pressable>
@@ -423,7 +444,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
           ))}
           {selectedLocation ? (
             <View style={styles.selectedLocation}>
-              <SparkbookIcon name="location" color={colors.main} size={18} />
+              <SparksIcon name="location" color={colors.main} size={18} />
               <View style={styles.selectedLocationCopy}>
                 <Text style={styles.selectedLocationTitle} numberOfLines={1}>{selectedLocation.displayName}</Text>
                 <Text style={styles.selectedLocationAddress} numberOfLines={1}>{selectedLocation.addressLabel}</Text>
@@ -450,7 +471,7 @@ export function CreateSparkScreen({ route, navigation }: Props) {
             ))}
           </View>
           <InlineError message={errors.tag} />
-          {permissionDenied ? <Text style={styles.warning}>Location permission is off. Sparkbook will use a safe fallback coordinate.</Text> : null}
+          {permissionDenied ? <Text style={styles.warning}>Location permission is off. sparks will use a safe fallback coordinate.</Text> : null}
         </ScrollView>
       ) : null}
 
@@ -487,7 +508,7 @@ function AddMediaTile({ onPress, style }: { onPress: () => void; style: object }
       style={({ pressed }) => [style, styles.addMediaCard, pressed ? styles.addMediaCardPressed : null]}
     >
       <View style={styles.addMediaIconPlate}>
-        <SparkbookIcon name="add" color={colors.main} size={24} />
+        <SparksIcon name="add" color={colors.main} size={24} />
       </View>
     </Pressable>
   );
@@ -504,7 +525,7 @@ function SelectedMediaPreview({ item, categoryId, onRemove, style }: { item: Sel
       onPress={onRemove}
       style={({ pressed }) => [styles.removeMediaButton, pressed ? styles.removeMediaButtonPressed : null]}
     >
-      <SparkbookIcon name="close" color={colors.text} size={14} />
+      <SparksIcon name="close" color={colors.text} size={14} />
     </Pressable>
   ) : null;
 

@@ -1,5 +1,10 @@
 export const routes = {
   homeFeed: 'HomeFeed',
+  welcome: 'Welcome',
+  signIn: 'SignIn',
+  createProfileOnboarding: 'CreateProfileOnboarding',
+  chooseInterests: 'ChooseInterests',
+  followCreators: 'FollowCreators',
   homeMap: 'HomeMap',
   createSpark: 'CreateSpark',
   postSparkOptions: 'PostSparkOptions',

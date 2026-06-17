@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { BookmarkToggle } from '../components/BookmarkToggle';
 import { BottomNav } from '../components/BottomNav';
 import { CategoryIcon } from '../components/CategoryIcon';
@@ -38,7 +38,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
     return (
       <View style={[styles.root, { paddingTop: insets.top + 16 }]}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
-          <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
+          <SparksIcon name="chevronLeft" color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.title}>Spark unavailable</Text>
       </View>
@@ -50,7 +50,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
       <View style={[styles.header, { paddingTop: insets.top, minHeight: insets.top + 56 }]}>
         <View style={styles.headerTitleWrap}>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
-            <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
+            <SparksIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
           <Text style={styles.headerTitle}>Spark</Text>
         </View>
@@ -67,7 +67,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
           ) : null}
           <Text style={styles.caption}>{spark.description || spark.caption || spark.reflectionNote || 'Saved in this Spark List.'}</Text>
           <View style={styles.locationRow}>
-            <SparkbookIcon name="location" color={colors.text} size={16} />
+            <SparksIcon name="location" color={colors.text} size={16} />
             <Text style={styles.location} numberOfLines={1}>{spark.addressLabel}</Text>
           </View>
         </View>
@@ -79,7 +79,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
         </View>
         <View style={styles.switcher}>
           <CTAButton label={previousSpark ? 'Previous spark' : 'Back to list'} onPress={() => previousSpark ? navigation.replace('SingleSparkFromList', { listId: list.id, sparkId: previousSpark.id }) : navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} />
-          <CTAButton label={nextSpark ? 'Next spark' : 'Start exploring'} onPress={() => nextSpark ? navigation.replace('SingleSparkFromList', { listId: list.id, sparkId: nextSpark.id }) : navigation.navigate('GuideRoute', { listId: list.id })} />
+          <CTAButton label={nextSpark ? 'Next spark' : 'Back to list'} onPress={() => nextSpark ? navigation.replace('SingleSparkFromList', { listId: list.id, sparkId: nextSpark.id }) : navigation.navigate('SparkListPreview', { listId: list.id, selectedSparkId: spark.id })} />
         </View>
       </ScrollView>
       <BottomNav active="lists" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => navigation.navigate('Bookmarks')} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => navigation.navigate('Lists')} onProfile={() => navigation.navigate('Profile')} />
@@ -90,7 +90,7 @@ export function SingleSparkFromListScreen({ route, navigation }: Props) {
 function Metric({ icon, label }: { icon: 'chat' | 'bookmark' | 'arrowForward'; label: string }) {
   return (
     <View style={styles.metric}>
-      <SparkbookIcon name={icon === 'chat' ? 'friends' : icon} color={colors.text} size={16} />
+      <SparksIcon name={icon === 'chat' ? 'friends' : icon} color={colors.text} size={16} />
       <Text style={styles.metricText}>{label}</Text>
     </View>
   );

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Sparkbook",
-    "slug": "sparkbook-app",
+    "name": "sparks",
+    "slug": "sparks",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -9,10 +9,11 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.sosekit.sparks",
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Sparkbook uses your location to help you create and explore saved sparks.",
-        "NSPhotoLibraryUsageDescription": "Sparkbook lets you add photos and videos to your sparks."
+        "NSLocationWhenInUseUsageDescription": "sparks uses your location to help you create and explore saved sparks.",
+        "NSPhotoLibraryUsageDescription": "sparks lets you add photos and videos to your sparks."
       }
     },
     "android": {

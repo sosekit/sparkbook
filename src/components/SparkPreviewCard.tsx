@@ -4,7 +4,7 @@ import { Spark } from '../types/spark';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 import { CategoryIcon } from './CategoryIcon';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { cardStyles } from './Card';
 import { Avatar } from './Avatar';
 import { DemoMediaArtwork } from './DemoMediaArtwork';
@@ -22,7 +22,7 @@ export function SparkPreviewCard({ spark, onPress, selected = false, variant = '
   if (!spark?.id) return null;
   const thumbnail = (spark.media || []).find((media) => media.mediaType === 'photo')?.url;
   const demoThumbnail = getDemoMediaAsset(thumbnail);
-  const cardStyle = variant === 'media' ? styles.mediaCard : wide ? styles.wideCard : styles.card;
+const cardStyle = variant === 'media' ? styles.mediaCard : wide ? styles.wideCard : styles.card;
 
   const content = variant === 'media' ? (
     <View style={styles.mediaOnly}>
@@ -56,16 +56,16 @@ export function SparkPreviewCard({ spark, onPress, selected = false, variant = '
             <Avatar name={spark.createdBy === 'profile-ray' ? 'Raymond Zhang' : spark.createdBy} size={24} />
           </View>
           <View style={styles.typeTag}>
-            <SparkbookIcon name="spark" color={colors.white} size={16} />
+            <SparksIcon name="spark" color={colors.white} size={16} />
           </View>
         </View>
         <View style={styles.locationPill}>
-          <SparkbookIcon name="location" color={colors.white} size={16} />
+          <SparksIcon name="location" color={colors.white} size={16} />
           <Text style={styles.locationPillText} numberOfLines={1}>{cityLabel(spark.addressLabel || spark.location)}</Text>
         </View>
       </View>
       <View style={styles.copy}>
-        <Text style={styles.caption} numberOfLines={2}>{spark.description || spark.caption || 'Saved as a Sparkbook location.'}</Text>
+        <Text style={styles.caption} numberOfLines={2}>{spark.description || spark.caption || 'Saved as a sparks location.'}</Text>
       </View>
     </>
   );
@@ -76,16 +76,18 @@ export function SparkPreviewCard({ spark, onPress, selected = false, variant = '
         accessibilityRole="button"
         accessibilityState={{ selected }}
         onPress={onPress}
-        style={({ pressed }) => [cardStyle, selected ? styles.selected : null, pressed ? styles.pressed : null]}
+        style={({ pressed }) => [cardStyle, pressed ? styles.pressed : null]}
       >
         {content}
+        {selected ? <View pointerEvents="none" style={styles.selectedOverlay} /> : null}
       </Pressable>
     );
   }
 
   return (
-    <View style={[cardStyle, selected ? styles.selected : null]}>
+    <View style={cardStyle}>
       {content}
+      {selected ? <View pointerEvents="none" style={styles.selectedOverlay} /> : null}
     </View>
   );
 }
@@ -125,16 +127,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderMuted
   },
-  selected: {
+  selectedOverlay: {
+    ...StyleSheet.absoluteFillObject,
     borderColor: colors.main,
-    borderWidth: 2
+    borderWidth: 2,
+    borderRadius: cardStyles.radius
   },
   pressed: { opacity: 0.78 },
   mediaOnly: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: cardStyles.previewBackground
+    backgroundColor: cardStyles.previewBackground,
+    overflow: 'hidden'
   },
   coverImage: {
     ...StyleSheet.absoluteFillObject,

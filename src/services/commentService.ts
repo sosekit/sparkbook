@@ -51,7 +51,7 @@ function fromSupabaseComment(row: any): Comment {
     targetType: row.target_type,
     targetId: row.target_id,
     userId: row.user_id,
-    userName: row.user_name || 'Sparkbook user',
+    userName: row.user_name || 'sparks user',
     userInitials: row.user_initials || 'SU',
     body: row.body,
     createdAt: row.created_at,

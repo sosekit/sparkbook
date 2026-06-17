@@ -103,7 +103,7 @@ export const locationSearchService = {
       const response = await fetch(url, {
         headers: {
           Accept: 'application/json',
-          'User-Agent': 'Sparkbook Expo preview'
+          'User-Agent': 'sparks Expo preview'
         }
       });
       if (!response.ok) throw new Error('Location search unavailable');

@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomNav } from '../components/BottomNav';
 import { EmptyState } from '../components/EmptyState';
 import { ListCard } from '../components/ListCard';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { useLists } from '../hooks/useLists';
 import { useSparks } from '../hooks/useSparks';
 import { colors } from '../theme/colors';
@@ -15,9 +15,6 @@ import { SparkList } from '../types/list';
 import { RootStackParamList } from '../types/navigation';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Lists'>;
-
-const DEMO_EXPLORE_LIST_ID = 'list-first-toronto-weekend';
-const DEMO_EXPLORE_START_SPARK_ID = 'spark-st-lawrence-market';
 
 export function ListsScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
@@ -37,7 +34,7 @@ export function ListsScreen({ navigation }: Props) {
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 88 }]}>
         <Pressable onPress={() => navigation.navigate('CreateSparkList')} style={({ pressed }) => [styles.createList, pressed ? styles.createListPressed : null]}>
           <Text style={styles.createText}>Create new list</Text>
-          <SparkbookIcon name="add" color={colors.main} size={14} />
+          <SparksIcon name="add" color={colors.main} size={14} />
         </Pressable>
         <ListSection title="Recently Created Lists" lists={createdLists} sparks={sparks} onOpen={openList} />
         <ListSection title="Private Lists" lists={privateLists} sparks={sparks} emptyMessage="Private routes you create will stay here." onOpen={openList} />
@@ -49,10 +46,6 @@ export function ListsScreen({ navigation }: Props) {
   );
 
   function openList(listId: string) {
-    if (listId === DEMO_EXPLORE_LIST_ID) {
-      navigation.navigate('GuideRoute', { listId, startSparkId: DEMO_EXPLORE_START_SPARK_ID });
-      return;
-    }
     navigation.navigate('SparkListPreview', { listId });
   }
 }

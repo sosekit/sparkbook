@@ -9,7 +9,7 @@ export function useAuth() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function load() {
+  async function load() {
       try {
         const { user } = await authService.getCurrentUser();
         setProfile(await profileService.getProfile(user?.id || 'local-user'));
@@ -22,5 +22,10 @@ export function useAuth() {
     load();
   }, []);
 
-  return { profile, setProfile, loading, error };
+  async function logoutAndResetDemo() {
+    await authService.logoutAndResetDemo();
+    setProfile(null);
+  }
+
+  return { profile, setProfile, loading, error, logoutAndResetDemo };
 }

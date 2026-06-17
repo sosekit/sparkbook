@@ -1,8 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { Logo } from '../components/Logo';
+import { authService } from '../services/authService';
+import { profileService } from '../services/profileService';
+import { storageService } from '../services/storageService';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
@@ -11,27 +13,63 @@ import { RootStackParamList } from '../types/navigation';
 type Props = NativeStackScreenProps<RootStackParamList, 'Entry'>;
 
 export function EntryScreen({ navigation }: Props) {
-  const insets = useSafeAreaInsets();
-
   useEffect(() => {
-    const timer = setTimeout(() => navigation.replace('HomeFeed'), 900);
-    return () => clearTimeout(timer);
+    let mounted = true;
+
+    async function route() {
+      try {
+        const [{ user }, onboardingCompleted] = await Promise.all([
+          authService.getCurrentUser(),
+          storageService.getOnboardingCompleted()
+        ]);
+
+        if (!mounted) return;
+        if (!user) {
+          navigation.replace('Welcome');
+          return;
+        }
+
+        const profile = await profileService.getProfile(user.id || 'local-user');
+        if (!mounted) return;
+        if (!profile?.displayName || !profile.username) {
+          navigation.replace('CreateProfileOnboarding');
+          return;
+        }
+        if (!profile.interests?.length) {
+          navigation.replace('ChooseInterests');
+          return;
+        }
+        if (!onboardingCompleted && !profile.onboardingCompleted) {
+          navigation.replace('FollowCreators');
+          return;
+        }
+        navigation.replace('HomeFeed');
+      } catch {
+        if (mounted) navigation.replace('Welcome');
+      }
+    }
+
+    route();
+    return () => {
+      mounted = false;
+    };
   }, [navigation]);
 
   return (
-    <Pressable onPress={() => navigation.replace('HomeFeed')} style={[styles.root, { paddingTop: insets.top + spacing.xl, paddingBottom: insets.bottom + spacing.xl }]}>
+    <View style={styles.root}>
       <View style={styles.center}>
         <Logo style={styles.logo} />
-        <Text style={styles.line}>Save places worth finding again.</Text>
+        <Text style={styles.line}>Save places worth coming back to.</Text>
+        <ActivityIndicator color={colors.main} />
       </View>
-    </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.neutral,
+    backgroundColor: colors.surface,
     paddingHorizontal: 24
   },
   center: {

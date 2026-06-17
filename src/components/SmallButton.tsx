@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon, SparkbookIconName } from '../assets/icons/SparkbookIcon';
+import { SparksIcon, SparksIconName } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 
@@ -7,13 +7,13 @@ type SmallButtonProps = {
   label: string;
   selected?: boolean;
   onPress?: () => void;
-  icon?: SparkbookIconName;
+  icon?: SparksIconName;
 };
 
 export function SmallButton({ label, selected = false, onPress, icon }: SmallButtonProps) {
   const content = (
     <>
-      {icon ? <SparkbookIcon name={icon} color={selected ? colors.white : colors.main} size={14} /> : null}
+      {icon ? <SparksIcon name={icon} color={selected ? colors.white : colors.main} size={14} /> : null}
       <Text style={[styles.label, selected ? styles.selectedLabel : null]}>{label}</Text>
     </>
   );

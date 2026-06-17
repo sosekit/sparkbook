@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 
@@ -7,7 +7,7 @@ export function SelectionCheckmark({ selected, order }: { selected?: boolean; or
   return (
     <View style={[styles.indicator, selected ? styles.selected : null]}>
       {selected && order ? <Text style={styles.orderText}>{order}</Text> : null}
-      {selected && !order ? <SparkbookIcon name="check" color={colors.white} size={13} /> : null}
+      {selected && !order ? <SparksIcon name="check" color={colors.white} size={13} /> : null}
     </View>
   );
 }

@@ -5,7 +5,7 @@ import { Spark } from '../types/spark';
 export function ListMapPreview({ sparks, selectedId, onSelect }: { sparks: Spark[]; selectedId?: string; onSelect: (sparkId: string) => void }) {
   return (
     <View style={styles.wrap}>
-      <MapPreview locations={sparks} selectedId={selectedId} height={272} fullBleed staticImageOnly onMarkerPress={onSelect} />
+      <MapPreview locations={sparks} selectedId={selectedId} height={272} fullBleed forceOpenMap onMarkerPress={onSelect} />
     </View>
   );
 }

@@ -1,9 +1,9 @@
-import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import Svg, { Polyline } from 'react-native-svg';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
 import { colors } from '../theme/colors';
 import { GuideRouteSegment } from '../types/list';
 import { Spark } from '../types/spark';
+import { MapSparkMarker } from './MapSparkMarker';
 
 type MapFallbackProps = {
   locations: Spark[];
@@ -51,20 +51,15 @@ export function MapFallback({ locations, selectedId, completedIds = [], liveLoca
         const selected = item.id === selectedId;
         const completed = completedSet.has(item.id);
         return (
-          <Pressable
+          <MapSparkMarker
             key={item.id}
-            accessibilityRole="button"
-            accessibilityLabel={`Open ${item.title}`}
+            spark={item}
+            selected={selected}
+            completed={completed}
             onPress={() => onMarkerPress?.(item.id)}
-            style={[
-              styles.pin,
-              selected ? styles.pinSelected : null,
-              completed ? styles.pinCompleted : null,
-              { left: `${left}%`, top: `${top}%` }
-            ]}
-          >
-            <SparkbookIcon name="spark" color={colors.white} size={16} />
-          </Pressable>
+            left={`${left}%`}
+            top={`${top}%`}
+          />
         );
       })}
       {livePoint ? <View style={[styles.liveFallback, { left: `${livePoint.left}%`, top: `${livePoint.top}%` }]} /> : null}
@@ -116,31 +111,6 @@ const styles = StyleSheet.create({
   mapWash: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(242, 244, 247, 0.12)'
-  },
-  pin: {
-    position: 'absolute',
-    width: 40,
-    height: 40,
-    marginLeft: -20,
-    marginTop: -20,
-    borderRadius: 20,
-    backgroundColor: colors.highlight,
-    borderWidth: 2,
-    borderColor: colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: colors.text,
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2
-  },
-  pinSelected: {
-    backgroundColor: colors.main
-  },
-  pinCompleted: {
-    backgroundColor: colors.altText,
-    opacity: 0.76
   },
   liveFallback: {
     position: 'absolute',

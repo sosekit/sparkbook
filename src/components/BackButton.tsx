@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
@@ -12,7 +12,7 @@ type BackButtonProps = {
 export function BackButton({ label = 'Back', onPress }: BackButtonProps) {
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={label} hitSlop={8} onPress={onPress} style={({ pressed }) => [styles.button, pressed ? styles.pressed : null]}>
-      <SparkbookIcon name="chevronLeft" color={colors.text} size={22} />
+      <SparksIcon name="chevronLeft" color={colors.text} size={22} />
       <Text style={styles.label}>{label}</Text>
     </Pressable>
   );

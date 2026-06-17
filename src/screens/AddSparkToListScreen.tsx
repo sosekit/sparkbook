@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { CTAButton } from '../components/CTAButton';
 import { EmptyState } from '../components/EmptyState';
 import { ListCard } from '../components/ListCard';
@@ -62,7 +62,7 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
     <View style={styles.root}>
       <View style={[styles.header, { paddingTop: insets.top + 6, minHeight: insets.top + 56 }]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.close}>
-          <SparkbookIcon name="close" color={colors.text} size={24} />
+          <SparksIcon name="close" color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.title}>Add Spark to List</Text>
       </View>
@@ -73,7 +73,7 @@ export function AddSparkToListScreen({ route, navigation }: Props) {
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recently Created Lists</Text>
           <Pressable accessibilityRole="button" onPress={() => navigation.navigate('CreateSparkList', { initialSparkId: route.params.sparkId })} style={({ pressed }) => [styles.createListButton, pressed ? styles.createListButtonPressed : null]}>
-            <SparkbookIcon name="add" color={colors.white} size={16} />
+            <SparksIcon name="add" color={colors.white} size={16} />
             <Text style={styles.createListText}>Create new list</Text>
           </Pressable>
         </View>

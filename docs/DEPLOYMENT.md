@@ -1,6 +1,6 @@
-# Sparkbook Deployment
+# sparks Deployment
 
-Sparkbook runs in two modes:
+sparks runs in two modes:
 
 - `local`: Expo + AsyncStorage demo data. No backend required.
 - `supabase`: Supabase Auth, Postgres/PostGIS, Storage, and app services.
@@ -91,7 +91,7 @@ eas submit -p ios
 
 ## Location Privacy
 
-Sparkbook requests foreground location for active guide sessions only.
+sparks requests foreground location for active guide sessions only.
 
 - Current location is private by default.
 - The app stores saved spark locations, not a continuous trail.
@@ -100,7 +100,7 @@ Sparkbook requests foreground location for active guide sessions only.
 
 ## Map Strategy
 
-The app can use live/native maps where available and falls back to the bundled Toronto map image with Sparkbook pins. The fallback should prevent blank maps during demos or poor network conditions.
+The app can use live/native maps where available and falls back to the bundled Toronto map image with sparks pins. The fallback should prevent blank maps during demos or poor network conditions.
 
 ## Validation
 

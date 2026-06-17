@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { GuideRoute } from '../types/list';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
@@ -33,11 +33,11 @@ export function GuideTimeline({ route, permissionDenied, routeEstimated = true, 
     <View style={styles.panel}>
       <View style={styles.header}>
         <View style={styles.titleWrap}>
-          <Text style={styles.eyebrow}>Sparkbook guide</Text>
+          <Text style={styles.eyebrow}>sparks guide</Text>
           <Text style={styles.title} numberOfLines={1}>{route.title}</Text>
         </View>
         <Pressable accessibilityRole="button" accessibilityLabel="Exit guide" hitSlop={8} onPress={onExit} style={styles.exit}>
-          <SparkbookIcon name="close" color={colors.text} size={18} />
+          <SparksIcon name="close" color={colors.text} size={18} />
         </Pressable>
       </View>
       <ProgressBar progress={progress} />
@@ -61,7 +61,7 @@ export function GuideTimeline({ route, permissionDenied, routeEstimated = true, 
           return (
             <Pressable key={stop.id} onPress={() => onSelectStop(index)} style={[styles.step, stop.status === 'current' ? styles.stepCurrent : null, stop.status === 'completed' ? styles.stepCompleted : null]}>
               <View style={[styles.stepDot, stop.status === 'current' ? styles.dotCurrent : null, stop.status === 'completed' ? styles.dotComplete : null]}>
-                {stop.status === 'completed' ? <SparkbookIcon name="check" color={colors.white} size={14} /> : <Text style={styles.stepNumber}>{index + 1}</Text>}
+                {stop.status === 'completed' ? <SparksIcon name="check" color={colors.white} size={14} /> : <Text style={styles.stepNumber}>{index + 1}</Text>}
               </View>
               <View style={styles.stepCopy}>
                 <Text style={styles.stepTitle} numberOfLines={1}>{stop.title || 'Spark stop'}</Text>

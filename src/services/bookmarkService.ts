@@ -42,6 +42,7 @@ async function syncSparkBookmarkState(sparkId: string, bookmarked: boolean) {
   await localStore.saveSparks(sparks.map((spark) => spark.id === sparkId ? {
     ...spark,
     isBookmarked: bookmarked,
+    wantToRevisit: bookmarked,
     updatedAt: now
   } : spark));
 }

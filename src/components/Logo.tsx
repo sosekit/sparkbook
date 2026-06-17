@@ -8,7 +8,7 @@ type LogoProps = {
 };
 
 export function Logo({ style, pointerEvents }: LogoProps) {
-  return <Text pointerEvents={pointerEvents} style={[styles.logo, style]}>sparkbook ✦</Text>;
+  return <Text pointerEvents={pointerEvents} style={[styles.logo, style]}>sparks ✦</Text>;
 }
 
 const styles = StyleSheet.create({

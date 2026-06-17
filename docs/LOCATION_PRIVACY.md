@@ -1,6 +1,6 @@
 # Location Privacy
 
-Sparkbook uses location for two user-controlled moments:
+sparks uses location for two user-controlled moments:
 
 - creating a spark at a place
 - exploring an active guide/list route

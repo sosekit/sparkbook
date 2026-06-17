@@ -1,5 +1,5 @@
 import { GestureResponderHandlers, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
@@ -48,7 +48,7 @@ export function SparkGridItem({ spark, selected = false, order, dragging = false
         ) : <CategoryIcon categoryId={category.id} selected size={48} />}
         {thumbnail ? <ThumbnailOverlay /> : null}
         <View style={[styles.check, selected ? styles.checkSelected : null]}>
-          {selected ? <SparkbookIcon name="check" color={colors.white} size={14} /> : null}
+          {selected ? <SparksIcon name="check" color={colors.white} size={14} /> : null}
         </View>
         {order ? (
           <View style={styles.order}>

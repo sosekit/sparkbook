@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Avatar } from '../components/Avatar';
 import { BottomNav } from '../components/BottomNav';
@@ -20,7 +20,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
 
 export function ProfileScreen({ navigation }: Props) {
   const insets = useSafeAreaInsets();
-  const { profile } = useAuth();
+  const { profile, logoutAndResetDemo } = useAuth();
   const { sparks } = useSparks();
   const { bookmarks } = useBookmarks();
   const [query, setQuery] = useState('');
@@ -33,14 +33,31 @@ export function ProfileScreen({ navigation }: Props) {
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt)), [created, query]);
   const savedCount = bookmarks.length;
 
+  function confirmLogout() {
+    Alert.alert('Log out?', 'This will reset your demo data and return to onboarding.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Log out',
+        style: 'destructive',
+        onPress: async () => {
+          await logoutAndResetDemo();
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Welcome' }]
+          });
+        }
+      }
+    ]);
+  }
+
   return (
     <View style={styles.root}>
-      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10 }]}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: insets.top + 10, paddingBottom: insets.bottom + 96 }]}>
         <View style={styles.profileCard}>
           <Avatar name={profile?.displayName} size={72} initialsFontSize={30} />
           <View style={styles.profileCopy}>
             <Text style={styles.title}>{profile?.displayName || 'Create profile'}</Text>
-            <Text style={styles.subtitle}>@{profile?.username || 'sparkbook'}</Text>
+            <Text style={styles.subtitle}>@{profile?.username || 'sparks'}</Text>
             <Text style={styles.body}>{profile?.bio || 'Add a bio to tell people what you spark.'}</Text>
           </View>
         </View>
@@ -56,6 +73,10 @@ export function ProfileScreen({ navigation }: Props) {
         {timeline.map((spark) => (
           <SparkCard key={spark.id} spark={spark} onPress={() => navigation.navigate('SparkDetail', { sparkId: spark.id })} />
         ))}
+        <View style={styles.logoutSection}>
+          <Button label="Log out" variant="secondary" onPress={confirmLogout} />
+          <Text style={styles.logoutCopy}>Resets demo data and returns to onboarding.</Text>
+        </View>
       </ScrollView>
       <BottomNav active="profile" onHome={() => navigation.navigate('HomeFeed')} onBookmarks={() => navigation.navigate('Bookmarks')} onCreate={() => navigation.navigate('CreateSpark')} onLists={() => navigation.navigate('Lists')} onProfile={() => undefined} />
     </View>
@@ -88,5 +109,17 @@ const styles = StyleSheet.create({
   stat: { flex: 1, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.neutral, borderRadius: radius.md, padding: spacing.sm },
   statNumber: { color: colors.main, fontFamily: fontFamilies.primaryBold, fontSize: 20 },
   statLabel: { color: colors.altText, fontFamily: fontFamilies.secondaryBold, fontSize: 10 },
-  archiveCopy: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 }
+  archiveCopy: { color: colors.altText, fontFamily: fontFamilies.secondary, fontSize: 12, lineHeight: 17 },
+  logoutSection: {
+    gap: 6,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm
+  },
+  logoutCopy: {
+    color: colors.altText,
+    fontFamily: fontFamilies.secondary,
+    fontSize: 12,
+    lineHeight: 17,
+    textAlign: 'center'
+  }
 });

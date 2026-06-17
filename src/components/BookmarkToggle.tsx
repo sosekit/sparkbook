@@ -1,5 +1,5 @@
 import { GestureResponderEvent, Pressable, StyleSheet } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 
 type BookmarkToggleProps = {
@@ -33,7 +33,7 @@ export function BookmarkToggle({ saved = false, onPress, size = 30, variant = 'p
         pressed ? pressedStyle : null
       ]}
     >
-      <SparkbookIcon name={saved ? 'bookmarkFilled' : 'bookmark'} color={circular && saved ? colors.white : colors.main} size={iconSize} />
+      <SparksIcon name={saved ? 'bookmarkFilled' : 'bookmark'} color={circular && saved ? colors.white : colors.main} size={iconSize} />
     </Pressable>
   );
 }

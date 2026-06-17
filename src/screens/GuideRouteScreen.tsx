@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GuideTimeline } from '../components/GuideTimeline';
 import { MapPreview } from '../components/MapPreview';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { EmptyState } from '../components/EmptyState';
 import { useGuideRoute } from '../hooks/useGuideRoute';
 import { useLiveLocation } from '../hooks/useLiveLocation';
@@ -31,7 +31,7 @@ export function GuideRouteScreen({ route, navigation }: Props) {
   );
   const ordered = useMemo(
     () => orderedIds
-      .map((sparkId) => sparks.find((spark) => spark.id === sparkId))
+      .map((sparkId) => sparks.find((spark) => spark.id === sparkId && spark.status === 'active'))
       .filter(Boolean) as Spark[],
     [orderedIds, sparks]
   );
@@ -79,12 +79,11 @@ export function GuideRouteScreen({ route, navigation }: Props) {
           if (index >= 0) guide.selectStop(index);
         }}
         fullBleed
-        staticImageOnly
         height={820}
       />
       <View style={[styles.header, { top: insets.top + 8 }]}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
-          <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
+          <SparksIcon name="chevronLeft" color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.title}>Explore Mode</Text>
       </View>

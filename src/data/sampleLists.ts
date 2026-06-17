@@ -77,6 +77,22 @@ export const sampleLists: SparkList[] = [
     items: items('list-study-art-afternoon', ['spark-toronto-reference-library', 'spark-ago', 'spark-kensington-market', 'spark-soft-light-gallery']),
     createdAt: stamp,
     updatedAt: stamp
+  },
+  {
+    id: 'list-ossington-best',
+    createdBy: 'profile-ray',
+    title: 'Ossington’s Best',
+    description: 'A short walk through food, vintage, dessert, and late-night spots around Ossington.',
+    listType: 'collected',
+    visibility: 'public',
+    audience: 'public',
+    status: 'active',
+    coverSparkId: 'spark-lunch-lady',
+    thumbnailIconKey: 'food',
+    sparkIds: ['spark-lunch-lady', 'spark-i-miss-you-man-vintage', 'spark-bang-bang-ice-cream', 'spark-bar-bowie-speakeasy', 'spark-linnys', 'spark-luckys-bodega'],
+    items: items('list-ossington-best', ['spark-lunch-lady', 'spark-i-miss-you-man-vintage', 'spark-bang-bang-ice-cream', 'spark-bar-bowie-speakeasy', 'spark-linnys', 'spark-luckys-bodega']),
+    createdAt: stamp,
+    updatedAt: stamp
   }
 ];
 

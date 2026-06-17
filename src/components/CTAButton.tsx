@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 
@@ -22,7 +22,7 @@ export function CTAButton({ label, onPress, disabled = false }: CTAButtonProps) 
       ]}
     >
       <Text style={[styles.label, disabled ? styles.disabledLabel : null]}>{label}</Text>
-      <SparkbookIcon name="arrowForward" color={disabled ? colors.altText : colors.white} size={16} />
+      <SparksIcon name="arrowForward" color={disabled ? colors.altText : colors.white} size={16} />
     </Pressable>
   );
 }

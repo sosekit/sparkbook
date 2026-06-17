@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { BookmarkToggle } from '../components/BookmarkToggle';
 import { CategoryIcon } from '../components/CategoryIcon';
 import { CTAButton } from '../components/CTAButton';
@@ -76,7 +76,7 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
       <View style={[styles.header, { top: insets.top }]}>
         <View style={styles.headerGroup}>
           <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.back, pressed ? styles.backPressed : null]}>
-            <SparkbookIcon name="chevronLeft" color={colors.text} size={24} />
+            <SparksIcon name="chevronLeft" color={colors.text} size={24} />
           </Pressable>
           <Text style={styles.headerTitle} numberOfLines={1}>{activeList.title}</Text>
         </View>
@@ -115,13 +115,13 @@ export function SparkListPreviewScreen({ route, navigation }: Props) {
                 </View>
               ) : null}
               <View style={styles.captionField}>
-                <Text style={styles.caption}>{selectedSpark.description || selectedSpark.caption || list.description || 'A saved Sparkbook list.'}</Text>
+                <Text style={styles.caption}>{selectedSpark.description || selectedSpark.caption || list.description || 'A saved sparks list.'}</Text>
               </View>
               <View style={styles.locationField}>
-                <SparkbookIcon name="location" color={colors.text} size={16} />
+                <SparksIcon name="location" color={colors.text} size={16} />
                 <Text style={styles.location} numberOfLines={1}>{selectedSpark.addressLabel}</Text>
               </View>
-              <CTAButton label="Start Guide" onPress={startGuide} />
+              <CTAButton label="Start Exploring" onPress={startGuide} />
             </>
           ) : (
             <View style={styles.emptyWrap}>

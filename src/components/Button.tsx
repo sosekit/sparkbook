@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
-import { SparkbookIcon, SparkbookIconName } from '../assets/icons/SparkbookIcon';
+import { SparksIcon, SparksIconName } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { radii, spacing } from '../theme/spacing';
 import { fontFamilies } from '../theme/typography';
@@ -9,7 +9,7 @@ type ButtonProps = {
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'ghost';
   disabled?: boolean;
-  rightIcon?: SparkbookIconName;
+  rightIcon?: SparksIconName;
 };
 
 export function Button({ label, onPress, variant = 'primary', disabled = false, rightIcon }: ButtonProps) {
@@ -34,7 +34,7 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
       <Text style={[styles.label, variant === 'primary' ? styles.primaryLabel : styles.secondaryLabel]}>
         {label}
       </Text>
-      {rightIcon ? <SparkbookIcon name={rightIcon} color={variant === 'primary' ? colors.white : colors.accent} size={16} /> : null}
+      {rightIcon ? <SparksIcon name={rightIcon} color={variant === 'primary' ? colors.white : colors.accent} size={16} /> : null}
     </Pressable>
   );
 }

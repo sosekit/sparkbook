@@ -23,7 +23,18 @@ export function useBookmarks() {
   }, [refresh]);
 
   async function toggleBookmark(sparkId: string) {
-    setBookmarks(await bookmarkService.toggleBookmark(sparkId));
+    let previous: string[] = [];
+    setBookmarks((current) => {
+      previous = current;
+      return current.includes(sparkId) ? current.filter((id) => id !== sparkId) : [...current, sparkId];
+    });
+    try {
+      setBookmarks(await bookmarkService.toggleBookmark(sparkId));
+      setError(null);
+    } catch (err) {
+      setBookmarks(previous);
+      setError(err instanceof Error ? err.message : 'Unable to update bookmark');
+    }
   }
 
   return { bookmarks, toggleBookmark, refresh, loading, error };

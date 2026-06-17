@@ -8,7 +8,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { SearchBar } from '../components/SearchBar';
 import { SparkGridItem } from '../components/SparkGridItem';
 import { TextField } from '../components/TextField';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { useLists } from '../hooks/useLists';
 import { useSparks } from '../hooks/useSparks';
 import { colors } from '../theme/colors';
@@ -97,7 +97,7 @@ export function CreateSparkListScreen({ route, navigation }: Props) {
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={[styles.header, { paddingTop: insets.top + 18, minHeight: insets.top + 82 }]}>
         <Pressable accessibilityRole="button" hitSlop={8} onPress={() => navigation.goBack()} style={({ pressed }) => [styles.close, pressed ? styles.closePressed : null]}>
-          <SparkbookIcon name="close" color={colors.text} size={24} />
+          <SparksIcon name="close" color={colors.text} size={24} />
         </Pressable>
         <Text style={styles.headerTitle}>New list</Text>
       </View>

@@ -32,11 +32,11 @@ export function FeedCard({ spark, bookmarked, onPress, onBookmark, onCreatorPres
       <View style={styles.image}>
         {thumbnail ? (
           demoThumbnail?.source ? (
-            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="contain" />
+            <Image source={demoThumbnail.source} style={styles.thumbnail} resizeMode="cover" />
           ) : isDemoMediaUri(thumbnail) ? (
             <DemoMediaArtwork categoryId={demoThumbnail?.categoryId || category.id} label={demoThumbnail?.title} style={styles.thumbnail} />
           ) : (
-            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="contain" />
+            <Image source={{ uri: thumbnail }} style={styles.thumbnail} resizeMode="cover" />
           )
         ) : null}
         {thumbnail ? <ThumbnailOverlay /> : null}
@@ -173,5 +173,5 @@ function getCreatorName(createdBy: string, recommendedBy?: string) {
     'profile-maya': 'Maya C.',
     'profile-evan': 'Evan L.'
   };
-  return names[createdBy] || 'Sparkbook user';
+  return names[createdBy] || 'sparks user';
 }

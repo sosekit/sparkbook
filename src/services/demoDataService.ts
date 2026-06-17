@@ -23,8 +23,16 @@ async function prepareDemoData() {
 }
 
 export async function resetDemoData() {
-  await storageService.clearSparkbookStorage();
+  await storageService.clearSparksStorage();
   await loadDemoData();
+  await storageService.saveDemoSeedVersion(DEMO_DATA_VERSION);
+}
+
+export async function logoutAndResetDemo() {
+  await storageService.clearSparksStorage();
+  await loadDemoData();
+  await storageService.saveOnboardingCompleted(false);
+  await storageService.clearLocalAuthUser();
   await storageService.saveDemoSeedVersion(DEMO_DATA_VERSION);
 }
 

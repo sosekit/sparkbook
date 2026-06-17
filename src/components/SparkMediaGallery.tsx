@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
@@ -73,7 +73,7 @@ function GalleryItem({ item, style, categoryId }: { item: SparkMedia; style: obj
     return (
       <View style={style}>
         <View style={styles.videoFallback}>
-          <SparkbookIcon name="spark" color={colors.white} size={30} />
+          <SparksIcon name="spark" color={colors.white} size={30} />
           <Text style={styles.videoText}>Video</Text>
         </View>
       </View>

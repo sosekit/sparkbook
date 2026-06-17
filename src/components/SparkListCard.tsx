@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { SparkbookIcon } from '../assets/icons/SparkbookIcon';
+import { SparksIcon } from '../assets/icons/SparksIcon';
 import { getDemoMediaAsset, isDemoMediaUri } from '../data/demoMediaLibrary';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
@@ -35,7 +35,7 @@ export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, 
       accessibilityRole="button"
       accessibilityState={{ selected }}
       onPress={onPress}
-      style={({ pressed }) => [styles.card, selected ? styles.selected : null, pressed ? styles.pressed : null, style]}
+      style={({ pressed }) => [styles.card, pressed ? styles.pressed : null, style]}
     >
       <View style={styles.preview}>
         {resolvedThumbnail ? (
@@ -69,12 +69,12 @@ export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, 
               }}
               style={({ pressed }) => [styles.bookmarkIcon, bookmarked ? styles.bookmarkIconSaved : null, pressed ? styles.bookmarkIconPressed : null]}
             >
-              <SparkbookIcon name={bookmarked ? 'bookmarkFilled' : 'bookmark'} color={bookmarked ? colors.white : colors.main} size={20} />
+              <SparksIcon name={bookmarked ? 'bookmarkFilled' : 'bookmark'} color={bookmarked ? colors.white : colors.main} size={20} />
             </Pressable>
           ) : null}
         </View>
         <View style={styles.locationPill}>
-          <SparkbookIcon name="location" color={colors.white} size={16} />
+          <SparksIcon name="location" color={colors.white} size={16} />
           <Text style={styles.locationText} numberOfLines={1}>{locationLabel}</Text>
         </View>
       </View>
@@ -84,6 +84,7 @@ export function SparkListCard({ list, sparks = [], onPress, bookmarked = false, 
           {list.description || `${sparks.length} saved ${sparks.length === 1 ? 'spark' : 'sparks'}`}
         </Text>
       </View>
+      {selected ? <View pointerEvents="none" style={styles.selectedOverlay} /> : null}
     </Pressable>
   );
 }
@@ -114,13 +115,19 @@ const styles = StyleSheet.create({
     borderColor: colors.main,
     borderWidth: 2
   },
+  selectedOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderColor: colors.main,
+    borderRadius: 4,
+    borderWidth: 2
+  },
   pressed: {
     opacity: 0.78
   },
   preview: {
     height: 152,
-    padding: 8,
-    justifyContent: 'space-between',
+    width: '100%',
+    padding: 0,
     backgroundColor: cardStyles.previewBackground,
     overflow: 'hidden',
     borderTopLeftRadius: 4,
@@ -137,6 +144,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   topRow: {
+    position: 'absolute',
+    top: 8,
+    left: 8,
+    right: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
@@ -168,7 +179,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.highlight
   },
   locationPill: {
-    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
     minHeight: 30,
     maxWidth: '88%',
     borderRadius: 8,

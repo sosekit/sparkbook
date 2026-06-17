@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SparkbookIcon, SparkbookIconName } from '../assets/icons/SparkbookIcon';
+import { SparksIcon, SparksIconName } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { fontFamilies } from '../theme/typography';
 
@@ -15,7 +15,7 @@ type BottomNavProps = {
 
 type NavKey = BottomNavProps['active'];
 
-const navIcons: Record<Exclude<NavKey, 'create'>, { active: SparkbookIconName; inactive: SparkbookIconName }> = {
+const navIcons: Record<Exclude<NavKey, 'create'>, { active: SparksIconName; inactive: SparksIconName }> = {
   home: { active: 'homeFilled', inactive: 'home' },
   bookmarks: { active: 'bookmarkFilled', inactive: 'bookmark' },
   lists: { active: 'listInactive', inactive: 'listInactive' },
@@ -45,11 +45,11 @@ export function BottomNav({ active, onHome, onBookmarks, onCreate, onLists, onPr
         >
           {key === 'create' ? (
             <View style={styles.createButton}>
-              <SparkbookIcon name="add" color={colors.white} size={24} />
+              <SparksIcon name="add" color={colors.white} size={24} />
             </View>
           ) : (
             <>
-              <SparkbookIcon name={active === key ? navIcons[key].active : navIcons[key].inactive} color={active === key ? colors.main : colors.text} size={24} />
+              <SparksIcon name={active === key ? navIcons[key].active : navIcons[key].inactive} color={active === key ? colors.main : colors.text} size={24} />
               <Text style={[styles.label, active === key ? styles.activeLabel : null]}>
                 {label}
               </Text>

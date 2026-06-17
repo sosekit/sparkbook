@@ -2,7 +2,7 @@ import { SvgXml } from 'react-native-svg';
 import { colors } from '../../theme/colors';
 import { SearchIcon } from './search';
 
-export type SparkbookIconName =
+export type SparksIconName =
   | 'add'
   | 'arrowForward'
   | 'bookmark'
@@ -29,13 +29,13 @@ export type SparkbookIconName =
   | 'trending'
   | 'visibility';
 
-type SparkbookIconProps = {
-  name: SparkbookIconName;
+type SparksIconProps = {
+  name: SparksIconName;
   color?: string;
   size?: number;
 };
 
-const icons: Record<SparkbookIconName, string> = {
+const icons: Record<SparksIconName, string> = {
   add: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="black"/></svg>',
   arrowForward: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00033 2.66699L7.06033 3.60699L10.7803 7.33366H2.66699V8.66699H10.7803L7.06033 12.3937L8.00033 13.3337L13.3337 8.00033L8.00033 2.66699Z" fill="black"/></svg>',
   bookmark: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4.66699V13.3137L6.66667 11.8803L3.33333 13.3137V4.66699H10ZM12.6667 0.666992H5.99333C5.26 0.666992 4.66667 1.26699 4.66667 2.00033H11.3333C12.0667 2.00033 12.6667 2.60033 12.6667 3.33366V12.0003L14 12.667V2.00033C14 1.26699 13.4 0.666992 12.6667 0.666992ZM10 3.33366H3.33333C2.6 3.33366 2 3.93366 2 4.66699V15.3337L6.66667 13.3337L11.3333 15.3337V4.66699C11.3333 3.93366 10.7333 3.33366 10 3.33366Z" fill="black"/></svg>',
@@ -63,7 +63,7 @@ const icons: Record<SparkbookIconName, string> = {
   visibility: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00033 4.33333C10.527 4.33333 12.7803 5.75333 13.8803 8C12.7803 10.2467 10.5337 11.6667 8.00033 11.6667C5.46699 11.6667 3.22033 10.2467 2.12033 8C3.22033 5.75333 5.47366 4.33333 8.00033 4.33333ZM8.00033 3C4.66699 3 1.82033 5.07333 0.666992 8C1.82033 10.9267 4.66699 13 8.00033 13C11.3337 13 14.1803 10.9267 15.3337 8C14.1803 5.07333 11.3337 3 8.00033 3ZM8.00033 6.33333C8.92033 6.33333 9.66699 7.08 9.66699 8C9.66699 8.92 8.92033 9.66667 8.00033 9.66667C7.08033 9.66667 6.33366 8.92 6.33366 8C6.33366 7.08 7.08033 6.33333 8.00033 6.33333Z" fill="black"/></svg>'
 };
 
-export function SparkbookIcon({ name, color = colors.text, size = 16 }: SparkbookIconProps) {
+export function SparksIcon({ name, color = colors.text, size = 16 }: SparksIconProps) {
   if (name === 'search') {
     return <SearchIcon color={color} size={size} />;
   }

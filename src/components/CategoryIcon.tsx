@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
-import { SparkbookIcon, SparkbookIconName } from '../assets/icons/SparkbookIcon';
+import { SparksIcon, SparksIconName } from '../assets/icons/SparksIcon';
 import { colors } from '../theme/colors';
 import { getCategoryById } from '../utils/category';
 
-const iconByCategory: Record<string, SparkbookIconName> = {
+const iconByCategory: Record<string, SparksIconName> = {
   food: 'pizza',
   coffee: 'drinks',
   drinks: 'drinks',
@@ -18,15 +18,20 @@ const iconByCategory: Record<string, SparkbookIconName> = {
   art: 'spark'
 };
 
+export function getCategoryIconName(categoryId?: string | null) {
+  const category = getCategoryById(categoryId);
+  return iconByCategory[category.id] ?? 'spark';
+}
+
 export function CategoryIcon({ categoryId, selected = false, size = 28 }: { categoryId?: string | null; selected?: boolean; size?: number }) {
   const category = getCategoryById(categoryId);
-  const iconName = iconByCategory[category.id] ?? 'spark';
+  const iconName = getCategoryIconName(category.id);
   const backgroundColor = selected ? colors.main : colors.highlight;
   const iconSize = Math.max(14, Math.round(size * 0.52));
 
   return (
     <View style={[styles.icon, { width: size, height: size, borderRadius: size / 2, backgroundColor }]}>
-      <SparkbookIcon name={iconName} color={colors.white} size={iconSize} />
+      <SparksIcon name={iconName} color={colors.white} size={iconSize} />
     </View>
   );
 }

@@ -20,6 +20,8 @@ export const profileService = {
           avatarInitials: data.avatar_initials,
           avatarColor: data.avatar_color,
           profilePhotoUrl: data.profile_photo_url || undefined,
+          interests: data.interests || [],
+          onboardingCompleted: Boolean(data.onboarding_completed),
           createdAt: data.created_at,
           updatedAt: data.updated_at
         } as Profile;
@@ -51,6 +53,8 @@ export const profileService = {
         avatar_initials: updated.avatarInitials,
         avatar_color: updated.avatarColor,
         profile_photo_url: updated.profilePhotoUrl,
+        interests: updated.interests || [],
+        onboarding_completed: Boolean(updated.onboardingCompleted),
         updated_at: updated.updatedAt
       });
     }
@@ -70,6 +74,8 @@ function fromSupabaseProfile(data: any): Profile {
     avatarInitials: data.avatar_initials,
     avatarColor: data.avatar_color,
     profilePhotoUrl: data.profile_photo_url || undefined,
+    interests: data.interests || [],
+    onboardingCompleted: Boolean(data.onboarding_completed),
     createdAt: data.created_at,
     updatedAt: data.updated_at
   };

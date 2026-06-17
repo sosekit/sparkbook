@@ -16,7 +16,7 @@ export const guideService = {
       id: `guide-${listId}`,
       listId,
       createdBy: list?.createdBy || 'profile-ray',
-      title: list?.title || 'Sparkbook guide',
+      title: list?.title || 'sparks guide',
       description: list?.description,
       routeMode: 'walk',
       stops: (list?.sparkIds || []).map((sparkId, index) => ({
